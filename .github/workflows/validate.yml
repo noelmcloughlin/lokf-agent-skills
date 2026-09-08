@@ -1,0 +1,97 @@
+name: Validate
+
+# Validate every pull request and every push to main. Separate jobs for the
+# repository contract, script linting, and Markdown/link checks so failures
+# are easy to diagnose at a glance.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: validate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-skills:
+    name: Validate repository contract & Agent Skills spec
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      # Monitors the runner's outbound network traffic for the rest of this
+      # job and flags anything unexpected. Audit mode only: it observes and
+      # reports, it does not block. See
+      # https://github.com/step-security/harden-runner.
+      - name: Harden the runner
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+
+      - name: Validate repository contract
+        run: bash scripts/validate-repository.sh
+
+      # Fail visibly if `gh skill` is unavailable rather than silently
+      # skipping spec validation - a missing subcommand is a broken run, not
+      # a pass.
+      - name: Verify gh skill support
+        run: gh skill --help
+
+      - name: Validate Agent Skills spec (dry run)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh skill publish --dry-run
+
+  lint-scripts:
+    name: Lint shell scripts
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+
+      - name: ShellCheck
+        uses: ludeeus/action-shellcheck@00cae500b08a931fb5698e11e79bfbd38e612a38 # 2.0.0
+        with:
+          scandir: '.'
+
+  validate-markdown:
+    name: Lint Markdown & check links
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+
+      - name: markdownlint
+        uses: DavidAnson/markdownlint-cli2-action@21c1be1b93ad9ed58fa840aacc3f279cde2a72ff # v24.2.0
+        with:
+          globs: '**/*.md'
+
+      - name: Check links
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          # lychee excludes mailto: links by default (opt in with
+          # --include-mail); no flag needed to exclude them.
+          args: --no-progress "**/*.md"
+          fail: true

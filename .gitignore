@@ -1,0 +1,6 @@
+# OS/editor noise
+.DS_Store
+*.swp
+
+# Local tooling, if a contributor runs npm/npx here directly
+node_modules/

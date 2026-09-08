@@ -1,0 +1,64 @@
+name: Publish
+
+# Maintainer-gated release. `gh skill publish` creates the tag and the GitHub
+# release itself, so this workflow must never be tag-triggered - a
+# tag-push trigger here would race the very tag `gh skill publish` is about
+# to create. `workflow_dispatch` keeps release timing an explicit human
+# decision; the `release` environment (configure required reviewers on it in
+# repo settings) adds a maintainer-approval gate in front of the write scope.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release tag, e.g. v1.0.0 (both skills are released together under this one tag)'
+        required: true
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish both skills
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write
+    steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Validate semantic version
+        run: |
+          version="${{ inputs.version }}"
+          if [[ ! "$version" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::'$version' is not vMAJOR.MINOR.PATCH."
+            exit 1
+          fi
+          if git rev-parse "$version" >/dev/null 2>&1; then
+            echo "::error::Tag '$version' already exists."
+            exit 1
+          fi
+
+      - name: Verify repository contract
+        run: bash scripts/validate-repository.sh
+
+      - name: Validate Agent Skills spec (dry run)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh skill publish --dry-run
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh skill publish --tag "${{ inputs.version }}"

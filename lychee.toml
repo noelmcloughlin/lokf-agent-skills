@@ -1,0 +1,11 @@
+# lychee link-checker config (validate.yml's "Check links" step, and local
+# ad-hoc runs, pick this up automatically).
+exclude = [
+  # LOKF's published JSON-LD context. Every LOKF bundle's index.md declares
+  # this exact URI (see skills/lokf-scaffolding/templates/knowledge/index.md
+  # and lokf-librarian/SKILL.md Golden Rule 2) - it is the upstream lokf
+  # project's identifier, not this repository's, and currently 404s
+  # (checked 2026-09-08). Re-check periodically and drop this line once the
+  # w3id.org redirect is registered.
+  '^https://w3id\.org/lokf/context\.jsonld$',
+]
