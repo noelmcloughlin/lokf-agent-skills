@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Isolated install smoke test. Installs both skills into a throwaway
+# Isolated install smoke test. Installs four skills into a throwaway
 # "consumer" repo via the open skills CLI, so generated agent directories
 # never contaminate this distribution source.
 #
@@ -38,6 +38,8 @@ mkdir -p "$test_root/consumer"
   npx --yes skills add "$source_arg" \
     --skill lokf-librarian \
     --skill lokf-scaffolding \
+    --skill lokf-curator \
+    --skill lokf-docent \
     --yes
 )
 
@@ -56,6 +58,14 @@ assert "lokf-scaffolding SKILL.md installed" \
   '[[ -n "$(find "$test_root/consumer" -path "*lokf-scaffolding/SKILL.md" 2>/dev/null)" ]]'
 assert "lokf-scaffolding templates/ carried along" \
   '[[ -n "$(find "$test_root/consumer" -path "*lokf-scaffolding/templates" -type d 2>/dev/null)" ]]'
+assert "lokf-curator discovered by name" \
+  '[[ -n "$(find "$test_root/consumer" -type d -iname lokf-curator 2>/dev/null)" ]]'
+assert "lokf-curator SKILL.md installed" \
+  '[[ -n "$(find "$test_root/consumer" -path "*lokf-curator/SKILL.md" 2>/dev/null)" ]]'
+assert "lokf-docent discovered by name" \
+  '[[ -n "$(find "$test_root/consumer" -type d -iname lokf-docent 2>/dev/null)" ]]'
+assert "lokf-docent SKILL.md installed" \
+  '[[ -n "$(find "$test_root/consumer" -path "*lokf-docent/SKILL.md" 2>/dev/null)" ]]'
 assert "no installer metadata leaked back into this source repo" \
   '[[ -z "$(git -C "$repo_root" status --porcelain 2>/dev/null)" ]]'
 

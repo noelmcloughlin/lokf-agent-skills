@@ -16,7 +16,12 @@ Maintain `.lokf/` - the host repository's knowledge captured as a [**Linked Open
 > run the **lokf-scaffolding** skill first - it creates `knowledge/index.md` with
 > the semantic header (Rule 2), `knowledge/log.md`, the domain directories, plus
 > `pyproject.toml` and the `justfile` that `just lokf-validate` needs. This
-> skill assumes all of that is already in place.
+> skill assumes all of that is already in place. Trust verdicts - a *person*
+> confirming, correcting, retiring, or sending back a concept - belong to the
+> **lokf-curator** skill: this one hands off to it (section 3) and never
+> writes a `human:` verification. Readers reach the bundle through
+> **lokf-docent**, which answers from it and records what it lacked in
+> `.lokf/feedback.md` for this skill to consume (section 1).
 
 > Model: keep this skill on the calling agent's normal/frontier model. Choosing
 > a class and `genre`, wiring typed relations (`isPartOf` vs `hasPart`,
@@ -112,6 +117,8 @@ The LOKF **format** is defined once in LinkML (`lokf.yaml`); the JSON Schema, JS
 
    **Actors** (`generated.by`, `verified[].by`, `sources[].author`) are plain OKF §7 literal strings - `<producer>/<version>`, `human:<id>`, `process:<id>` - carried verbatim, never coerced to IRIs. **Trust tiers derive from them, never stored:** no `verified` ⇒ *unverified*; only non-human actors ⇒ *machine-confirmed*; any `human:` actor ⇒ *human-reviewed*.
 
+   **This skill's own `verified` events.** When a steady-state refresh actually re-confirms a concept against its `resource` (section 1), record it as one event `{ by: process:lokf-librarian, at }` - replacing only this skill's own previous event, never touching `human:` events, and never on a concept it did not re-check this run. That makes "the bot checked this last week" distinguishable from "nobody ever looked"; it is not a claim of truth. Only **lokf-curator** writes `human:` events, and only on a person's explicit say-so.
+
    **AttestedComputation** (`type: AttestedComputation`; OKF's spaced `Attested Computation` normalizes to this) carries an immutable, sanctioned recipe - semantically a `prov:Plan`: `runtime` (REQUIRED, e.g. `bigquery`|`postgres`|`dbt`|`python`), `parameters` (each `{ name, type, required }` where `type` is drawn from `ParameterType`), `computation` (optional file path; omit it and the body's `# Computation` fenced block IS the recipe), `executor` (`{ resource, receipt }`), `attester` (`{ resource }`).
 7. **Stay permissive.** Missing optional fields, unknown `type`, unknown keys, and broken cross-links MUST NOT cause rejection.
 
@@ -136,7 +143,9 @@ Record the resulting map as a concept: **`playbooks/knowledge-sources.md`** (`ty
 
 ### Steady-state refresh - every later run
 
-1. **Re-verify provenance.** For each existing concept, follow its `resource`/`derivedFrom`/`source` back to the origin: does it still exist, are the facts still true, do relations still point the right way? Fix drift - including **deleting** concepts whose source no longer exists (remove their index bullets and log the removal).
+**First, consume `.lokf/feedback.md`** if it exists. lokf-docent appends reader feedback there - one line per entry, newest first (format: lokf-docent's `references/feedback.md`). A **Miss** names a question the bundle could not answer and the source that did: derive the concept from that source, or, if the source doesn't settle it, create a `status: draft` placeholder carrying the question under `## Open questions`. A **Disagreement** names a concept and what its source now says instead: if the repository has simply moved on, fix the concept from the source; if it can't be settled, set `status: draft` and record both versions under `## Open questions` for lokf-curator. Remove each entry you handled and leave the rest; the scheduled workflow commits `feedback.md` alongside `knowledge/`, so consumed entries don't return.
+
+1. **Re-verify provenance.** For each existing concept, follow its `resource`/`derivedFrom`/`source` back to the origin: does it still exist, are the facts still true, do relations still point the right way? Fix drift - including **deleting** concepts whose source no longer exists (remove their index bullets and log the removal). When a concept still matches its source, refresh this skill's own `verified` event (Rule 6). When a claim **cannot be settled from the repository** - sources disagree, or the origin is ambiguous - set `status: draft` and add a short `## Open questions` section at the end of the body saying, in plain words, what is unclear; that is the hand-off to lokf-curator. **Human-authored content is never rewritten:** if `generated.by` starts with `human:`, leave the text alone; if the repository now disagrees with it, set `status: draft` and record both versions under `## Open questions` ("source says X; human-authored text says Y").
 2. **Re-walk `playbooks/knowledge-sources.md`.** Sources listed there may have grown new assets since the last run.
 3. **Sweep for orphans.** Repository files or directories that no concept and no source-map entry accounts for are gap candidates: add a concept, extend the source map, or consciously leave them out.
 4. **Update the source map** whenever the repository's knowledge geography changes - it must stay as accurate as the concepts it feeds.
@@ -155,7 +164,7 @@ resource: https://github.com/acme/platform/tree/main/services/orders
 generated:
   by: process:lokf-librarian
   at: 2026-08-05T00:00:00Z
-status: stable
+status: draft
 dependsOn:
   - https://acme.example/knowledge/datasets/orders-db
 ---
@@ -165,7 +174,7 @@ dependsOn:
 The **Orders API** generates its endpoints from `services/orders/openapi.yaml` and serves the order data consumed by the CLI and web UI...
 ```
 
-On every concept you create or materially change, record provenance with `generated: { by: <OKF §7 actor>, at: <ISO 8601 UTC datetime> }` (`prov:wasGeneratedBy`) - e.g. `at: "2026-08-05T00:00:00Z"`, `by: process:lokf-librarian`. This supersedes the v0.1 `timestamp` (`schema:dateModified`), which consumers still read as a fallback; keep `timestamp` only on v0.1 concepts you are not otherwise touching. Never bump `generated`/`timestamp` on untouched concepts, or the diff fills with churn. Update the nearest `index.md` (bullet + `description`) and prepend a dated entry to `log.md` (newest first, ISO `YYYY-MM-DD` date header - log dates are date-only, concept timestamps are datetime+Z). `log.md` records **knowledge changes only** - concepts added/changed/removed, or the source map updated. If a run changes nothing in the bundle, write no log entry; never log administrative events ("librarian ran, no changes detected") - they do not represent a knowledge change.
+On every concept you create or materially change, record provenance with `generated: { by: <OKF §7 actor>, at: <ISO 8601 UTC datetime> }` (`prov:wasGeneratedBy`) - e.g. `at: "2026-08-05T00:00:00Z"`, `by: process:lokf-librarian`. Concepts this skill **creates** also get `status: draft` - the spec's "not yet reviewed" - until a person confirms them through lokf-curator, which removes the key (absent means stable); don't otherwise add or change `status` on concepts you merely refresh (the one exception is the unresolvable-claim case in the refresh list above). This supersedes the v0.1 `timestamp` (`schema:dateModified`), which consumers still read as a fallback; keep `timestamp` only on v0.1 concepts you are not otherwise touching. Never bump `generated`/`timestamp` on untouched concepts, or the diff fills with churn. Update the nearest `index.md` (bullet + `description`) and prepend a dated entry to `log.md` (newest first, ISO `YYYY-MM-DD` date header - log dates are date-only, concept timestamps are datetime+Z). `log.md` records **knowledge changes only** - concepts added/changed/removed, or the source map updated. If a run changes nothing in the bundle, write no log entry; never log administrative events ("librarian ran, no changes detected") - they do not represent a knowledge change.
 
 ## 2. Audit (correctness, gaps, bugs)
 
@@ -187,22 +196,18 @@ just lokf-serve            # SPARQL endpoint + live graph explorer (optional)
 
 Report findings as a checklist; fix mechanical issues directly and re-run `just lokf-validate`.
 
-If `uv`/the `lokf` package isn't available, there's no substitute for the two
-generated validators above - fall back to the manual, structural cross-check
-against the raw schema described in lokf-scaffolding's Step 4, and say so in
-the audit report rather than silently claiming full coverage.
+If `uv`/the `lokf` package isn't available, there's no substitute for the two generated validators above - fall back to the manual, structural cross-check against the raw schema described in lokf-scaffolding's Step 4, and say so in the audit report rather than silently claiming full coverage.
 
 ## 3. Hand off for human maintainer review
 
 Open a PR scoped to `.lokf/` with a summary, the `lokf validate` (and, when relevant, SHACL/convert) output, and citations for every claim whose authority lives outside the repository - the standards, ontologies, and upstream systems the bundle's `Reference` concepts point at. A human maintainer verifies against the canonical source and approves before merge. Once `.github/workflows/knowledge-validate.yaml` exists (see [references/scheduled-task.md](references/scheduled-task.md)), it runs `uv run lokf validate knowledge` on every `.lokf/**` PR as the automated gate; until then, paste the local `just lokf-validate` output into the PR.
 
+End the PR description - or, when there is no PR, the hand-off message - with a short **For the curator** section in plain words: the health line (confirmed by a person / checked by automation only / nobody has checked / drafts / past review date), the concepts newly marked `draft`, and every `## Open questions` entry, then name the **lokf-curator** skill. That is how a busy person learns that a few minutes of confirmation are wanted; the frontmatter carries the same facts for the curator's own report, so nothing is lost if the summary is skimmed.
+
 If `.lokf/` is gitignored - a legitimate choice, see lokf-scaffolding's Step 0 - none of this applies: there is no diff for git to show and no PR to open. Review by handing the human maintainer the `just lokf-validate` output directly and pointing at the changed files on disk instead; the scheduled automation doesn't apply either (same reference).
 
 ## 4. Scheduled librarian task (Karpathy rule)
 
-Keep the graph continuously accurate rather than rewriting it in bursts. Two
-GitHub workflows and a wrapper script - scaffolded by lokf-scaffolding's Step
-5 - run this skill on a schedule and open a review PR with whatever changed.
-Their operating manual (behaviour, guardrails, the repo variables to wire, and
-why none of it applies to a gitignored `.lokf/`) is
-[references/scheduled-task.md](references/scheduled-task.md).
+Keep the graph continuously accurate rather than rewriting it in bursts. Two GitHub workflows and a wrapper script - scaffolded by lokf-scaffolding's Step
+5 - run this skill on a schedule and open a review PR with whatever changed. Their operating manual (behaviour, guardrails, the repo variables to wire, and
+why none of it applies to a gitignored `.lokf/`) is [references/scheduled-task.md](references/scheduled-task.md).

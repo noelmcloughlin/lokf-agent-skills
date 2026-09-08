@@ -29,15 +29,17 @@ repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$repo_root"
 
 # The lokf-librarian skill may live under any of these skill-directory
-# conventions. If this repo uses a different one, add it here - a candidate
+# conventions - the three install targets, plus bare skills/ for a repo that
+# publishes the skills it also uses. If this repo uses a different one, add it here - a candidate
 # list that doesn't match reality fails this whole script at run time, not at
 # scaffold time.
 skill=""
-for candidate in .claude/skills/lokf-librarian/SKILL.md .github/skills/lokf-librarian/SKILL.md .agents/skills/lokf-librarian/SKILL.md; do
+for candidate in .claude/skills/lokf-librarian/SKILL.md .github/skills/lokf-librarian/SKILL.md \
+                 .agents/skills/lokf-librarian/SKILL.md skills/lokf-librarian/SKILL.md; do
   if [ -f "$candidate" ]; then skill="$candidate"; break; fi
 done
 [ -n "$skill" ] || {
-  echo "knowledge-librarian: lokf-librarian SKILL.md not found in .claude/skills/, .github/skills/, or .agents/skills/" >&2
+  echo "knowledge-librarian: lokf-librarian SKILL.md not found in .claude/skills/, .github/skills/, .agents/skills/, or skills/" >&2
   exit 2
 }
 
@@ -54,6 +56,8 @@ fi
 
 # Build the prompt. The agent should follow the skill verbatim, edit only the
 # .lokf/knowledge/ bundle, and make no VCS operations.
+# The heredoc is unquoted so $skill expands - which means any backtick in the
+# text MUST be escaped (\`) or bash runs it as a command and blanks the word.
 prompt="$(cat <<EOF
 You are the repository knowledge librarian. Follow this skill file verbatim:
   - $skill
@@ -65,7 +69,7 @@ Task (Karpathy rule - continuous small corrections, not a rewrite):
      .lokf/knowledge/playbooks/knowledge-sources.md).
   2. Reconcile the .lokf/ knowledge bundle with the repository: add missing
      concepts, correct stale facts (refreshing each changed concept's
-     `generated` provenance, which supersedes the v0.1 `timestamp`), wire
+     \`generated\` provenance, which supersedes the v0.1 \`timestamp\`), wire
      typed relations, and prepend dated entries to
      .lokf/knowledge/log.md - but only when the bundle content actually
      changed. If nothing changed, leave the bundle (including log.md)
@@ -73,6 +77,11 @@ Task (Karpathy rule - continuous small corrections, not a rewrite):
   3. Only edit files under .lokf/knowledge/. Do NOT run git, open PRs, or touch
      any other path. Cite sources for any claim whose authority is outside the
      repository.
+  4. Mark concepts you create, and claims you cannot settle from the
+     repository, as \`status: draft\` (with a plain-prose "## Open questions"
+     section for the latter), exactly as the skill says. End your reply with a
+     short "For the curator" summary: how many concepts are drafts, which
+     carry open questions, and how many are confirmed by a person.
 EOF
 )"
 

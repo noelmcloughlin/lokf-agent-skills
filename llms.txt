@@ -1,6 +1,6 @@
-# <PROJ_NAME>
+# LOKF Agent Skills
 
-> <PROJ_DESC>
+> Four Agent Skills that turn a repository's scattered knowledge into a maintained, trusted LOKF knowledge bundle.
 
 ## Agent context
 

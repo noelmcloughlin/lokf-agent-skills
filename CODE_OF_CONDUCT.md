@@ -2,12 +2,7 @@
 
 ## Our Pledge
 
-We as members, contributors, and leaders pledge to make participation in our
-community a harassment-free experience for everyone, regardless of age, body
-size, visible or invisible disability, ethnicity, sex characteristics, gender
-identity and expression, level of experience, education, socio-economic
-status, nationality, personal appearance, race, religion, or sexual identity
-and orientation.
+We as members, contributors, and leaders pledge to make participation in our community a harassment-free experience for everyone, regardless of age, body size, visible or invisible disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
 
 ## Our Standards
 
@@ -29,23 +24,16 @@ Examples of unacceptable behavior:
 
 ## Enforcement Responsibilities
 
-Project maintainers are responsible for clarifying and enforcing our
-standards and will take appropriate, fair corrective action in response to
-any behavior deemed inappropriate, threatening, offensive, or harmful.
+Project maintainers are responsible for clarifying and enforcing our standards and will take appropriate, fair corrective action in response to any behavior deemed inappropriate, threatening, offensive, or harmful.
 
 ## Scope
 
-This Code of Conduct applies within all project spaces (issues, pull
-requests, discussions) and when an individual is officially representing the
-project in public spaces.
+This Code of Conduct applies within all project spaces (issues, pull requests, discussions) and when an individual is officially representing the project in public spaces.
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the maintainer at <noel.mcloughlin@gmail.com>. All complaints will
-be reviewed and investigated promptly and fairly.
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported to the maintainer at <noel.mcloughlin@gmail.com>. All complaints will be reviewed and investigated promptly and fairly.
 
 ## Attribution
 
-Adapted from the [Contributor Covenant](https://www.contributor-covenant.org/),
-version 2.1.
+Adapted from the [Contributor Covenant](https://www.contributor-covenant.org/), version 2.1.

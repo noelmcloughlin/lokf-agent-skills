@@ -1,12 +1,18 @@
 name: Validate
 
 # Validate every pull request and every push to main. Separate jobs for the
-# repository contract, script linting, and Markdown/link checks so failures
-# are easy to diagnose at a glance.
+# repository contract, script linting, workflow linting, the actual install
+# path, and Markdown/link checks so failures are easy to diagnose at a
+# glance. Also runs weekly and on demand: link rot, an upstream `gh skill`
+# spec change, or drift in what the install path resolves to would otherwise
+# only be caught on the next incidental PR.
 on:
   pull_request:
   push:
     branches: [main]
+  schedule:
+    - cron: "0 6 * * 1" # Mondays at 06:00 UTC
+  workflow_dispatch:
 
 permissions: {}
 
@@ -68,6 +74,58 @@ jobs:
         with:
           scandir: '.'
 
+  lint-workflows:
+    name: Lint GitHub Actions workflows
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+
+      # Catches what YAML parsing alone misses (bad expressions, wrong
+      # contexts, invalid `needs:`, shellcheck on `run:` blocks) - and,
+      # unlike `gh skill publish --dry-run`, reaches the two workflow
+      # templates under skills/lokf-scaffolding/templates/github/ that get
+      # copied into other repositories and run there.
+      - name: actionlint
+        uses: docker://rhysd/actionlint@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667 # v1.7.12
+        with:
+          args: -color
+
+  smoke-test:
+    name: Smoke-test the install path
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          persist-credentials: false
+
+      - name: Use Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with:
+          node-version: 22
+
+      # Installs from this checkout (a local path, not the published repo),
+      # so a PR exercises the actual `npx skills add` install path - skill
+      # discovery, full directory copy, relative-link survival - before it
+      # ever reaches a real consumer.
+      - name: Run the install smoke test
+        run: bash scripts/smoke-test-install.sh "$GITHUB_WORKSPACE"
+
   validate-markdown:
     name: Lint Markdown & check links
     runs-on: ubuntu-latest
@@ -95,3 +153,8 @@ jobs:
           # --include-mail); no flag needed to exclude them.
           args: --no-progress "**/*.md"
           fail: true
+
+      - name: codespell
+        uses: codespell-project/actions-codespell@e3258cca84ce02b0bb36a3d41f2c18f719a0cc1a # v2.4.3
+        with:
+          path: '**/*.md'

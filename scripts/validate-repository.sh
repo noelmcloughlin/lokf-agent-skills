@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Repository-contract checks for the lokf-librarian-agent-skills distribution
+# Repository-contract checks for the lokf-agent-skills distribution
 # repo. Separate from specification/Markdown checks (workflows/validate.yml
 # runs those as their own jobs) so failures are easy to diagnose.
 set -euo pipefail
@@ -14,9 +14,9 @@ ok() { printf 'OK:   %s\n' "$*"; }
 
 # 1. Exactly the two intended published skill directories exist.
 mapfile -t skill_dirs < <(find skills -mindepth 1 -maxdepth 1 -type d | sort)
-expected_dirs=("skills/lokf-librarian" "skills/lokf-scaffolding")
+expected_dirs=("skills/lokf-curator" "skills/lokf-docent" "skills/lokf-librarian" "skills/lokf-scaffolding")
 if [[ "${skill_dirs[*]}" == "${expected_dirs[*]}" ]]; then
-  ok "exactly the two intended skill directories exist (${expected_dirs[*]})"
+  ok "exactly the four intended skill directories exist (${expected_dirs[*]})"
 else
   err "expected skill directories ${expected_dirs[*]}, found ${skill_dirs[*]:-none}"
 fi
@@ -45,10 +45,10 @@ done
 
 # 4. No unexpected duplicate SKILL.md files in publishable paths.
 mapfile -t all_skill_md < <(find skills -iname 'SKILL.md' | sort)
-if [[ ${#all_skill_md[@]} -eq 2 ]]; then
+if [[ ${#all_skill_md[@]} -eq 4 ]]; then
   ok "no duplicate SKILL.md files under skills/"
 else
-  err "expected exactly 2 SKILL.md files under skills/, found ${#all_skill_md[@]}: ${all_skill_md[*]}"
+  err "expected exactly 4 SKILL.md files under skills/, found ${#all_skill_md[@]}: ${all_skill_md[*]}"
 fi
 
 # 5. Relative references remain valid after the complete skill directory is
@@ -57,19 +57,26 @@ fi
 say ""
 say "Checking relative link targets..."
 broken=0
-while IFS=: read -r file line link; do
-  # Skip absolute URLs and in-page anchors.
-  [[ "$link" =~ ^https?:// ]] && continue
-  [[ "$link" =~ ^# ]] && continue
-  link="${link%%#*}"
-  [[ -z "$link" ]] && continue
-  target="$(dirname "$file")/$link"
-  if [[ ! -e "$target" ]]; then
-    err "$file:$line: broken relative link '$link' (resolved: $target)"
-    broken=1
-  fi
-done < <(grep -rnoE '\]\(([^)]+)\)' --include='*.md' skills | sed -E 's/^([^:]+):([0-9]+):\]\((.*)\)$/\1:\2:\3/')
-[[ "$broken" -eq 0 ]] && ok "all relative Markdown links under skills/ resolve"
+while IFS= read -r file; do
+  # Blank out fenced code blocks first (keeping line numbers stable): example
+  # links inside ``` fences are documentation of syntax, not real links.
+  while IFS=: read -r line match; do
+    link="${match#\](}"
+    link="${link%)}"
+    # Skip absolute URLs and in-page anchors.
+    [[ "$link" =~ ^https?:// ]] && continue
+    [[ "$link" =~ ^# ]] && continue
+    link="${link%%#*}"
+    [[ -z "$link" ]] && continue
+    target="$(dirname "$file")/$link"
+    if [[ ! -e "$target" ]]; then
+      err "$file:$line: broken relative link '$link' (resolved: $target)"
+      broken=1
+    fi
+  done < <(awk 'BEGIN{f=0} /^[[:space:]]*```/{f=!f; print ""; next} {print (f ? "" : $0)}' "$file" \
+             | grep -noE '\]\(([^)]+)\)' || true)
+done < <(find skills -name '*.md' | sort)
+[[ "$broken" -eq 0 ]] && ok "all relative Markdown links under skills/ resolve (fenced examples ignored)"
 [[ "$broken" -eq 1 ]] && fail=1
 
 # 6. Executable scripts pass language-specific linting.

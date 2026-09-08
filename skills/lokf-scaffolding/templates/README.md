@@ -19,6 +19,7 @@ You write normal Markdown; you get a validated, queryable graph for free.
 |   |-- services/         # concepts (grow into metrics/ policies/ playbooks/ glossary/ ...)
 |-- pyproject.toml        # declares the `lokf` toolkit as a dependency
 |-- justfile              # convenience commands (below)
+|-- feedback.md           # appears once a reader's agent records a gap; input for the librarian, not knowledge
 ```
 
 ## Prerequisites
