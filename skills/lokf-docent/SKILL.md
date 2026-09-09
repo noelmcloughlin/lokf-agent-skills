@@ -73,6 +73,4 @@ Keep only the lines that apply. For a one-line answer where the concept and its 
 
 ## Where the notes go
 
-`.lokf/feedback.md` sits beside `knowledge/`, not inside it: it is *input to* the librarian, not knowledge. On its next run the librarian turns each Miss
-into a concept (or a draft placeholder with the question attached), each Disagreement into a fix or an open question for the curator, and removes the
-entry. Format and examples: [references/feedback.md](references/feedback.md).
+`.lokf/feedback.md` sits beside `knowledge/`, not inside it: it is *input to* the librarian, not knowledge. On its next run the librarian turns each Miss into a concept (or a draft placeholder with the question attached), each Disagreement into a fix or an open question for the CURATOR, and removes the entry. Format and examples: [references/feedback.md](references/feedback.md).

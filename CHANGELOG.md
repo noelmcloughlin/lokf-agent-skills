@@ -2,6 +2,10 @@
 
 All notable changes to this repository are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows the rules in [CONTRIBUTING.md](CONTRIBUTING.md#release-process). All skills release together under one tag.
 
+## [unreleased] - 2026-09-09
+
+- `lokf-docent` and `lokf-librarian` will use uppercase 'CURATOR' during handoff.
+
 ## [0.9.0] - 2026-09-09
 
 Initial release: four [Agent Skills](https://agentskills.io/home) that turn a repository's scattered knowledge into a maintained, trusted [LOKF](https://lokf.nolan-nichols.com/) knowledge bundle - built once, kept current, and reviewed by a person, rather than rediscovered every session.
