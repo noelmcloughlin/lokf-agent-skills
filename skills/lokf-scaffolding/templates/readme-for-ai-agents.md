@@ -1,9 +1,5 @@
-## For AI Agents
-
-If `.lokf/knowledge/index.md` exists in this repository, read it first. It is
-a queryable [LOKF](https://lokf.nolan-nichols.com) knowledge bundle containing
-repository-specific context, conventions, and typed relationships intended
-for agents. A concept marked `status: draft` has not yet been confirmed by a
-person; one with a `human:` entry under `verified` has - weigh them
-accordingly. The `lokf-docent` skill, if installed, is the disciplined way to
-answer from the bundle - and to record what it lacked.
+> **For AI agents:** if `.lokf/knowledge/index.md` exists in this repository,
+> read it first - it is a queryable [LOKF](https://lokf.nolan-nichols.com)
+> knowledge bundle of repository-specific context; `llms.txt` says how to weigh
+> what you find there (drafts vs. person-confirmed) and names the `lokf-docent`
+> skill for answering from it.

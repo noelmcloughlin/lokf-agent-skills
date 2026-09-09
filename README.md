@@ -7,10 +7,11 @@
 
 Four [Agent Skills](https://agentskills.io/home) that turn a repository's scattered knowledge into a maintained, trusted asset using **[LOKF's](https://lokf.nolan-nichols.com/)** [python package](https://pypi.org/project/lokf/) (Linked Open Knowledge Format)  - a semantic profile of OKF in which a plain folder of Markdown concept files carries enough meaning to be validated by schema, queried as a graph, and read by people and agents alike.
 
-## For AI Agents
-
-If `.lokf/knowledge/index.md` exists in this repository, read it first. It is a queryable [LOKF](https://lokf.nolan-nichols.com) knowledge bundle containing repository-specific context, conventions, and typed relationships intended for agents. A concept marked `status: draft` has not yet been confirmed by a person; one with a `human:` entry under `verified` has - weigh them accordingly. The `lokf-docent` skill, if installed, is the disciplined way to
-answer from the bundle - and to record what it lacked.
+> **For AI agents:** if `.lokf/knowledge/index.md` exists in this repository,
+> read it first - it is a queryable [LOKF](https://lokf.nolan-nichols.com)
+> knowledge bundle of repository-specific context; `llms.txt` says how to weigh
+> what you find there (drafts vs. person-confirmed) and names the `lokf-docent`
+> skill for answering from it.
 
 ## The problem they solve
 

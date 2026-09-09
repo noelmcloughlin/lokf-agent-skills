@@ -84,7 +84,7 @@ to stay true **whether or not `.lokf/` exists later**, so nothing ever needs cle
 - **`llms.txt`** - copy `templates/llms.txt` (PROJ_NAME, PROJ_DESC) if absent. If it exists, leave it intact and append only the `## Agent context`
   section, and only if the file doesn't already mention `.lokf/`.
 - **README pointer** - if `README.md` exists and doesn't already link to `.lokf/knowledge/` anywhere (check the path, not a heading string), insert
-  `templates/readme-for-ai-agents.md` after the intro, before the first `##`. Don't invent a README on a host that has none.
+  `templates/readme-for-ai-agents.md` after the intro, before the first `##`. It is a one-paragraph blockquote aside, not a section: agents read the top of a README, a human skims past an aside, and the trust-weighing detail lives in `llms.txt` rather than being repeated here. Don't invent a README on a host that has none.
 
 ## Step 3 - Verify the skeleton
 
