@@ -8,10 +8,12 @@ resource: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf
 generated:
   by: process:lokf-librarian
   at: "2026-09-09T10:00:00Z"
-status: draft
 verified:
 - by: process:lokf-librarian
   at: "2026-09-09T17:00:00Z"
+- by: human:noelmcloughlin
+  at: "2026-09-09T18:31:00Z"
+stale_after: 2027-09-09
 ---
 
 # Overview

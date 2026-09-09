@@ -2,6 +2,16 @@
 
 ## 2026-09-09
 
+* **Curation**: human:noelmcloughlin confirmed 5 concepts (the ones most
+  relied-upon and least-checked per the Step 1 report): `references/agent-skills-specification`,
+  `references/okf-specification`, `glossary/knowledge-bundle`,
+  `playbooks/lokf-librarian-skill`, `references/lokf-specification`. Sent 0
+  back, corrected 0, retired 0. One evidence-citation error caught mid-session
+  (a quote presented as coming from a single "Section 1" of
+  `lokf-librarian/SKILL.md` was actually a synthesis drawn from three separate
+  places in the file) - re-quoted properly and the underlying claim held; a
+  one-off slip in how evidence was presented, not a defect in the concept or
+  a pattern worth changing lokf-librarian's instructions over.
 * **AI_COVENANT.md gained a "Repository-Owned Agent Automation" section**:
   raised by the maintainer after noticing this same run's own commit carried
   an AI co-authorship trailer the covenant already discourages (fixed by

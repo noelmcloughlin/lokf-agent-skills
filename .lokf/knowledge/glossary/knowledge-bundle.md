@@ -8,12 +8,14 @@ resource: skills/lokf-scaffolding/templates/README.md
 generated:
   by: process:lokf-librarian
   at: "2026-09-09T10:00:00Z"
-status: draft
 about:
   - https://lokf-agent-skills.example/knowledge/glossary/lokf
 verified:
 - by: process:lokf-librarian
   at: "2026-09-09T17:00:00Z"
+- by: human:noelmcloughlin
+  at: "2026-09-09T18:33:00Z"
+stale_after: 2028-09-09
 ---
 
 # Overview
