@@ -97,7 +97,7 @@ The LOKF **format** is defined once in LinkML (`lokf.yaml`); the JSON Schema, JS
    | `dependsOn` | `dcterms:requires` | this depends on the target |
    | `derivedFrom` | `prov:wasDerivedFrom` | provenance |
    | `about` | `schema:about` | subject matter |
-   | `sameAs` | `owl:sameAs` | same entity |
+   | `sameAs` | `schema:sameAs` | same entity |
    | `relatedTo` | `dcterms:relation` | generic association |
    | `definedBy` | `rdfs:isDefinedBy` | formally defined by |
    | `source` | `dcterms:source` | sourced from the target |

@@ -13,7 +13,7 @@ about:
   - https://lokf-agent-skills.example/knowledge/glossary/lokf
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-09T12:00:00Z"
+  at: "2026-09-09T17:00:00Z"
 ---
 
 # Overview

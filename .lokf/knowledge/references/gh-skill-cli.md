@@ -11,6 +11,9 @@ generated:
 status: draft
 definedBy:
 - https://lokf-agent-skills.example/knowledge/references/agent-skills-specification
+verified:
+- by: process:lokf-librarian
+  at: "2026-09-09T17:00:00Z"
 ---
 
 # Overview

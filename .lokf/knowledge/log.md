@@ -2,6 +2,33 @@
 
 ## 2026-09-09
 
+* **Steady-state refresh, second pass**: re-verified all 18 internal-resource
+  concepts (no drift - the two upstream commits since the prior pass,
+  `e6d5633` and `b743c84`, were prose tidying with no facts this bundle
+  asserts) and, for the first time since bootstrap, fetched and checked all
+  seven external Reference concepts against their live sources - all still
+  accurate. Details and the one loose end (an unconfirmed GitHub CLI version
+  number) are in `playbooks/knowledge-sources.md`.
+* **Correctness bug found and fixed**: a same-day commit (`e6d5633`) had
+  flipped the `sameAs` typed-relation's RDF predicate from the correct
+  `schema:sameAs` to `owl:sameAs` in `lokf-librarian/SKILL.md`'s Golden Rule
+  4 - confirmed wrong against both the LOKF specification site and the raw
+  `lokf.yaml` schema. Not just documentation: `just lokf-check-refs`'s SPARQL
+  query filtered on the same wrong predicate in both `.lokf/justfile` and the
+  `lokf-scaffolding` template it's copied from, so a `sameAs` relation's
+  target would have silently never been checked for existing. Fixed all
+  three; `lokf validate` and `lokf-check-refs` still pass.
+* **Tooling floor bumped**: `lokf` reached 0.7.0 on PyPI (floor was
+  `>=0.5.0`, already resolving to 0.7.0 with no upper bound). Reviewed
+  0.6.0/0.7.0 release notes for breaking changes affecting this sidecar -
+  none found. Bumped the floor to `>=0.7.0` to match what's actually locked.
+* **Feedback consumed, no bundle change**: the one open `.lokf/feedback.md`
+  entry asked about a roadmap for a fifth skill; re-searched the repository
+  and found nothing to derive a concept from, so cleared it rather than
+  inventing one, per the docent's own note.
+* **Orphan sweep**: `LICENSE`, `llms.txt`, and `EXAMPLES.md` had no
+  source-map row; added one, all three staying excluded as concepts (see
+  `playbooks/knowledge-sources.md` for why).
 * **Initialization**: Scaffolded the LOKF bundle for LOKF Agent Skills, then
   ran a bootstrap discovery pass over the repository. Populated it with 25
   concepts: 8 playbooks (the four skills, the source map, contributing,

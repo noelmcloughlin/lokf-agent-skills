@@ -7,11 +7,11 @@ genre: how-to
 resource: .
 generated:
   by: process:lokf-librarian
-  at: "2026-09-09T12:00:00Z"
+  at: "2026-09-09T17:00:00Z"
 status: draft
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-09T12:00:00Z"
+  at: "2026-09-09T17:00:00Z"
 ---
 
 # Sources swept for this bootstrap discovery pass
@@ -32,15 +32,60 @@ verified:
 | `CHANGELOG.md` | what changed between releases | read the `[Unreleased]` section for behaviour changes not yet reflected in concepts |
 | external URLs cited across the repo | the seven Reference concepts | confirm each still resolves and still says what the concept claims |
 | `.assets/*.svg` | decorative images (e.g. the README social-preview card) | consciously excluded - see note below; re-check only that the row still applies if the asset's purpose changes |
+| `LICENSE`, `llms.txt`, `EXAMPLES.md` | licensing boilerplate, the agent-facing pointer file, and captured docent transcripts | consciously excluded as concepts - see note below; re-check that `llms.txt` still matches the "For AI agents" callout in `README.md`, and that `EXAMPLES.md`'s trust-label claims still match `glossary/trust-label.md` |
 
 # Notes for the next run
 
-- **Steady-state refresh (this run)**: re-verified all 17 internal-resource
-  concepts against their current files - all still accurate; no body
-  changes needed. Consciously skipped `.assets/lokf-agent-skills-card.svg`,
-  a new decorative image added to `README.md` since the bootstrap pass: it
-  carries no reusable knowledge, so it gets a source-map row (above) instead
-  of a concept, the same treatment as `.markdownlint-cli2.jsonc`/`lychee.toml`.
+- **Steady-state refresh (2026-09-09, second pass)**: re-verified all 18
+  internal-resource concepts against their current files (18, not 17 -
+  this file itself is one) - no body drift found; two upstream commits since
+  the prior pass (`e6d5633`, `b743c84`) turned out to be prose tidying with
+  no factual changes this bundle asserts. Also fetched and checked all seven
+  external Reference concepts against their live sources for the first time
+  (previously unverified since bootstrap) - all still accurate; `gh-skill-cli.md`'s
+  "Added in GitHub CLI v2.90.0" claim could not be independently confirmed
+  from `cli.github.com` itself (the manual page carries no version-introduced
+  note) but was not contradicted either - GitHub's own CLI changelog shows
+  `gh skill install` already existed by v2.91.0, consistent with v2.90.0
+  without pinning it exactly; leaving as-is, flag if a future run finds the
+  exact version.
+- **Correctness bug found and fixed (this run)**: `skills/lokf-librarian/SKILL.md`
+  Golden Rule 4 mapped `sameAs` to `owl:sameAs`, changed from the correct
+  `schema:sameAs` by commit `e6d5633` (self-described as "chore: minor updates
+  and improvements", not a deliberate spec change). Cross-checked against both
+  the LOKF specification site and the raw `lokf.yaml` schema on GitHub, which
+  agree: `sameAs` maps to `schema:sameAs`. This wasn't just a documentation
+  slip - `just lokf-check-refs`'s SPARQL query (in both `.lokf/justfile` and
+  the `skills/lokf-scaffolding/templates/justfile` it was copied from) filters
+  on the same predicate list, so any `sameAs` relation would have silently
+  never been checked for a dangling target. Fixed in all three places, no
+  `sameAs` relations exist in this bundle yet so nothing else changed;
+  `just lokf-validate` and `just lokf-check-refs` still pass.
+- **Tooling floor bumped (this run)**: `lokf` on PyPI reached 0.7.0 (this
+  sidecar's floor was `>=0.5.0`, already resolving to 0.7.0 in practice since
+  there was no upper bound). Reviewed the 0.6.0/0.7.0 release notes for
+  breaking changes - 0.6.0 requires `mcp>=2.0` (irrelevant here; this sidecar
+  never touches the MCP server feature) and 0.7.0 is toolkit-code-unchanged
+  from 0.6.0. Bumped the floor to `>=0.7.0` to match what's actually locked;
+  `uv sync`, `just lokf-validate`, and `just lokf-check-refs` all still pass.
+- **Feedback consumed (this run)**: the one `.lokf/feedback.md` entry (a
+  reader's "roadmap for a fifth skill?" Miss) was cleared with no bundle
+  change - re-searched the whole repository for "fifth"/"roadmap" and found
+  nothing, so recording a placeholder concept would have been inventing a
+  fact rather than deriving one, per the docent's own note on the entry.
+- **Orphan sweep (this run)**: `LICENSE`, `llms.txt`, and `EXAMPLES.md` had no
+  source-map row. Added one (above); all three stay excluded as concepts -
+  `LICENSE` restates the Apache-2.0 fact `playbooks/contributing.md` already
+  carries, `llms.txt` restates the agent-facing pointer already in `README.md`
+  and covered by no concept of its own, and `EXAMPLES.md` is captured docent
+  output rather than a repository fact to derive from.
+- **Steady-state refresh (2026-09-09, first pass)**: re-verified all 17
+  internal-resource concepts against their current files - all still
+  accurate; no body changes needed. Consciously skipped
+  `.assets/lokf-agent-skills-card.svg`, a new decorative image added to
+  `README.md` since the bootstrap pass: it carries no reusable knowledge, so
+  it gets a source-map row (above) instead of a concept, the same treatment
+  as `.markdownlint-cli2.jsonc`/`lychee.toml`.
 - **Audit finding, fixed this run**: 12 of 25 concepts had a bare-scalar
   value on a multivalued relation slot (`dependsOn`/`definedBy`/`relatedTo`),
   which is schema-invalid even though it reads naturally - `uv run lokf
