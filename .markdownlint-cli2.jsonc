@@ -1,4 +1,10 @@
 {
+  // Ignore generated local virtualenvs and other tool caches so the repo's
+  // markdown validation only sees source content, not runtime artifacts.
+  "ignores": [
+    "**/.venv/**",
+    ".lokf/.venv/**"
+  ],
   // Rules disabled for reasons specific to this repo's content, not because
   // the underlying style guidance is wrong in general:
   "config": {

@@ -48,6 +48,8 @@ Resolve every placeholder from real project sources before writing anything; nev
 
 **Tracked or gitignored - decide now.** Check whether the root `.gitignore` already excludes `.lokf/` (ask if unclear). Committing `.lokf/` is the default four skills assume; gitignoring it is equally valid (personal bundle, or a policy against committing agent-authored content) but changes three things: still create every file (the bundle is filesystem-based either way); skip the commit in Step 4 and all of Step 5; say so in the Step 6 handoff. This is unrelated to `.lokf/.gitignore` below, which only excludes tool build noise.
 
+> Repo hygiene note: if the host repo installs AI skills locally, the generated runtime directories `.agents/`, `.claude/`, and the lockfile `skills-lock.json` are not source content and should be excluded from the root `.gitignore` rather than committed as project changes.
+
 ## Step 1 - Create the skeleton and copy the templates
 
 Copy each template to its destination, then substitute the placeholders it lists. Only these placeholders exist; `templates/gitignore` is written as

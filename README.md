@@ -5,11 +5,11 @@
 > We balance the earth in a pair of scales of our own devising."\
 > — Amy Lowell, *The Congressional Library* (1922)
 
+Four [Agent Skills](https://agentskills.io/home) that turn a repository's scattered knowledge into a maintained, trusted asset using **[LOKF](https://lokf.nolan-nichols.com/)** (Linked Open Knowledge Format) - a semantic profile of OKF in which a plain folder of Markdown concept files carries enough meaning to be validated by schema, queried as a graph, and read by people and agents alike. The [lokf python](https://pypi.org/project/lokf) package provides schema and tooling. **An agent derives it. Deterministic tools check it. A named person vouches for it. The bundle records which of the three happened to every claim.**
+
 <p align="center">
   <img src=".assets/lokf-agent-skills-card.svg" alt="LOKF Agent Skills overview graphic" width="720" />
 </p>
-
-Four [Agent Skills](https://agentskills.io/home) that turn a repository's scattered knowledge into a maintained, trusted asset using **[LOKF's](https://lokf.nolan-nichols.com/)** (Linked Open Knowledge Format)  - a semantic profile of OKF in which a plain folder of Markdown concept files carries enough meaning to be validated by schema, queried as a graph, and read by people and agents alike. The [lokf python](https://pypi.org/project/lokf) package provides schema and tooling.
 
 > **For AI agents:** if `.lokf/knowledge/index.md` exists in this repository,
 > read it first - it is a queryable [LOKF](https://lokf.nolan-nichols.com)
@@ -17,11 +17,13 @@ Four [Agent Skills](https://agentskills.io/home) that turn a repository's scatte
 > what you find there (drafts vs. person-confirmed) and names the `lokf-docent`
 > skill for answering from it.
 
-## The problem they solve
+## Why libraries have catalogues
 
-The knowledge already exists - in code, documents, diagrams, policies, operational records. What is missing is a durable layer *between* those sources and the next task. Every new session re-finds the material, re-connects the pieces, and re-judges whether they can be trusted; the useful interpretation evaporates when the task ends. A knowledge bundle keeps the selected context once, keeps it current, and keeps its provenance and trust signals visible so that people and AI assistants can reuse it instead of rediscovering it.
+The knowledge already exists - in code, documents, diagrams, policies, operational records. What's missing is a layer that sits between those sources and whoever needs them next, and stays put. Without it, every task starts the same way: find the material, work out how it connects, judge what's still true. That's real work, and it dies with the task - the next person, or the next conversation with an assistant, pays for it again.
 
-Schema checks make a bundle *consistent*. They cannot make it *true*. That takes a person - which is why there are four roles here, not one.
+A bundle keeps that work instead of discarding it. But it is only worth keeping if you can tell what's sound - otherwise you re-verify everything yourself, the very thing you were trying to avoid, and the files quietly rot.
+
+So ask a question and the answer tells you where it came from and how far it has been checked, in plain words - *confirmed by a person*, or *nobody has checked this yet*. Those labels are computed from the files on every read, never stored, so they cannot drift from what they describe: run it twice against an unchanged bundle and it says the same thing.
 
 ## Four roles, three lines of the poem
 
@@ -32,9 +34,9 @@ Schema checks make a bundle *consistent*. They cannot make it *true*. That takes
 | [`lokf-curator`](skills/lokf-curator/SKILL.md) | **Holds the scales.** A human curator's assistant. Shows what needs a person's look, puts the source next to the claim, and records the person's verdict - confirm, correct, retire, send back - in the bundle's own frontmatter. It deals in *judgments a person made*, never in facts it derived. | a little, regularly |
 | [`lokf-docent`](skills/lokf-docent/SKILL.md) ([examples](EXAMPLES.md)) | **Guides the visitors** - the role the poem leaves implicit, because the library exists for them. Answers questions from the bundle first, says how far each concept used has been trusted, verifies exact values at the source, and when the bundle has no answer explores the repository and records the miss so it becomes the librarian's next task. Read-only on the bundle. | whenever anyone asks |
 
-*Curator* here is meant in the museum sense - the person who authenticates, weighs provenance, and decides what is exhibited as trusted. (In data-management usage "curation" describes the librarian's work; that is not what the third skill does.) If it helps to place yourself: the librarian is the reporter, the curator is the fact-checker and editor, and the docent is the reader - who also writes in with corrections.
+*Curator* here is the museum sense - the one who authenticates, weighs provenance, and decides what goes on display; not the data-management sense, which describes the librarian's job. A *docent* is the museum's guide - the one who walks visitors through a collection and explains what they are seeing, without moving anything on the shelves. If it helps to place yourself: the librarian reports, the curator fact-checks and edits, the docent reads - and writes back with corrections.
 
-Run scaffolding once on a repository with no `.lokf/`; it hands off to the librarian, which fills the bundle and marks everything it creates as a draft; the librarian hands off to the curator, where a person turns drafts into confirmed knowledge a few at a time. On a repository that already has a healthy `.lokf/`, install the librarian and the curator. Install the docent wherever an agent will *read* a bundle - including repositories and agents that only ever consume one.
+On a fresh repository they run in that order: scaffolding once, then the librarian filling the bundle and marking everything it creates a draft, then the curator, where a person turns drafts into confirmed knowledge a few at a time. After that it stops being a sequence and becomes a loop - the librarian refreshes on a schedule, readers send back what the bundle missed, and the curator works through whatever that surfaces.
 
 ## Trust stays visible
 
@@ -45,17 +47,15 @@ Every concept carries its own trust record, and the curator reports it in plain 
 - **Nobody has checked this yet** - no check of any kind is recorded.
 - **Still a draft**, **edited since a person last confirmed it**, **past its review date**, **retired** - and, for prioritising, how many other concepts rely on each one.
 
-The **docent** carries the label into every answer it gives from a concept, so a reader always knows which rung an answer stands on.
-
-The number to watch is **confirmed by a person: n of N**. It is computed from the bundle every time, never stored, and it is meant to rise slowly. Curation is cumulative and partial by design: a busy person confirms a handful of concepts per session, the librarian's next scheduled run re-prompts with what changed, and end users who lean on the bundle report what it got wrong or missed. A small, young bundle can reach fully-confirmed quickly; a large or fast-growing one never quite does - and the report says so honestly instead of pretending.
+The number to watch is **confirmed by a person: n of N**, and it is meant to rise slowly - a handful of concepts in a sitting, cumulative and partial by design. A small, young bundle can reach fully-confirmed quickly; a large or fast-growing one never quite does, and the report says so instead of pretending.
 
 ### How a claim gets checked
 
-Four levels, each answering a narrower question than it sounds like it answers. Schema checks make a bundle *consistent*; only the third rung makes it *trusted*.
+Four levels, each proving less than its name suggests. Only the third yields a claim someone has agreed to stand behind.
 
 | Check | Who, when | What it proves | What it can't |
 | --- | --- | --- | --- |
-| Schema-valid | the `lokf` toolkit (`just lokf-validate`) on every change, and the CI gate on every `.lokf/**` pull request | the frontmatter is well-formed, the types and relations are ones the schema knows, the graph is consistent | that anything in it is true |
+| Schema-valid | the `lokf` toolkit on every change (`just lokf-validate`, and `just lokf-check-refs` for relation targets); `lokf validate` again as the CI gate on every `.lokf/**` pull request | the frontmatter is well-formed, the types and relations are ones the schema knows, and every typed relation points at a concept that exists | that anything in it is true |
 | Source-consistent | `lokf-librarian` on every scheduled refresh - shown as *checked by automation only* | the concept still matches what its source says today | that the source is right, or that the concept says what the team means |
 | Human-confirmed | a named person, through `lokf-curator` - shown as *confirmed by a person* | someone accountable read the source and agreed | that it stays true - which is what review dates are for |
 | Proven in use | readers, through `lokf-docent`, which records misses and disagreements in `.lokf/feedback.md` | the bundle answered a real question - or didn't, and the gap became the librarian's next task | nothing further - this is the feedback loop that feeds the other three |
@@ -66,9 +66,7 @@ LOKF's vocabulary is deliberately small - 14 classes, ten typed relations - whic
 
 ## Install
 
-All four skills must be installed **explicitly** - installing one does not pull in the others, as current installers have no cross-skill dependency mechanism.
-
-**Start small if you like.** Scaffolding plus the librarian is enough to see the idea: the bundle gets built, everything in it marked a draft. Add the curator once there is a bundle worth trusting; until then the librarian's pull requests keep pointing at it. The docent is the one to install in any repository or agent that merely *reads* a bundle.
+**Install what you need - each skill stands alone.** Scaffolding plus the librarian is enough to see the idea: the bundle gets built, everything in it marked a draft. Add the curator once there is a bundle worth trusting; until then the librarian's pull requests keep pointing at it. Already have a healthy `.lokf/`? Skip scaffolding. The docent goes anywhere an agent only *reads* a bundle.
 
 **GitHub CLI** ([`gh skill`](https://cli.github.com/manual/gh_skill_install), GitHub CLI v2.90.0+):
 
@@ -111,7 +109,7 @@ Each `SKILL.md` is a lean router; anything not needed on every invocation lives 
 
 ## Versioning
 
-All four skills ship from this repository under one semantic version - `vMAJOR.MINOR.PATCH`, released together with meaning that should not surprise consumers. What each level means: [CONTRIBUTING.md](CONTRIBUTING.md#release-process).
+All four skills ship from this repository under one semantic version - `vMAJOR.MINOR.PATCH`, released together, so pinning them to the same tag always gives you a set that agrees with itself. What each level means: [CONTRIBUTING.md](CONTRIBUTING.md#release-process).
 
 See [CHANGELOG.md](CHANGELOG.md) for what changed in each release.
 
