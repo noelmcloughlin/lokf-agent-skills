@@ -11,4 +11,12 @@ Initial release: four [Agent Skills](https://agentskills.io/home) that turn a re
 - `lokf-curator` - a human curator's assistant: a one-screen trust and freshness report, and an opt-in review session that records a person's confirm/correct/retire/send-back verdict directly in the bundle's frontmatter.
 - `lokf-docent` - the reader's entry point. Answers questions from the bundle first, states each concept's trust label in plain words, verifies exact values at the source, and - when the bundle has no answer - explores the repository directly and records the gap in `.lokf/feedback.md` for the librarian to pick up. See [`EXAMPLES.md`](EXAMPLES.md) for real question-and-answer transcripts.
 
+Also in this release:
+
+- Prompt-injection guards across all three content-reading skills (`lokf-librarian`, `lokf-curator`, `lokf-docent`), documented in [`SECURITY.md`](SECURITY.md).
+- [`AI_COVENANT.md`](AI_COVENANT.md)'s "Repository-Owned Agent Automation" section, governing how agent-authored commits and PRs are attributed and reviewed.
+- `just lokf-check-refs` - a SPARQL check that every typed-relation target resolves to a real concept, closing a gap `lokf validate` doesn't cover.
+- Fixed `knowledge-librarian.yaml`'s agent step executing a repository variable's content as an arbitrary shell command; it now always runs a pinned, reviewed wrapper script, with a dedicated step enforcing that the agent only wrote where it's allowed to.
+- Workflow and script lint/hardening fixes (`scripts/smoke-test-install.sh` among them).
+
 This repository dogfoods its own skills: `.lokf/` here is a real bundle built by `lokf-scaffolding` and `lokf-librarian`, self-describing all four skills, this repository's own governance, and its CI.
