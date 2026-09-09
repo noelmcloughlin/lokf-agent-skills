@@ -4,3 +4,8 @@
 
 # Local tooling, if a contributor runs npm/npx here directly
 node_modules/
+
+# Installed agent runtime state is local to the consuming repo, not source content.
+.agents/
+.claude/
+skills-lock.json

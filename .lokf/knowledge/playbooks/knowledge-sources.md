@@ -74,5 +74,3 @@ verified:
   reserved domain) pending a namespace the project actually controls. It mints
   every concept `@id` here, so migrating it later rewrites all of them - cheap
   now, expensive once anything external links in.
-- The repository has **no published release yet**, so the `v1.0.0` in the
-  install examples is illustrative. Re-check once a tag exists.
