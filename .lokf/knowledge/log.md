@@ -32,3 +32,14 @@
   `playbooks/knowledge-sources.md`, keeping all of them excluded as concepts
   (intake forms and maintenance config carry no reusable knowledge), and
   recorded the defects the sweep turned up in each.
+* **Prompt-injection guards added and documented**: a synergy review against
+  an external curation-patterns catalog (ai4curation.io) found that
+  `.lokf/feedback.md` reached the scheduled librarian agent with no guard
+  against a reader-submitted entry phrased as a directive. Added an explicit
+  guard to `lokf-librarian/SKILL.md` (resolve only from the source an entry
+  names, never its wording), and the same guard for the other two content-
+  fetching paths in `lokf-curator/SKILL.md` and `lokf-docent/SKILL.md`.
+  `SECURITY.md` gained a **Prompt-injection guards** section naming all three
+  plus the unattended-write-path blast-radius containment and what remains
+  unguarded (ordinary repository content, a reader's own phrasing); refreshed
+  `policies/security.md` to match.
