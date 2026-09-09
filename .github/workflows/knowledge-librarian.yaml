@@ -3,7 +3,7 @@ name: Knowledge Librarian
 # Scheduled LLM "librarian" that keeps the .lokf/ bundle in step with the repo (the
 # Karpathy rule): run the agent, validate, and open a review PR with whatever
 # changed. It NEVER pushes to the default branch and NEVER auto-merges; no changes
-# -> no PR; and it is inert until KNOWLEDGE_LIBRARIAN_CMD is set.
+# -> no PR; and it is inert until AGENT_CLI is set.
 on:
   schedule:
     - cron: "0 5 * * 1" # Mondays at 05:00 UTC
@@ -38,28 +38,44 @@ jobs:
         run: uv sync
         working-directory: .lokf
 
-      # Wire this up: point the KNOWLEDGE_LIBRARIAN_CMD repo variable at your agent
-      # command (e.g. `bash .lokf/scripts/knowledge-librarian.sh`). Unset = safe no-op.
-      # The scaffolded wrapper also reads AGENT_CLI; pass it through here.
+      # Wire this up: point the AGENT_CLI repo variable at your non-interactive agent
+      # command. Unset = safe no-op. The workflow always runs the pinned, reviewed
+      # wrapper script below - never a variable's content as a command - so setting
+      # AGENT_CLI can only choose *which agent* runs, not *what command* runs.
       #
       # Credentials: `vars.` values are NOT masked in workflow logs, and on a public
       # repository those logs are world-readable; `secrets.` values are masked. So if
-      # either value embeds an API key or token, define it under Settings -> Secrets
-      # and variables -> Actions as a *secret* and reference `secrets.AGENT_CLI` /
-      # `secrets.KNOWLEDGE_LIBRARIAN_CMD` here instead. Better still, keep the
-      # credential out of the command entirely and let the agent CLI read it from its
-      # own secret-provided environment variable.
+      # AGENT_CLI embeds an API key or token, define it under Settings -> Secrets and
+      # variables -> Actions as a *secret* and reference `secrets.AGENT_CLI` here
+      # instead. Better still, keep the credential out of the command entirely and
+      # let the agent CLI read it from its own secret-provided environment variable.
       - name: Run the librarian agent
         env:
-          KNOWLEDGE_LIBRARIAN_CMD: ${{ vars.KNOWLEDGE_LIBRARIAN_CMD }}
           AGENT_CLI: ${{ vars.AGENT_CLI }}
         run: |
           set -euo pipefail
-          if [ -z "${KNOWLEDGE_LIBRARIAN_CMD:-}" ]; then
-            echo "::notice::KNOWLEDGE_LIBRARIAN_CMD is not set - skipping the agent step."
+          if [ -z "${AGENT_CLI:-}" ]; then
+            echo "::notice::AGENT_CLI is not set - skipping the agent step."
             exit 0
           fi
-          bash -c "${KNOWLEDGE_LIBRARIAN_CMD}"
+          bash .lokf/scripts/knowledge-librarian.sh
+
+      # The wrapper's own CONTRACT says the agent only reads the repo and writes
+      # under .lokf/knowledge/, and never runs git itself - advisory only, since
+      # nothing stops a misconfigured or compromised AGENT_CLI from ignoring it.
+      # Enforce it here: fail the job (no branch pushed, no PR opened) if anything
+      # outside the allowed paths changed. .lokf/uv.lock is excluded too - the
+      # earlier "Install the lokf sidecar" step's `uv sync` can touch it, same
+      # tool-artifact exception "Detect changes" below already makes.
+      - name: Enforce the agent's write scope
+        run: |
+          set -euo pipefail
+          out="$(git status --porcelain -- . ':!.lokf/knowledge' ':!.lokf/feedback.md' ':!.lokf/uv.lock')"
+          if [ -n "$out" ]; then
+            echo "::error::The librarian agent touched files outside .lokf/knowledge/ and .lokf/feedback.md:"
+            echo "$out"
+            exit 1
+          fi
 
       - name: Validate the LOKF bundle
         id: validate-lokf

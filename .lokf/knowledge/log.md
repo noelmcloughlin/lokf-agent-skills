@@ -2,6 +2,21 @@
 
 ## 2026-09-09
 
+* **Security hardening on `knowledge-librarian.yaml`**: prompted by an
+  external security scan of the scaffolding templates. Two findings: (1,
+  MEDIUM) the agent step let a repository variable's *content* become the
+  executed shell command (`bash -c "${KNOWLEDGE_LIBRARIAN_CMD}"`), wider than
+  needed under that job's `contents: write` scope - fixed by removing that
+  variable entirely; the workflow now always invokes the pinned, reviewed
+  `.lokf/scripts/knowledge-librarian.sh` directly, and `AGENT_CLI` only
+  selects which agent runs, never what command runs. (2, LOW) the wrapper
+  script's contract - only touch `.lokf/knowledge/`, never run git - was
+  advisory, unenforced - fixed by a new "Enforce the agent's write scope"
+  step that fails the job before any commit if anything else changed
+  (excluding `.lokf/uv.lock`, a known `uv sync` side effect). Applied to the
+  scaffolding template and this repository's dogfooded copy in lockstep (both
+  `.yaml` and `.sh`), plus `SECURITY.md`, `scheduled-task.md`, and
+  `automation.md`. Updated `policies/security.md` to match.
 * **Curation**: human:noelmcloughlin confirmed 5 concepts (the ones most
   relied-upon and least-checked per the Step 1 report): `references/agent-skills-specification`,
   `references/okf-specification`, `glossary/knowledge-bundle`,
