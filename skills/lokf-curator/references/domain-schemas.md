@@ -25,6 +25,12 @@ uv run gen-shacl       domain.yaml                        # shapes for the proje
 
 The same schema serves the people who think in JSON, Python, or docs pages and the people who think in graphs - which is the point of writing it in LinkML rather than in any one of those. If your sidecar pins plain `lokf` without the `[build]` extra, add the extra rather than installing `linkml` separately, so the two stay version-compatible.
 
+## Validating values against an external vocabulary
+
+A domain schema often binds a slot to codes from an external controlled vocabulary - a `diagnosis` slot's permissible values `meaning`-bound to SNOMED CT terms, say. That binding is a LinkML concern; neither LOKF's schema nor `lokf validate` checks it - schema validation confirms the *shape* is right, not that a bound term still exists, isn't obsolete, or carries the label a concept assumes.
+
+[`linkml-term-validator`](https://github.com/linkml/linkml-term-validator), backed by the [Ontology Access Kit](https://github.com/INCATools/ontology-access-kit), checks that gap: it queries the live ontology behind a `meaning:` binding and reports whether the term still exists, isn't deprecated, and matches the expected label. Run it as an additional, optional gate alongside `lokf validate`, never a replacement for it, and treat "the ontology service was unreachable" as its own non-passing result rather than a silent pass. It only applies once a domain schema introduces a binding like this - a bundle using LOKF's built-in vocabulary alone has nothing for it to check.
+
 Roles stay as they are:
 
 - **The curator raises it.** A rising vocabulary-fit count, or a critical domain, is a report line and a conversation with the team - not something this skill fixes.

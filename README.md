@@ -62,7 +62,7 @@ Four levels, each answering a narrower question than it sounds like it answers. 
 
 ## When the vocabulary stops fitting
 
-LOKF's vocabulary is deliberately small - 14 classes, ten typed relations - which is what keeps bundles portable. When a bundle drifts into a deep or safety-critical domain (medicine, law, finance, safety engineering) and concepts start not fitting those classes, the answer is a domain schema written in [LinkML](https://linkml.io) that extends LOKF's, not a looser bundle. The curator flags the drift; the team decides; the librarian applies it. It costs no new tooling: the sidecar's `lokf[build]` dependency already includes the LinkML generators, so the same domain schema also gives you Pydantic models, JSON Schema, and rendered documentation. Examples in [`lokf-curator/references/domain-schemas.md`](skills/lokf-curator/references/domain-schemas.md).
+LOKF's vocabulary is deliberately small - 14 classes, ten typed relations - which is what keeps bundles portable. When a bundle drifts into a deep or safety-critical domain (medicine, law, finance, safety engineering) and concepts start not fitting those classes, the answer is a domain schema written in [LinkML](https://linkml.io) that extends LOKF's, not a looser bundle. The curator flags the drift; the team decides; the librarian applies it. It costs no new tooling: the sidecar's `lokf[build]` dependency already includes the LinkML generators, so the same domain schema also gives you Pydantic models, JSON Schema, and rendered documentation. Examples - including how to validate values a domain schema binds to an external ontology - in [`lokf-curator/references/domain-schemas.md`](skills/lokf-curator/references/domain-schemas.md).
 
 ## Install
 

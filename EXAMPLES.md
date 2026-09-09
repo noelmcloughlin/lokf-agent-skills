@@ -129,4 +129,3 @@ Checked at source: SECURITY.md's "Reporting a vulnerability" section - matches e
 ---
 
 Try these yourself once `lokf-docent` is installed, or ask your own - that's the point of the skill.
-
