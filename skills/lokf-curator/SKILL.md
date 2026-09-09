@@ -30,7 +30,7 @@ frontmatter. It decides nothing itself.
 Say these to the human. Don't say RDF, IRI, SPARQL, predicate, or tier. The fields behind each label, and the exact rules, are in [references/trust-fields.md](references/trust-fields.md).
 
 | Say | Meaning |
-|---|---|
+| --- | --- |
 | Confirmed by a person | a named person checked it against its source |
 | Checked by automation only | the librarian re-checked that the source still matches; no person has |
 | Nobody has checked this yet | no check of any kind is recorded |
@@ -62,7 +62,7 @@ Write nothing in Step 1. If `.lokf/knowledge/` doesn't exist, stop and point at 
 **Evidence first, every item.** Open the concept's `resource` (and `sources`) and quote the lines that matter - or say plainly that the source is gone or unreachable. *Then* show the concept's claim (title, description, the key facts). Ask "does the source still say this?" - and never answer it yourself with "looks consistent". Then take exactly one verb:
 
 | Verb | What you write (exact YAML: [references/review-session.md](references/review-session.md)) |
-|---|---|
+| --- | --- |
 | **Confirm** | add a `verified` event for this person; remove `status: draft`; propose a review date from the curation policy (they accept or edit); clear open questions they say are resolved |
 | **Wrong - send back** *(default)* | `status: draft` and the person's note under `## Open questions`; content untouched - the librarian fixes it on its next run |
 | **Wrong - correct now** | only when the person states the correct fact: the minimal edit to that field or sentence; `generated: { by: human:<id>, at }`; a `verified` event; remove `draft` |

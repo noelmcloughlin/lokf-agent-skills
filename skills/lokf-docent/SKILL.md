@@ -34,7 +34,7 @@ The full procedure, question-type hints, and edge cases: [references/answering.m
 ## Trust labels (the same words lokf-curator uses)
 
 | Say | When |
-|---|---|
+| --- | --- |
 | Confirmed by a person | any `verified[].by` starts with `human:` |
 | Checked by automation only | `verified` present, no `human:` actor |
 | Nobody has checked this yet | no `verified` key |

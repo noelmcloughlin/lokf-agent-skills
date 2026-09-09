@@ -46,28 +46,37 @@ mkdir -p "$test_root/consumer"
 echo ""
 echo "Assertions:"
 fail=0
-assert() { if eval "$2"; then echo "OK:   $1"; else echo "FAIL: $1"; fail=1; fi; }
+assert() {
+  local description="$1"
+  local check="$2"
+  if eval "$check"; then
+    echo "OK:   $description"
+  else
+    echo "FAIL: $description"
+    fail=1
+  fi
+}
 
 assert "lokf-librarian discovered by name" \
-  '[[ -n "$(find "$test_root/consumer" -type d -iname lokf-librarian 2>/dev/null)" ]]'
+  "[[ -n \"\$(find \"\$test_root/consumer\" -path \"*.agents/skills/lokf-librarian\" -o -path \"*.claude/skills/lokf-librarian\" 2>/dev/null)\" ]]"
 assert "lokf-scaffolding discovered by name" \
-  '[[ -n "$(find "$test_root/consumer" -type d -iname lokf-scaffolding 2>/dev/null)" ]]'
+  "[[ -n \"\$(find \"\$test_root/consumer\" -path \"*.agents/skills/lokf-scaffolding\" -o -path \"*.claude/skills/lokf-scaffolding\" 2>/dev/null)\" ]]"
 assert "lokf-librarian SKILL.md installed" \
-  '[[ -n "$(find "$test_root/consumer" -path "*lokf-librarian/SKILL.md" 2>/dev/null)" ]]'
+  "[[ -n \"\$(find \"\$test_root/consumer\" -path \"*.agents/skills/lokf-librarian/SKILL.md\" -o -path \"*.claude/skills/lokf-librarian/SKILL.md\" 2>/dev/null)\" ]]"
 assert "lokf-scaffolding SKILL.md installed" \
-  '[[ -n "$(find "$test_root/consumer" -path "*lokf-scaffolding/SKILL.md" 2>/dev/null)" ]]'
+  "[[ -n \"\$(find \"\$test_root/consumer\" -path \"*.agents/skills/lokf-scaffolding/SKILL.md\" -o -path \"*.claude/skills/lokf-scaffolding/SKILL.md\" 2>/dev/null)\" ]]"
 assert "lokf-scaffolding templates/ carried along" \
-  '[[ -n "$(find "$test_root/consumer" -path "*lokf-scaffolding/templates" -type d 2>/dev/null)" ]]'
+  "[[ -n \"\$(find \"\$test_root/consumer\" \( -path \"*.agents/skills/lokf-scaffolding/templates\" -o -path \"*.claude/skills/lokf-scaffolding/templates\" \) -type d 2>/dev/null)\" ]]"
 assert "lokf-curator discovered by name" \
-  '[[ -n "$(find "$test_root/consumer" -type d -iname lokf-curator 2>/dev/null)" ]]'
+  "[[ -n \"\$(find \"\$test_root/consumer\" -path \"*.agents/skills/lokf-curator\" -o -path \"*.claude/skills/lokf-curator\" 2>/dev/null)\" ]]"
 assert "lokf-curator SKILL.md installed" \
-  '[[ -n "$(find "$test_root/consumer" -path "*lokf-curator/SKILL.md" 2>/dev/null)" ]]'
+  "[[ -n \"\$(find \"\$test_root/consumer\" -path \"*.agents/skills/lokf-curator/SKILL.md\" -o -path \"*.claude/skills/lokf-curator/SKILL.md\" 2>/dev/null)\" ]]"
 assert "lokf-docent discovered by name" \
-  '[[ -n "$(find "$test_root/consumer" -type d -iname lokf-docent 2>/dev/null)" ]]'
+  "[[ -n \"\$(find \"\$test_root/consumer\" -path \"*.agents/skills/lokf-docent\" -o -path \"*.claude/skills/lokf-docent\" 2>/dev/null)\" ]]"
 assert "lokf-docent SKILL.md installed" \
-  '[[ -n "$(find "$test_root/consumer" -path "*lokf-docent/SKILL.md" 2>/dev/null)" ]]'
+  "[[ -n \"\$(find \"\$test_root/consumer\" -path \"*.agents/skills/lokf-docent/SKILL.md\" -o -path \"*.claude/skills/lokf-docent/SKILL.md\" 2>/dev/null)\" ]]"
 assert "no installer metadata leaked back into this source repo" \
-  '[[ -z "$(git -C "$repo_root" status --porcelain 2>/dev/null)" ]]'
+  "[[ -z \"\$(git -C \"\$repo_root\" status --porcelain --untracked-files=all -- .agents .claude skills-lock.json 2>/dev/null)\" ]]"
 
 echo ""
 if [[ "$fail" -eq 0 ]]; then

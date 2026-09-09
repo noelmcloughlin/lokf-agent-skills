@@ -3,7 +3,7 @@
 The human-facing labels in SKILL.md map onto OKF v0.2 §5 / LOKF Golden Rule 6 fields. Everything is computed from frontmatter with an ordinary YAML parser - no toolkit, no graph. (For the curious, the last column is the RDF predicate the LOKF toolkit projects each field to; it is never needed here.)
 
 | Label | Rule | Field(s) | RDF (optional) |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Confirmed by a person | any `verified[].by` starts with `human:` | `verified` | `lokf:verified` -> `prov:wasAssociatedWith` |
 | Checked by automation only | `verified` present, no `human:` actor | `verified` | same |
 | Nobody has checked this yet | no `verified` key | `verified` | - |

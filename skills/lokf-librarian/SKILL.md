@@ -80,7 +80,7 @@ The LOKF **format** is defined once in LinkML (`lokf.yaml`); the JSON Schema, JS
 3. **Use a class from the LOKF type vocabulary** (consumers tolerate unknowns as `lokf:Concept`): `Dataset`, `Table`, `Metric`, `Service`, `Playbook`, `Tutorial`, `Explanation`, `Policy`, `GlossaryTerm`, `Reference`, `Document`, `Person`, `Organization`, `AttestedComputation`.
 
    | class | type-specific fields |
-   |-------|----------------------|
+   | ----- | ---------------------- |
    | `Table`, `Dataset` | `fields` - list of `Field` (`name?`, `description?`, `datatype?`, `is_key?`, `unit?`, `constraints?`); `distribution` - list of `Distribution` (`access_url`, `name?`, `description?`, `media_type?`). Structured objects, **never** plain strings or URLs |
    | `Metric` | `unit`, `formula`, `measures` |
    | `Service` | `endpoint`, `http_method`, `documentation` |
@@ -90,7 +90,7 @@ The LOKF **format** is defined once in LinkML (`lokf.yaml`); the JSON Schema, JS
 4. **Prefer typed relationships over bare links** - this is LOKF's core upgrade. Each maps to a fixed RDF predicate; values are Concept IRIs (or IDs resolved against `base_iri`), all optional and multivalued:
 
    | field | predicate | meaning |
-   |-------|-----------|---------|
+   | ----- | --------- | ------- |
    | `isPartOf` | `dcterms:isPartOf` | this is part of the target |
    | `hasPart` | `schema:hasPart` | the target is part of this |
    | `references` | `dcterms:references` | this refers to the target |
@@ -107,7 +107,7 @@ The LOKF **format** is defined once in LinkML (`lokf.yaml`); the JSON Schema, JS
 6. **Record trust, provenance & lifecycle (OKF v0.2 §5.4) where the source attests it.** These optional families make trust signals *queryable RDF* instead of loose YAML; their absence carries meaning (an unverified concept stays valid, never rejected). Never invent them - record only what the origin actually states.
 
    | family | field | shape -> RDF predicate | meaning |
-   |--------|-------|------------------------|---------|
+   | ------ | ----- | ---------------------- | ------- |
    | provenance | `generated` | `{ by, at }` -> `prov:wasGeneratedBy` | who/what produced the current content, and when. **Supersedes `timestamp`** - prefer it on new/changed concepts. |
    | trust | `verified` | list of `{ by, at }` -> `lokf:verified` | verification events; a bare `{ by, at }` mapping MUST be read as a one-element list. |
    | provenance | `sources` | list of Source -> `schema:isBasedOn` | materials the concept derives from: `resource` (REQUIRED), plus optional `id` (footnote/merge key), `title`, `author`, `usage_count`, `last_modified`. Supersedes `citations`. |
@@ -131,7 +131,7 @@ Derive concepts from the host repository (or, as an edge case, any directory tre
 Sweep the repository with generic heuristics and map what you find to LOKF classes:
 
 | Look at | Typical finds | Class |
-|---------|---------------|-------|
+| ------- | ------------- | ----- |
 | manifests (`package.json`, `pyproject.toml`, `go.mod`, ...), entry points, `Dockerfile`/compose files, CI config | APIs, CLIs, UIs, workers, databases | `Service` |
 | data and schema files (CSV/YAML/JSON/SQL), fixtures, migrations | datasets, tables | `Dataset` / `Table` (use `fields`, `distribution`) |
 | external standards, specs, and ontologies the code or data encodes | upstream authorities | `Reference` (wire `derivedFrom` from the encoding `Dataset`) |

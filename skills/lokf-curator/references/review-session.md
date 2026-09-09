@@ -125,7 +125,7 @@ verified:
 # How often a person re-confirms
 
 | Kind of concept | Re-confirm every |
-|---|---|
+| --- | --- |
 | Services, datasets, tables, metrics, attested computations | 6 months |
 | Policies, playbooks, tutorials, references, documents, people, organizations | 12 months |
 | Glossary terms, explanations | 24 months |

@@ -35,7 +35,7 @@ Create a fresh **`.lokf/` sidecar** - a machine-readable, SPARQL-queryable [LOKF
 Resolve every placeholder from real project sources before writing anything; never leave a `<...>` token or dummy value behind.
 
 | Placeholder | Meaning | Where to find it |
-|---|---|---|
+| --- | --- | --- |
 | `<PROJ_NAME>` | Human-readable project name | manifest `name` (`package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, ...), root `README.md` title, service catalog, or repo name |
 | `<PROJ_DESC>` | One-sentence description | manifest `description`, README intro, or service catalog |
 | `<PROJ_SLUG>` | lowercase-hyphenated slug | derive from `<PROJ_NAME>` (`Acme Platform` -> `acme-platform`) |
@@ -54,7 +54,7 @@ Copy each template to its destination, then substitute the placeholders it lists
 `.lokf/.gitignore`.
 
 | Template | Destination | Placeholders |
-|---|---|---|
+| --- | --- | --- |
 | `templates/pyproject.toml` | `.lokf/pyproject.toml` | PROJ_NAME, PROJ_SLUG |
 | `templates/gitignore` | `.lokf/.gitignore` | - |
 | `templates/justfile` | `.lokf/justfile` | PROJ_NAME |
@@ -114,7 +114,7 @@ silently reports "no changes" for an ignored path forever. GitHub-only; other ho
 [references/portability.md](references/portability.md)). No placeholders.
 
 | Template | Destination |
-|---|---|
+| --- | --- |
 | `templates/github/knowledge-validate.yaml` | `.github/workflows/knowledge-validate.yaml` |
 | `templates/github/knowledge-librarian.yaml` | `.github/workflows/knowledge-librarian.yaml` |
 | `templates/scripts/knowledge-librarian.sh` | `.lokf/scripts/knowledge-librarian.sh` (`chmod +x`) |

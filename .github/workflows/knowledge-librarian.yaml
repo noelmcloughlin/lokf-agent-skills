@@ -82,10 +82,16 @@ jobs:
         if: steps.diff.outputs.changed == 'true'
         run: |
           set -euo pipefail
-          count() { grep -rlE "$1" --include='*.md' .lokf/knowledge 2>/dev/null | grep -vE '/(index|log)\.md$' | wc -l | tr -d ' '; }
-          echo "drafts=$(count '^status: *draft')" >> "$GITHUB_OUTPUT"
-          echo "questions=$(count '^## Open questions')" >> "$GITHUB_OUTPUT"
-          echo "human=$(count '^ *-? *by: *human:')" >> "$GITHUB_OUTPUT"
+          count() {
+            grep -rlE "$1" --include='*.md' .lokf/knowledge 2>/dev/null \
+              | grep -vE '/(index|log)\.md$' \
+              | grep -c . || true
+          }
+          {
+            echo "drafts=$(count '^status: *draft')"
+            echo "questions=$(count '^## Open questions')"
+            echo "human=$(count '^ *-? *by: *human:')"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Commit and push the librarian branch
         id: push

@@ -5,7 +5,11 @@
 > We balance the earth in a pair of scales of our own devising."\
 > — Amy Lowell, *The Congressional Library* (1922)
 
-Four [Agent Skills](https://agentskills.io/home) that turn a repository's scattered knowledge into a maintained, trusted asset using **[LOKF's](https://lokf.nolan-nichols.com/)** [python package](https://pypi.org/project/lokf/) (Linked Open Knowledge Format)  - a semantic profile of OKF in which a plain folder of Markdown concept files carries enough meaning to be validated by schema, queried as a graph, and read by people and agents alike.
+<p align="center">
+  <img src=".assets/lokf-agent-skills-card.svg" alt="LOKF Agent Skills overview graphic" width="720" />
+</p>
+
+Four [Agent Skills](https://agentskills.io/home) that turn a repository's scattered knowledge into a maintained, trusted asset using **[LOKF's](https://lokf.nolan-nichols.com/)** (Linked Open Knowledge Format)  - a semantic profile of OKF in which a plain folder of Markdown concept files carries enough meaning to be validated by schema, queried as a graph, and read by people and agents alike. The [lokf python](https://pypi.org/project/lokf) provides tooling.
 
 > **For AI agents:** if `.lokf/knowledge/index.md` exists in this repository,
 > read it first - it is a queryable [LOKF](https://lokf.nolan-nichols.com)
@@ -22,7 +26,7 @@ Schema checks make a bundle *consistent*. They cannot make it *true*. That takes
 ## Four roles, three lines of the poem
 
 | Skill | Role | Runs |
-|---|---|---|
+| --- | --- | --- |
 | [`lokf-scaffolding`](skills/lokf-scaffolding/SKILL.md) | **Lays the network.** Bootstraps a fresh `.lokf/` sidecar (tooling, docs, dummy skeleton) into a repository that doesn't have one, from bundled templates; repairs a broken scaffolding file. | once |
 | [`lokf-librarian`](skills/lokf-librarian/SKILL.md) | **Binds it into order.** Scrapes the repository, derives concepts with their sources, classifies them, wires typed relationships, audits, and hands off for review. Like a real librarian it catalogues without vouching - it deals in *facts about the repository*, never in verdicts about truth. | often, including on a schedule |
 | [`lokf-curator`](skills/lokf-curator/SKILL.md) | **Holds the scales.** A human curator's assistant. Shows what needs a person's look, puts the source next to the claim, and records the person's verdict - confirm, correct, retire, send back - in the bundle's own frontmatter. It deals in *judgments a person made*, never in facts it derived. | a little, regularly |
@@ -50,7 +54,7 @@ The number to watch is *confirmed by a person: n of N*. It is computed from the 
 Four levels, each answering a narrower question than it sounds like it answers. Schema checks make a bundle *consistent*; only the third rung makes it *trusted*.
 
 | Check | Who, when | What it proves | What it can't |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | Schema-valid | the `lokf` toolkit (`just lokf-validate`) on every change, and the CI gate on every `.lokf/**` pull request | the frontmatter is well-formed, the types and relations are ones the schema knows, the graph is consistent | that anything in it is true |
 | Source-consistent | `lokf-librarian` on every scheduled refresh - shown as *checked by automation only* | the concept still matches what its source says today | that the source is right, or that the concept says what the team means |
 | Human-confirmed | a named person, through `lokf-curator` - shown as *confirmed by a person* | someone accountable read the source and agreed | that it stays true - which is what review dates are for |

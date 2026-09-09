@@ -12,7 +12,7 @@ Weekly (Mondays 05:00 UTC) and on demand. Checks out full history, sets up `uv`,
 changed. It is **inert until wired**:
 
 | Repository variable | Value |
-|---|---|
+| --- | --- |
 | `KNOWLEDGE_LIBRARIAN_CMD` | `bash .lokf/scripts/knowledge-librarian.sh` |
 | `AGENT_CLI` | your non-interactive agent command, accepting a prompt via `-p` (use a repo *secret* instead if it embeds a token, and read `secrets.AGENT_CLI` in the workflow) |
 

@@ -1,6 +1,6 @@
 # Contributing to LOKF Agent Skills
 
-Thanks for your interest in improving `lokf-librarian` or `lokf-scaffolding`.
+Thanks for your interest in improving `lokf-agent-skills`.
 
 ## Development setup
 
@@ -23,7 +23,7 @@ npx skills add ./lokf-agent-skills --skill lokf-scaffolding
 ## Layout
 
 | Path | Responsibility |
-|---|---|
+| --- | --- |
 | `skills/lokf-scaffolding/SKILL.md` | One-shot bootstrap: creates `.lokf/` from `templates/`. Router only - see its `references/` for portability and automation detail. |
 | `skills/lokf-scaffolding/templates/` | Every file scaffolding writes, copied verbatim - never inlined into `SKILL.md`. |
 | `skills/lokf-librarian/SKILL.md` | Day-to-day: scrape, build, audit, and hand off `.lokf/` concepts. Facts, never verdicts. |

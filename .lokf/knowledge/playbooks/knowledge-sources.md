@@ -14,7 +14,7 @@ status: draft
 # Sources swept for this bootstrap discovery pass
 
 | Source | Yields | Re-check by |
-|---|---|---|
+| --- | --- | --- |
 | `skills/*/SKILL.md` | the four skill Playbooks | re-read each router; a changed step list, guardrail, or frontmatter `description` is a drift signal |
 | `skills/*/references/*.md` | detail behind each skill Playbook | diff against the claims in the corresponding concept body |
 | `skills/lokf-scaffolding/templates/` | what scaffolding actually writes; the toolkit dependency and its `[build]` extra | diff `pyproject.toml` (the `lokf` floor) and the template list in the skill's Step 1 table |

@@ -13,7 +13,7 @@ The point of a bundle is to *not* re-read the repository. Spend tokens in this o
 ## Finding the right concept
 
 | The question sounds like | Look for |
-|---|---|
+| --- | --- |
 | "What is X?" / "What does X mean?" | a `GlossaryTerm` (`definition`), or an `Explanation` |
 | "Who owns / publishes / maintains X?" | a `Person` or `Organization`, reached from X via `source`, `author`, or the bundle-root `publisher` |
 | "Which policy governs X?" | a `Policy` whose `about` points at X |

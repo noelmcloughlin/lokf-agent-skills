@@ -71,7 +71,7 @@ In short:
 ## What This Means in Practice
 
 | Situation | Guidance |
-|-----------|----------|
+| --- | --- |
 | Writing code with Copilot/Claude | No disclosure needed; you own the result |
 | Submitting AI-suggested fix you fully understand | No disclosure needed |
 | Submitting AI-suggested fix in unfamiliar code | Disclose AI origin for reviewer context |
