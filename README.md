@@ -45,9 +45,9 @@ Every concept carries its own trust record, and the curator reports it in plain 
 - **Nobody has checked this yet** - no check of any kind is recorded.
 - **Still a draft**, **edited since a person last confirmed it**, **past its review date**, **retired** - and, for prioritising, how many other concepts rely on each one.
 
-The docent carries the label into every answer it gives from a concept, so a reader always knows which rung an answer stands on.
+The **docent** carries the label into every answer it gives from a concept, so a reader always knows which rung an answer stands on.
 
-The number to watch is *confirmed by a person: n of N*. It is computed from the bundle every time, never stored, and it is meant to rise slowly. Curation is cumulative and partial by design: a busy person confirms a handful of concepts per session, the librarian's next scheduled run re-prompts with what changed, and end users who lean on the bundle report what it got wrong or missed. A small, young bundle can reach fully-confirmed quickly; a large or fast-growing one never quite does - and the report says so honestly instead of pretending.
+The number to watch is **confirmed by a person: n of N**. It is computed from the bundle every time, never stored, and it is meant to rise slowly. Curation is cumulative and partial by design: a busy person confirms a handful of concepts per session, the librarian's next scheduled run re-prompts with what changed, and end users who lean on the bundle report what it got wrong or missed. A small, young bundle can reach fully-confirmed quickly; a large or fast-growing one never quite does - and the report says so honestly instead of pretending.
 
 ### How a claim gets checked
 
@@ -62,13 +62,13 @@ Four levels, each answering a narrower question than it sounds like it answers. 
 
 ## When the vocabulary stops fitting
 
-LOKF's vocabulary is deliberately small - 14 classes, ten typed relations - which is what keeps bundles portable. When a bundle drifts into a deep or safety-critical domain (medicine, law, finance, safety engineering) and concepts start not fitting those classes, the answer is a domain schema written in [LinkML](https://linkml.io) that extends LOKF's, not a looser bundle. The curator flags the drift; the team decides; the librarian applies it. It costs no new tooling: the sidecar's `lokf[build]` dependency already includes the LinkML generators, so the same domain schema also gives you Pydantic models, JSON Schema, and rendered documentation. Examples - including how to validate values a domain schema binds to an external ontology - in [`lokf-curator/references/domain-schemas.md`](skills/lokf-curator/references/domain-schemas.md).
+LOKF's vocabulary is deliberately small - 14 classes, ten typed relations - which is what keeps bundles portable. When concepts stop fitting those classes, typically in a deep or safety-critical domain (medicine, law, finance, safety engineering), the answer is a domain schema written in [LinkML](https://linkml.io) that extends LOKF's, not a looser bundle. The curator flags the drift; the team decides; the librarian applies it. What it costs (no new tooling), how to write one, and how to validate values it binds to an external ontology: [`lokf-curator/references/domain-schemas.md`](skills/lokf-curator/references/domain-schemas.md).
 
 ## Install
 
-All four skills must be installed **explicitly** - installing one does not pull in the others. Current installers have no cross-skill dependency mechanism.
+All four skills must be installed **explicitly** - installing one does not pull in the others, as current installers have no cross-skill dependency mechanism.
 
-**Start small if you like.** Scaffolding plus the librarian is enough to see the idea: the bundle gets built, and everything in it is marked as a draft.  Add the curator once there is a bundle worth trusting; until then the librarian's pull requests will keep pointing at it. The curator's cost is one short description in your agent's always-loaded context, and about 1.8k tokens only when you invoke it. The docent is the one to install in any repository or agent that merely *reads* a bundle.
+**Start small if you like.** Scaffolding plus the librarian is enough to see the idea: the bundle gets built, everything in it marked a draft. Add the curator once there is a bundle worth trusting; until then the librarian's pull requests keep pointing at it. The docent is the one to install in any repository or agent that merely *reads* a bundle.
 
 **GitHub CLI** ([`gh skill`](https://cli.github.com/manual/gh_skill_install), GitHub CLI v2.90.0+):
 
@@ -79,14 +79,7 @@ gh skill install noelmcloughlin/lokf-agent-skills lokf-curator
 gh skill install noelmcloughlin/lokf-agent-skills lokf-docent
 ```
 
-Pin all four to the same release for reproducibility:
-
-```bash
-gh skill install noelmcloughlin/lokf-agent-skills lokf-scaffolding@v1.0.0
-gh skill install noelmcloughlin/lokf-agent-skills lokf-librarian@v1.0.0
-gh skill install noelmcloughlin/lokf-agent-skills lokf-curator@v1.0.0
-gh skill install noelmcloughlin/lokf-agent-skills lokf-docent@v1.0.0
-```
+Append `@v1.0.0` to each to pin all four to the same release.
 
 **Open Skills CLI** ([`npx skills`](https://github.com/vercel-labs/skills)):
 
@@ -118,17 +111,9 @@ Each `SKILL.md` is a lean router; anything not needed on every invocation lives 
 
 ## Versioning
 
-All four skills ship from this repository under one semantic version - `vMAJOR.MINOR.PATCH`, released together:
-
-- **Patch** - corrections that don't materially change expected behavior.
-- **Minor** - backward-compatible additions or broader supported workflows.
-- **Major** - breaking changes to behavior, structure, assumptions, or interoperability.
+All four skills ship from this repository under one semantic version - `vMAJOR.MINOR.PATCH`, released together with meaning that should not surprise consumers. What each level means: [CONTRIBUTING.md](CONTRIBUTING.md#release-process).
 
 See [CHANGELOG.md](CHANGELOG.md) for what changed in each release.
-
-## Canonical source
-
-This repository is the sole, canonical source of all four skills. Install from it rather than copying, and pin them all to the same release.
 
 ## Contributing
 

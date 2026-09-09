@@ -97,7 +97,7 @@ The LOKF **format** is defined once in LinkML (`lokf.yaml`); the JSON Schema, JS
    | `dependsOn` | `dcterms:requires` | this depends on the target |
    | `derivedFrom` | `prov:wasDerivedFrom` | provenance |
    | `about` | `schema:about` | subject matter |
-   | `sameAs` | `schema:sameAs` | same entity |
+   | `sameAs` | `owl:sameAs` | same entity |
    | `relatedTo` | `dcterms:relation` | generic association |
    | `definedBy` | `rdfs:isDefinedBy` | formally defined by |
    | `source` | `dcterms:source` | sourced from the target |
@@ -192,15 +192,16 @@ Use the toolkit - it gives you two independent, generated validators. From
 ```bash
 just lokf-install          # uv sync  (first time)
 just lokf-validate         # JSON Schema on frontmatter + assembled bundle
+just lokf-check-refs       # every typed-relation target resolves to a real concept
 just lokf-convert          # project to Turtle/RDF; eyeball the triples
 just lokf-serve            # SPARQL endpoint + live graph explorer (optional)
 ```
 
-`lokf validate` catches frontmatter/bundle-shape errors; the generated SHACL shapes catch cardinality/datatype/range violations on the projected graph. Beyond mechanical validity, audit for:
+`lokf validate` catches frontmatter/bundle-shape errors; the generated SHACL shapes catch cardinality/datatype/range violations on the projected graph. Neither checks that a relation target actually exists - a fabricated or stale IRI in `dependsOn` et al. passes both silently, since it's still a syntactically valid IRI. `just lokf-check-refs` closes that one gap with a SPARQL query over the same graph `lokf-serve` exposes: any typed-relation target that is never itself the subject of an `a` triple is reported and fails the check. It cannot tell you a target is *wrong*, only that it is *missing* - a `dependsOn` pointed at the right concept's evil twin still passes. Beyond that, audit for:
 
-- **Correctness** - class matches the asset; typed relations point the right way (`isPartOf` vs `hasPart`, `dependsOn` vs `derivedFrom`); `id`/`base_iri` mint the expected IRIs and the namespace passes Rule 2's authority test (not inside a URL space the project doesn't control); `endpoint`/`resource` still resolve.
+- **Correctness** - class matches the asset; typed relations point the right way (`isPartOf` vs `hasPart`, `dependsOn` vs `derivedFrom`); relation targets resolve to the *intended* concept, not merely *a* concept (`lokf-check-refs` can't catch this half); `id`/`base_iri` mint the expected IRIs and the namespace passes Rule 2's authority test (not inside a URL space the project doesn't control); `endpoint`/`resource` still resolve.
 - **Gaps** - new code/data files with no concept; untyped body links that should be typed relations; missing `id` on concepts other bundles link to; classes left as generic `lokf:Concept` that have a proper vocabulary type; concepts whose provenance/trust is knowable but unrecorded (missing `generated`, `sources`, or a `status`/`stale_after` on content that has clearly gone `deprecated` or stale).
-- **Bugs** - malformed YAML, invalid enum/datatype (fails JSON Schema or SHACL), relation targets that resolve to nothing *intended*, missing `base_iri`/`context` in the root `index.md`, `pyproject.toml` `lokf` constraint missing a `>=` floor or behind the latest release (see step 5).
+- **Bugs** - malformed YAML, invalid enum/datatype (fails JSON Schema or SHACL), a relation target that resolves to nothing at all (`lokf-check-refs`), missing `base_iri`/`context` in the root `index.md`, `pyproject.toml` `lokf` constraint missing a `>=` floor or behind the latest release (see step 5).
 
 Report findings as a checklist; fix mechanical issues directly and re-run `just lokf-validate`.
 

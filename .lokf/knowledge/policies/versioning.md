@@ -4,10 +4,10 @@ id: https://lokf-agent-skills.example/knowledge/policies/versioning
 title: Versioning policy
 description: One repository-level semantic version covering all four skills, released together under a single tag, with patch/minor/major defined by effect on expected behaviour.
 genre: reference
-resource: README.md
+resource: CONTRIBUTING.md
 generated:
   by: process:lokf-librarian
-  at: "2026-09-09T10:00:00Z"
+  at: "2026-09-09T14:00:00Z"
 status: draft
 about:
   - https://lokf-agent-skills.example/knowledge/playbooks/releasing

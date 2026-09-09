@@ -48,4 +48,8 @@ repository and never vouches for them; the curator records a person's verdicts a
 
 ## Release process
 
-Releases are maintainer-gated via the `publish.yml` workflow (`workflow_dispatch`, not tag-triggered - see that file's header comment for why). All four skills always ship together under one tag. See [README.md](README.md#versioning) for the version-bump rules.
+Releases are maintainer-gated via the `publish.yml` workflow (`workflow_dispatch`, not tag-triggered - see that file's header comment for why). All four skills always ship together under one tag, under one semantic version - `vMAJOR.MINOR.PATCH`:
+
+- **Patch** - corrections that don't materially change expected behavior.
+- **Minor** - backward-compatible additions or broader supported workflows.
+- **Major** - breaking changes to behavior, structure, assumptions, or interoperability.

@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to this repository are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows the rules in [README.md](README.md#versioning). All skills release together under one tag.
+All notable changes to this repository are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows the rules in [CONTRIBUTING.md](CONTRIBUTING.md#release-process). All skills release together under one tag.
 
 ## [1.0.0] - 2026-09-09
 

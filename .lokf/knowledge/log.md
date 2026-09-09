@@ -32,6 +32,12 @@
   `playbooks/knowledge-sources.md`, keeping all of them excluded as concepts
   (intake forms and maintenance config carry no reusable knowledge), and
   recorded the defects the sweep turned up in each.
+* **Versioning policy re-sourced**: the `vMAJOR.MINOR.PATCH` bump definitions
+  moved out of `README.md` (slimmed) into `CONTRIBUTING.md`'s release-process
+  section, where the rest of the release mechanics already live. Repointed
+  `policies/versioning.md`'s `resource` to follow them - its body was
+  asserting definitions its stated source no longer carried - along with the
+  cross-references in `README.md` and `CHANGELOG.md`.
 * **Prompt-injection guards added and documented**: a synergy review against
   an external curation-patterns catalog (ai4curation.io) found that
   `.lokf/feedback.md` reached the scheduled librarian agent with no guard
