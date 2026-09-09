@@ -2,6 +2,19 @@
 
 ## 2026-09-09
 
+* **AI_COVENANT.md gained a "Repository-Owned Agent Automation" section**:
+  raised by the maintainer after noticing this same run's own commit carried
+  an AI co-authorship trailer the covenant already discourages (fixed by
+  amending that commit). The deeper gap: the covenant's model is a person
+  drafting with AI help then submitting, but `lokf-librarian` (scheduled or
+  interactive) and `lokf-curator` both have an *agent* executing the actual
+  commit/PR. The scheduled workflow already gets this right by convention
+  (bot identity, no trailer, mandatory review) but the convention was never
+  written down. New section makes it explicit: bot-or-maintainer identity
+  with no trailer either way, every change lands as a human-reviewed PR
+  (never an agent's own approval), and a curator-recorded human verdict must
+  trace to that person's real-time answer to that specific item. Updated
+  `policies/ai-covenant.md` to match.
 * **Steady-state refresh, second pass**: re-verified all 18 internal-resource
   concepts (no drift - the two upstream commits since the prior pass,
   `e6d5633` and `b743c84`, were prose tidying with no facts this bundle
