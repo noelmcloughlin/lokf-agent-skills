@@ -10,8 +10,13 @@ generated:
   by: process:lokf-librarian
   at: "2026-09-09T10:00:00Z"
 status: draft
-definedBy: https://lokf-agent-skills.example/knowledge/references/lokf-specification
-relatedTo: https://lokf-agent-skills.example/knowledge/glossary/okf
+definedBy:
+- https://lokf-agent-skills.example/knowledge/references/lokf-specification
+relatedTo:
+- https://lokf-agent-skills.example/knowledge/glossary/okf
+verified:
+- by: process:lokf-librarian
+  at: "2026-09-09T12:00:00Z"
 ---
 
 # Overview

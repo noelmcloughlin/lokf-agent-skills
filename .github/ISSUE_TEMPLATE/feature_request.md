@@ -1,13 +1,13 @@
 ---
 name: Feature request
-about: Suggest an improvement to lokf-librarian or lokf-scaffolding
+about: Suggest an improvement to one of the four LOKF skills
 title: ''
 labels: enhancement
 assignees: ''
 ---
 
 **Which skill?**
-lokf-librarian / lokf-scaffolding / both
+lokf-scaffolding / lokf-librarian / lokf-curator / lokf-docent / several
 
 **What's missing or awkward**
 Describe the gap. Note whether it's about the skill's operational content
@@ -21,4 +21,4 @@ Describe the gap. Note whether it's about the skill's operational content
 ## AI Assistance
 
 If you used AI tools while preparing this issue, you are still the author and responsible for understanding, verifying, and defending your submission. Don't dump LLM output into
-this issue without curation. See our [AI Covenant](AI_COVENANT.md) for details.
+this issue without curation. See our [AI Covenant](https://github.com/noelmcloughlin/lokf-agent-skills/blob/main/AI_COVENANT.md) for details.

@@ -9,13 +9,18 @@ generated:
   by: process:lokf-librarian
   at: "2026-09-09T10:00:00Z"
 status: draft
-dependsOn: https://lokf-agent-skills.example/knowledge/playbooks/lokf-scaffolding-skill
+dependsOn:
+- https://lokf-agent-skills.example/knowledge/playbooks/lokf-scaffolding-skill
 about:
   - https://lokf-agent-skills.example/knowledge/glossary/knowledge-bundle
-definedBy: https://lokf-agent-skills.example/knowledge/references/agent-skills-specification
+definedBy:
+- https://lokf-agent-skills.example/knowledge/references/agent-skills-specification
 references:
   - https://lokf-agent-skills.example/knowledge/references/lokf-specification
   - https://lokf-agent-skills.example/knowledge/references/okf-specification
+verified:
+- by: process:lokf-librarian
+  at: "2026-09-09T12:00:00Z"
 ---
 
 # Overview

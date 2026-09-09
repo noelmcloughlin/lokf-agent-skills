@@ -9,6 +9,12 @@ A docent guides visitors through a collection. This skill guides an agent throug
 gets filled. It is the reader's side of the loop the other three skills run: the miss you record today is the concept the librarian derives on its next
 run and a person confirms after that.
 
+> Eight real examples of this skill answering real questions, including a
+> deliberate miss and an honest "couldn't confirm at the source" case:
+> [`EXAMPLES.md`](https://github.com/noelmcloughlin/lokf-agent-skills/blob/main/EXAMPLES.md)
+> in this skill's home repository (not copied on install, since it documents
+> that repository's own bundle rather than this skill's behavior generally).
+
 > Scope: **read-only on `.lokf/knowledge/`.** The only file this skill ever
 > writes is `.lokf/feedback.md`, and only after asking once per session. It
 > never edits concepts (lokf-librarian), never confirms them (lokf-curator),

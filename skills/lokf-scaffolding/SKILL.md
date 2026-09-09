@@ -91,7 +91,7 @@ to stay true **whether or not `.lokf/` exists later**, so nothing ever needs cle
 Placeholder tokens only - the files legitimately contain other angle brackets:
 
 ```bash
-grep -rn -e '<PROJ_' -e '<BASE_IRI>' -e '<OWNER_' -e '<TODAY' .lokf/ llms.txt
+grep -rn -e '<PROJ_' -e '<BASE_IRI>' -e '<OWNER_' -e '<TODAY>' .lokf/ llms.txt
 ```
 
 Zero hits means fully resolved. Leave the `example-service-*.md` dummies as dummies (or delete them for an empty bundle) - don't enumerate real services.

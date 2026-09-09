@@ -13,6 +13,9 @@ references:
   - https://lokf-agent-skills.example/knowledge/playbooks/repository-validation
   - https://lokf-agent-skills.example/knowledge/policies/ai-covenant
   - https://lokf-agent-skills.example/knowledge/policies/code-of-conduct
+verified:
+- by: process:lokf-librarian
+  at: "2026-09-09T12:00:00Z"
 ---
 
 # Overview

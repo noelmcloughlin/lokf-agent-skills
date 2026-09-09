@@ -1,13 +1,13 @@
 ---
 name: Bug report
-about: Something in lokf-librarian or lokf-scaffolding behaves incorrectly
+about: One of the four LOKF skills behaves incorrectly
 title: ''
 labels: bug
 assignees: ''
 ---
 
 **Which skill?**
-lokf-librarian / lokf-scaffolding
+lokf-scaffolding / lokf-librarian / lokf-curator / lokf-docent
 
 **Installed via**
 `gh skill install` / `npx skills add` / manual copy - and which version/tag
@@ -26,4 +26,4 @@ Anything about the host repository that might matter: presence/absence of
 ## AI Assistance
 
 If you used AI tools while preparing this issue, you are still the author and responsible for understanding, verifying, and defending your submission. Don't dump LLM output into
-this issue without curation. See our [AI Covenant](AI_COVENANT.md) for details.
+this issue without curation. See our [AI Covenant](https://github.com/noelmcloughlin/lokf-agent-skills/blob/main/AI_COVENANT.md) for details.

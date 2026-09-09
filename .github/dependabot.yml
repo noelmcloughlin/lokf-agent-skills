@@ -10,6 +10,18 @@ updates:
   # limitation (dependabot/dependabot-core#5970). Those pins still need a
   # manual bump; lint-workflows' actionlint step catches syntax drift, not
   # staleness. Re-evaluate if that upstream limitation is ever lifted.
+  #
+  # This repository dogfoods both templates, so each one is currently kept
+  # byte-identical to its live counterpart above. That makes the manual bump a
+  # copy rather than a judgement call, and staleness cheap to spot:
+  #
+  #   for f in knowledge-validate knowledge-librarian; do
+  #     diff "skills/lokf-scaffolding/templates/github/$f.yaml" \
+  #          ".github/workflows/$f.yaml"
+  #   done
+  #
+  # Deliberate divergence is allowed - if a template ever needs to differ from
+  # the dogfooded copy, say why here so the diff above isn't read as a defect.
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:

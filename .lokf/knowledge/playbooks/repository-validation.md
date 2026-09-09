@@ -12,6 +12,9 @@ status: draft
 references:
   - https://lokf-agent-skills.example/knowledge/references/agent-skills-specification
   - https://lokf-agent-skills.example/knowledge/references/open-skills-cli
+verified:
+- by: process:lokf-librarian
+  at: "2026-09-09T12:00:00Z"
 ---
 
 # Overview

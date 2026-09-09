@@ -16,6 +16,9 @@ about:
   - https://lokf-agent-skills.example/knowledge/playbooks/lokf-docent-skill
 references:
   - https://lokf-agent-skills.example/knowledge/glossary/trust-label
+verified:
+- by: process:lokf-librarian
+  at: "2026-09-09T12:00:00Z"
 ---
 
 # Overview

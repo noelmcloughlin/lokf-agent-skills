@@ -1,17 +1,14 @@
 # Changelog
 
-All notable changes to this repository are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows the rules in [README.md](README.md#versioning). All  skills release together under one tag.
+All notable changes to this repository are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows the rules in [README.md](README.md#versioning). All skills release together under one tag.
 
-## [Unreleased]
+## [1.0.0] - 2026-09-09
 
-### Added
+Initial release: four [Agent Skills](https://agentskills.io/home) that turn a repository's scattered knowledge into a maintained, trusted [LOKF](https://lokf.nolan-nichols.com/) knowledge bundle - built once, kept current, and reviewed by a person, rather than rediscovered every session.
 
-- Initial publication of `lokf-scaffolding`, `lokf-librarian`, `lokf-curator`, and `lokf-docent` as a dedicated, installable Agent Skills repository.
-- `lokf-docent` - the reader's side of the loop. Answers questions from the bundle first (TOC, then one to three concepts, then typed relations), states each concept's trust label in plain words, verifies exact values at the concept's `resource`, falls back to the repository only when the bundle has no answer, and - after asking once per session - records misses and disagreements in `.lokf/feedback.md` for the librarian to consume. Read-only on `.lokf/knowledge/`.
-- `lokf-curator` - a human curator's assistant. A one-screen trust and freshness report computed from the bundle's frontmatter (confirmed by a person / checked by automation only / nobody has checked / drafts / past review date / edited since confirmed, plus the most relied-upon unchecked concepts); an opt-in review session that shows the source before the claim and records a person's Confirm, Wrong (send back or correct now), Retire, or Later as OKF v0.2 `verified`, `status`, `stale_after`, and `generated`; a curation-policy concept for review cadence; placeholders for reported gaps; loose guidance on domain schemas when the 14-class vocabulary stops fitting.
-- `lokf-librarian` - the hand-off channel to the curator: concepts it creates start as `status: draft`; a concept it re-confirms against its source gets one `process:lokf-librarian` `verified` event; a claim it cannot settle gets `draft` plus a plain-prose `## Open questions` section; human-authored content (`generated.by: human:`) is never rewritten, only questioned; the PR/hand-off ends with a "For the curator" summary; every refresh first consumes `.lokf/feedback.md`, and the scheduled workflow commits that file alongside `knowledge/`.
-- `lokf-scaffolding` - two trust queries in `queries.http`; the `llms.txt` and README-fragment templates tell consumers what `status: draft` means.
-- `scripts/validate-repository.sh` - repository-contract checks (skill directories, frontmatter/directory name match, no duplicate `SKILL.md`, relative-link resolution, script linting).
-- `scripts/smoke-test-install.sh` - isolated install smoke test via the open skills CLI.
-- `.github/workflows/validate.yml` - repository contract, Agent Skills spec (`gh skill publish --dry-run`), ShellCheck, and Markdown/link checks on every pull request and push to `main`.
-- `.github/workflows/publish.yml` - maintainer-gated release (`workflow_dispatch`), never tag-triggered.
+- `lokf-scaffolding` - bootstraps a fresh `.lokf/` sidecar into a repository that has none: tooling, docs, and a dummy skeleton from bundled templates.
+- `lokf-librarian` - scrapes the repository, derives concepts with their sources, wires typed relationships, audits the bundle against the LOKF schema, and hands off for review. Runs often, including on a schedule; deals in facts about the repository, never in verdicts about truth.
+- `lokf-curator` - a human curator's assistant: a one-screen trust and freshness report, and an opt-in review session that records a person's confirm/correct/retire/send-back verdict directly in the bundle's frontmatter.
+- `lokf-docent` - the reader's entry point. Answers questions from the bundle first, states each concept's trust label in plain words, verifies exact values at the source, and - when the bundle has no answer - explores the repository directly and records the gap in `.lokf/feedback.md` for the librarian to pick up. See [`EXAMPLES.md`](EXAMPLES.md) for real question-and-answer transcripts.
+
+This repository dogfoods its own skills: `.lokf/` here is a real bundle built by `lokf-scaffolding` and `lokf-librarian`, self-describing all four skills, this repository's own governance, and its CI.

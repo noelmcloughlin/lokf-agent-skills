@@ -11,9 +11,13 @@ generated:
 status: draft
 about:
   - https://lokf-agent-skills.example/knowledge/glossary/knowledge-bundle
-definedBy: https://lokf-agent-skills.example/knowledge/references/agent-skills-specification
+definedBy:
+- https://lokf-agent-skills.example/knowledge/references/agent-skills-specification
 references:
   - https://lokf-agent-skills.example/knowledge/references/lokf-toolkit
+verified:
+- by: process:lokf-librarian
+  at: "2026-09-09T12:00:00Z"
 ---
 
 # Overview

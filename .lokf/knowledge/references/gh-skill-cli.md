@@ -9,7 +9,8 @@ generated:
   by: process:lokf-librarian
   at: "2026-09-09T10:00:00Z"
 status: draft
-definedBy: https://lokf-agent-skills.example/knowledge/references/agent-skills-specification
+definedBy:
+- https://lokf-agent-skills.example/knowledge/references/agent-skills-specification
 ---
 
 # Overview

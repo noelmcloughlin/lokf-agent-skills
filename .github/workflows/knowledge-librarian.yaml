@@ -40,8 +40,15 @@ jobs:
 
       # Wire this up: point the KNOWLEDGE_LIBRARIAN_CMD repo variable at your agent
       # command (e.g. `bash .lokf/scripts/knowledge-librarian.sh`). Unset = safe no-op.
-      # The scaffolded wrapper also reads AGENT_CLI; pass it through here (switch to
-      # `secrets.AGENT_CLI` if the command embeds a token).
+      # The scaffolded wrapper also reads AGENT_CLI; pass it through here.
+      #
+      # Credentials: `vars.` values are NOT masked in workflow logs, and on a public
+      # repository those logs are world-readable; `secrets.` values are masked. So if
+      # either value embeds an API key or token, define it under Settings -> Secrets
+      # and variables -> Actions as a *secret* and reference `secrets.AGENT_CLI` /
+      # `secrets.KNOWLEDGE_LIBRARIAN_CMD` here instead. Better still, keep the
+      # credential out of the command entirely and let the agent CLI read it from its
+      # own secret-provided environment variable.
       - name: Run the librarian agent
         env:
           KNOWLEDGE_LIBRARIAN_CMD: ${{ vars.KNOWLEDGE_LIBRARIAN_CMD }}

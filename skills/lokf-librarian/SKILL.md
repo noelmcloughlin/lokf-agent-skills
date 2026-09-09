@@ -102,6 +102,14 @@ The LOKF **format** is defined once in LinkML (`lokf.yaml`); the JSON Schema, JS
    | `definedBy` | `rdfs:isDefinedBy` | formally defined by |
    | `source` | `dcterms:source` | sourced from the target |
 
+   **Multivalued means always a YAML list, even for one value.** A bare
+   scalar (`dependsOn: <iri>`) reads naturally but fails schema validation,
+   because the generated schema requires an array for every one of these ten
+   slots - write it as a one-item list instead (`dependsOn:` on its own
+   line, then `- <iri>` indented below it), even for a single target. A real
+   audit of this bundle found exactly this mistake in 12 of 25 concepts -
+   the fix is mechanical, but only `lokf validate` catches it; see section 2.
+
    For predicates outside this set, use the generic `relations` list of reified objects (`predicate` from the `RelationType` vocab, e.g. `joinsWith`, plus `target`). Human-facing Markdown links in the body remain valid and encouraged alongside the typed fields.
 5. **Core fields map to ontology terms:** `title`->`schema:name`, `description`->`schema:description`, `resource`->`schema:url`, `tags`->`schema:keywords`, `timestamp`->`schema:dateModified`, `body`->`schema:text` (the markdown after the frontmatter), plus optional `id`, `created`, `version`, `license`, `author`, `genre` (`schema:genre`, Rule 3), `citations`. Two JSON-LD aliases let plain OKF frontmatter behave as Linked Data: `type` -> `@type` (rdf:type, the concept's class) and `id` -> `@id` (the subject IRI). Two v0.1 fields are **superseded in v0.2** but still read as fallbacks: `timestamp` by `generated.at`, and `citations` by `sources` (Rule 6).
 6. **Record trust, provenance & lifecycle (OKF v0.2 §5.4) where the source attests it.** These optional families make trust signals *queryable RDF* instead of loose YAML; their absence carries meaning (an unverified concept stays valid, never rejected). Never invent them - record only what the origin actually states.
@@ -196,7 +204,7 @@ just lokf-serve            # SPARQL endpoint + live graph explorer (optional)
 
 Report findings as a checklist; fix mechanical issues directly and re-run `just lokf-validate`.
 
-If `uv`/the `lokf` package isn't available, there's no substitute for the two generated validators above - fall back to the manual, structural cross-check against the raw schema described in lokf-scaffolding's Step 4, and say so in the audit report rather than silently claiming full coverage.
+If `uv`/the `lokf` package isn't available, there's no substitute for the two generated validators above - fall back to the manual, structural cross-check against the raw schema described in lokf-scaffolding's Step 4, and say so in the audit report rather than silently claiming full coverage. That fallback cannot catch everything the generated JSON Schema does - it has no cardinality check, so a bare-scalar value where a slot is `multivalued: true` (Rule 4) passes it silently and only fails real `lokf validate`. A bundle that has only passed the manual fallback is not proven schema-valid; report it as such.
 
 ## 3. Hand off for human maintainer review
 

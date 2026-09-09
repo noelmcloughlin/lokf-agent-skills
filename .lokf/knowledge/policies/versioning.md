@@ -11,6 +11,9 @@ generated:
 status: draft
 about:
   - https://lokf-agent-skills.example/knowledge/playbooks/releasing
+verified:
+- by: process:lokf-librarian
+  at: "2026-09-09T12:00:00Z"
 ---
 
 # Overview

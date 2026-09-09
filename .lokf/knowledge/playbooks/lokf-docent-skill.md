@@ -9,12 +9,17 @@ generated:
   by: process:lokf-librarian
   at: "2026-09-09T10:00:00Z"
 status: draft
-dependsOn: https://lokf-agent-skills.example/knowledge/playbooks/lokf-librarian-skill
+dependsOn:
+- https://lokf-agent-skills.example/knowledge/playbooks/lokf-librarian-skill
 about:
   - https://lokf-agent-skills.example/knowledge/glossary/trust-label
-definedBy: https://lokf-agent-skills.example/knowledge/references/agent-skills-specification
+definedBy:
+- https://lokf-agent-skills.example/knowledge/references/agent-skills-specification
 references:
   - https://lokf-agent-skills.example/knowledge/playbooks/lokf-curator-skill
+verified:
+- by: process:lokf-librarian
+  at: "2026-09-09T12:00:00Z"
 ---
 
 # Overview
