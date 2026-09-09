@@ -13,10 +13,10 @@ Initial release: four [Agent Skills](https://agentskills.io/home) that turn a re
 
 Also in this release:
 
-- Prompt-injection guards across all three content-reading skills (`lokf-librarian`, `lokf-curator`, `lokf-docent`), documented in [`SECURITY.md`](SECURITY.md).
-- [`AI_COVENANT.md`](AI_COVENANT.md)'s "Repository-Owned Agent Automation" section, governing how agent-authored commits and PRs are attributed and reviewed.
-- `just lokf-check-refs` - a SPARQL check that every typed-relation target resolves to a real concept, closing a gap `lokf validate` doesn't cover.
-- Fixed `knowledge-librarian.yaml`'s agent step executing a repository variable's content as an arbitrary shell command; it now always runs a pinned, reviewed wrapper script, with a dedicated step enforcing that the agent only wrote where it's allowed to.
-- Workflow and script lint/hardening fixes (`scripts/smoke-test-install.sh` among them).
+- Prompt-injection guards across the three content-reading skills - see [`SECURITY.md`](SECURITY.md).
+- [`AI_COVENANT.md`](AI_COVENANT.md): a section on agent-authored commits/PRs.
+- `just lokf-check-refs` - checks typed-relation targets resolve to real concepts.
+- Fixed `knowledge-librarian.yaml` running a repo variable's content as a shell command; now a pinned script with write-scope enforcement.
+- Workflow and script lint/hardening fixes.
 
 This repository dogfoods its own skills: `.lokf/` here is a real bundle built by `lokf-scaffolding` and `lokf-librarian`, self-describing all four skills, this repository's own governance, and its CI.

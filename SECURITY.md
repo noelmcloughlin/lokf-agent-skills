@@ -8,6 +8,10 @@ This repository is mostly Markdown. Two things in it execute or are executed by 
 - This repository's own `.github/workflows/*.yml`, which run with a `GITHUB_TOKEN` on every PR and (for `publish.yml`) with `contents: write` behind a maintainer-approval environment.
 - The four skills' `SKILL.md`/`references/` prose **is executed too - by whichever LLM agent runs it**, here and in every consumer repository that installs the skills. Anywhere that prose sends an agent to read content it didn't author - a repository file, an external URL, a reader's question, `.lokf/feedback.md` - is a prompt-injection surface. See **Prompt-injection guards** below.
 
+## Interactive use: scope is advisory, not enforced
+
+A skill's `Scope:` line (e.g. `lokf-librarian` "owns only `.lokf/`") is prose, not a checked permission - the Agent Skills format has no manifest for that. Run interactively, an agent has whatever tool access your harness already grants it; that's the generic "runs with full agent permissions" warning `npx skills` prints after every install. Only the scheduled `knowledge-librarian.yaml` workflow technically enforces its scope (**Repository hardening**, below), because nothing is watching it run. For interactive use, review what the agent changed before committing or merging - the same discipline the scheduled path's mandatory PR review provides automatically.
+
 ## Reporting a vulnerability
 
 Please use GitHub's [private vulnerability reporting](https://github.com/noelmcloughlin/lokf-agent-skills/security/advisories/new) rather than a public issue. Include:

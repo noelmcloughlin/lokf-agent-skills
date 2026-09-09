@@ -2,18 +2,18 @@
 type: Policy
 id: https://lokf-agent-skills.example/knowledge/policies/security
 title: Security policy
-description: What the actual attack surface is (the copied-into-other-repositories templates, this repo's own CI, and the four skills' own prose read by an LLM agent), how to report privately, and the hardening and prompt-injection guards this repository applies.
+description: The actual attack surface (copied-into-other-repositories templates, this repo's own CI, the four skills' own prose read by an LLM agent), that a skill's `Scope:` line is advisory except on the scheduled workflow, how to report privately, and this repository's hardening and prompt-injection guards.
 genre: reference
 resource: SECURITY.md
 generated:
   by: process:lokf-librarian
-  at: "2026-09-09T19:00:00Z"
+  at: "2026-09-09T21:00:00Z"
 status: draft
 references:
   - https://lokf-agent-skills.example/knowledge/playbooks/repository-validation
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-09T19:00:00Z"
+  at: "2026-09-09T21:00:00Z"
 ---
 
 # Overview
@@ -23,6 +23,13 @@ copied into *other* repositories and run there, this repository's own
 workflows, and the four skills' `SKILL.md`/`references/` prose - executed by
 whichever LLM agent runs it. Vulnerabilities go through GitHub private
 vulnerability reporting, not public issues.
+
+A skill's `Scope:` line is prose, not an enforced boundary - the Agent
+Skills format has no permission manifest, so an installed skill runs with
+whatever tool access the calling agent session has (the same warning
+`npx skills` prints after every install). Only the scheduled workflow
+technically checks its scope (below); interactive sessions rely on a person
+reviewing what the agent changed before committing or merging.
 
 Hardening: third-party Actions pinned to reviewed commit SHAs everywhere
 including the templates, `persist-credentials: false`, least-privilege

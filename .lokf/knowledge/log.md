@@ -2,6 +2,13 @@
 
 ## 2026-09-09
 
+* **`SECURITY.md` gained an "Interactive use: scope is advisory, not
+  enforced" section**: prompted by a user question about `npx skills add`'s
+  generic "runs with full agent permissions" warning. Boilerplate - the
+  Agent Skills format has no permission manifest - but it surfaced a real
+  gap: a skill's `Scope:` line is prose, checked only by the scheduled
+  workflow's write-scope enforcement; interactive sessions rely on a person
+  reviewing what the agent changed. Updated `policies/security.md` to match.
 * **Security hardening on `knowledge-librarian.yaml`**: prompted by an
   external security scan of the scaffolding templates. Two findings: (1,
   MEDIUM) the agent step let a repository variable's *content* become the
