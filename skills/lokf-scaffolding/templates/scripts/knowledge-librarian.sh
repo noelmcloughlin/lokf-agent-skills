@@ -2,12 +2,10 @@
 #
 # Wrapper for the scheduled knowledge-librarian loop (Karpathy rule).
 #
-# `.github/workflows/knowledge-librarian.yaml` invokes whatever the
-# `KNOWLEDGE_LIBRARIAN_CMD` repository variable points at. Set that variable to:
-#
-#     bash .lokf/scripts/knowledge-librarian.sh
-#
-# ...and set `AGENT_CLI` (repo variable or secret) to the command that runs your
+# `.github/workflows/knowledge-librarian.yaml` always invokes this script
+# directly (never a repository variable's content as a command - a repo
+# variable can only choose *which* agent runs, never *what command* runs).
+# Set `AGENT_CLI` (repo variable or secret) to the command that runs your
 # coding agent non-interactively - e.g. the GitHub Copilot CLI or an internal
 # agent runner that accepts a prompt on `-p`/stdin.
 #
