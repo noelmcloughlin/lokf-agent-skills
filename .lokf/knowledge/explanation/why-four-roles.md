@@ -1,13 +1,13 @@
 ---
 type: Explanation
 id: https://lokf-agent-skills.example/knowledge/explanation/why-four-roles
-title: Why four roles rather than one skill
-description: Why deriving, confirming, and reading knowledge are separated into distinct skills - schema checks can make a bundle consistent, but only a person can make it trusted.
+title: Why four skill roles rather than one skill
+description: Why deriving, confirming, and reading knowledge are separated into four distinct skill roles - schema checks can make a bundle consistent, but only a person can make it trusted. A fifth, non-skill role (the registrar) also exists - see why-a-registrar-role.md.
 genre: explanation
 resource: README.md
 generated:
   by: process:lokf-librarian
-  at: "2026-09-09T10:00:00Z"
+  at: "2026-09-10T12:00:00Z"
 status: draft
 about:
   - https://lokf-agent-skills.example/knowledge/playbooks/lokf-scaffolding-skill
@@ -20,10 +20,16 @@ relatedTo:
 - https://lokf-agent-skills.example/knowledge/explanation/why-a-registrar-role
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-10T00:00:00Z"
+  at: "2026-09-10T12:00:00Z"
 ---
 
 # Overview
+
+"Four roles" here means the four **skill** roles - `README.md`'s own section
+header is "Four roles, three lines of the poem." A fifth role, the
+**registrar**, is named separately and explicitly *not* a skill (see
+[why a registrar role](why-a-registrar-role.md)) - so the repository names
+five roles in total, four of which are skills.
 
 A single "keep the docs current" agent would conflate two different acts:
 finding out what the repository says, and deciding what the team accepts as

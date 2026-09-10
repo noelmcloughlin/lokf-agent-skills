@@ -2,6 +2,15 @@
 
 ## 2026-09-10
 
+* **Feedback consumed - Disagreement fixed**: lokf-docent flagged that
+  `explanation/why-four-roles.md`'s title/description read as the total
+  count of roles, while `README.md`'s own headers ("Four roles, three lines
+  of the poem" / "The fifth role, which is not a skill") name five roles in
+  total, four of which are skills. Retitled the concept "Why four **skill**
+  roles rather than one skill", reworded its description, and added a short
+  paragraph naming both the source headers and `explanation/why-a-registrar-role.md`
+  explicitly. Updated `knowledge/index.md`'s matching bullet.
+
 * **Curation**: `human:noelmcloughlin` confirmed 5 concepts this session -
   `policies/security.md`, `explanation/why-a-registrar-role.md`,
   `playbooks/knowledge-sources.md`, `policies/ai-covenant.md`,
