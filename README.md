@@ -51,21 +51,6 @@ Every concept carries its own trust record, and the curator reports it in plain 
 
 The number to watch is **confirmed by a person: n of N**, and it is meant to rise slowly - a handful of concepts in a sitting, cumulative and partial by design. A small, young bundle can reach fully-confirmed quickly; a large or fast-growing one never quite does, and the report says so instead of pretending.
 
-### How a claim gets checked
-
-Four levels, each proving less than its name suggests. Only the third yields a claim someone has agreed to stand behind.
-
-| Check | Who, when | What it proves | What it can't |
-| --- | --- | --- | --- |
-| Schema-valid | the `lokf` toolkit on every change (`just lokf-validate`, and `just lokf-check-refs` for relation targets); `lokf validate` again as the CI gate on every `.lokf/**` pull request | the frontmatter is well-formed, the types and relations are ones the schema knows, and every typed relation points at a concept that exists | that anything in it is true |
-| Source-consistent | `lokf-librarian` on every scheduled refresh - shown as *checked by automation only* | the concept still matches what its source says today | that the source is right, or that the concept says what the team means |
-| Human-confirmed | a named person, through `lokf-curator` - shown as *confirmed by a person* | someone accountable read the source and agreed | that it stays true - which is what review dates are for |
-| Proven in use | readers, through `lokf-docent`, which records misses and disagreements in `.lokf/feedback.md` | the bundle answered a real question - or didn't, and the gap became the librarian's next task | nothing further - this is the feedback loop that feeds the other three |
-
-## When the vocabulary stops fitting
-
-LOKF's vocabulary is deliberately small - 14 classes, ten typed relations - which is what keeps bundles portable. When concepts stop fitting those classes, typically in a deep or safety-critical domain (medicine, law, finance, safety engineering), the answer is a domain schema written in [LinkML](https://linkml.io) that extends LOKF's, not a looser bundle. The curator flags the drift; the team decides; the librarian applies it. What it costs (no new tooling), how to write one, and how to validate values it binds to an external ontology: [`lokf-curator/references/domain-schemas.md`](skills/lokf-curator/references/domain-schemas.md).
-
 ## Install
 
 **Install what you need - each skill stands alone.** Scaffolding plus the librarian is enough to see the idea: the bundle gets built, everything in it marked a draft. Add the curator once there is a bundle worth trusting; until then the librarian's pull requests keep pointing at it. Already have a healthy `.lokf/`? Skip scaffolding. The docent goes anywhere an agent only *reads* a bundle.
@@ -90,6 +75,27 @@ npx skills add noelmcloughlin/lokf-agent-skills \
   --skill lokf-curator \
   --skill lokf-docent
 ```
+
+## For the curious: how a claim gets checked, and where the vocabulary ends
+
+The sections above are everything you need to decide whether to install these. What follows is the mechanics, for anyone who wants to know exactly what "confirmed by a person" is standing on - and what to do when a bundle outgrows the built-in vocabulary.
+
+### Four levels of checking
+
+Each proves less than its name suggests. Only the third yields a claim someone has agreed to stand behind.
+
+| Check | Who, when | What it proves | What it can't |
+| --- | --- | --- | --- |
+| Schema-valid | the `lokf` toolkit on every change (`just lokf-validate`, and `just lokf-check-refs` for relation targets); `lokf validate` again as the CI gate on every `.lokf/**` pull request | the frontmatter is well-formed, the types and relations are ones the schema knows, and every typed relation points at a concept that exists | that anything in it is true |
+| Source-consistent | `lokf-librarian` on every scheduled refresh - shown as *checked by automation only* | the concept still matches what its source says today | that the source is right, or that the concept says what the team means |
+| Human-confirmed | a named person, through `lokf-curator` - shown as *confirmed by a person* | someone accountable read the source and agreed | that it stays true - which is what review dates are for |
+| Proven in use | readers, through `lokf-docent`, which records misses and disagreements in `.lokf/feedback.md` | the bundle answered a real question - or didn't, and the gap became the librarian's next task | nothing further - this is the feedback loop that feeds the other three |
+
+The schema-valid row also runs live, outside these skills and the CLI: [LOKF Enforcer](https://github.com/noelmcloughlin/obsidian-lokf-enforcer) is an Obsidian plugin that checks the same LOKF layer in the editor, as you write, for anyone maintaining a bundle in Obsidian. It's an optional companion, not a dependency in either direction - `lokf validate` remains the gate these skills rely on.
+
+### When the vocabulary stops fitting
+
+LOKF's vocabulary is deliberately small - 14 classes, ten typed relations - which is what keeps bundles portable. When concepts stop fitting those classes, typically in a deep or safety-critical domain (medicine, law, finance, safety engineering), the answer is a domain schema written in [LinkML](https://linkml.io) that extends LOKF's, not a looser bundle. The curator flags the drift; the team decides; the librarian applies it. What it costs (no new tooling), how to write one, and how to validate values it binds to an external ontology: [`lokf-curator/references/domain-schemas.md`](skills/lokf-curator/references/domain-schemas.md).
 
 ## Repository layout
 
