@@ -7,11 +7,11 @@ genre: how-to
 resource: .
 generated:
   by: process:lokf-librarian
-  at: "2026-09-09T17:00:00Z"
+  at: "2026-09-10T00:00:00Z"
 status: draft
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-09T17:00:00Z"
+  at: "2026-09-10T00:00:00Z"
 ---
 
 # Sources swept for this bootstrap discovery pass
@@ -36,6 +36,29 @@ verified:
 
 # Notes for the next run
 
+- **Steady-state refresh (2026-09-10)**: re-verified concepts touched since the
+  prior pass against their now-current sources. `.github/workflows/knowledge-librarian.yaml`
+  and `.lokf/scripts/knowledge-librarian.sh` were split into two least-privilege
+  jobs (commit `17d8f3a`) - the agent now runs `contents: read` with no
+  persisted credentials, and only a separate, agent-free `publish` job holds
+  `contents: write`/`pull-requests: write`. `policies/security.md` was rewritten
+  to match, sourced from the workflow/script/`CHANGELOG.md` rather than
+  `SECURITY.md` prose, which still describes the prior single-job design in one
+  place - flagged under that concept's `## Open questions` since fixing
+  `SECURITY.md` itself is outside this skill's `.lokf/`-only scope. `README.md`
+  gained a substantive new section, "The fifth role, which is not a skill" (the
+  registrar, plus two companion Obsidian plugins, LOKF Enforcer and LOKF
+  Curator) - a real gap, not yet a concept, so added
+  `explanation/why-a-registrar-role.md`. Confirmed `skills/lokf-librarian/SKILL.md`'s
+  layout diagram and bundle-root `publisher` example already use `person/`/`Person`
+  (an earlier fix, commit `dd74943`), consistent with this bundle's own
+  `knowledge/index.md`. Version bump to v0.10.0 in `README.md`/`CHANGELOG.md`
+  touches no concept - no literal version pin is asserted anywhere in the
+  bundle. `lokf` on PyPI is still `0.7.0`, matching the sidecar's floor - no
+  bump needed. Noticed but did not act on (out of scope - a prose consistency
+  issue between two non-`.lokf/` files, not a bundle fact): `skills/lokf-librarian/SKILL.md`
+  still says "For the CURATOR" (uppercase) while the actual
+  `knowledge-librarian.yaml` PR body says "For the curator" (lowercase).
 - **Steady-state refresh (2026-09-09, second pass)**: re-verified all 18
   internal-resource concepts against their current files (18, not 17 -
   this file itself is one) - no body drift found; two upstream commits since

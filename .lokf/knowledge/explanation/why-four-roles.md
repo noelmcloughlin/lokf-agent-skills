@@ -16,9 +16,11 @@ about:
   - https://lokf-agent-skills.example/knowledge/playbooks/lokf-docent-skill
 references:
   - https://lokf-agent-skills.example/knowledge/glossary/trust-label
+relatedTo:
+- https://lokf-agent-skills.example/knowledge/explanation/why-a-registrar-role
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-09T17:00:00Z"
+  at: "2026-09-10T00:00:00Z"
 ---
 
 # Overview
