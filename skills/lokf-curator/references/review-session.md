@@ -164,6 +164,6 @@ Add a bullet to the nearest `index.md`? No - `index.md` is the librarian's; it w
 
 ## Handing off
 
-Git-tracked `.lokf/`: open a pull request scoped to `.lokf/` titled "Curation: <date>", body = the health line before and after, the verbs taken, and the `just lokf-validate` output (or "validation skipped - no `uv`"). The `knowledge-validate.yaml` gate, if scaffolded, runs on it.
+Git-tracked `.lokf/`: open a pull request scoped to `.lokf/` titled "Curation: <date>", body = the health line before and after, the verbs taken, and the `just lokf-validate` output (or "validation skipped - no `uv`"). The `knowledge-registrar.yaml` gate, if scaffolded, runs on it.
 
 Gitignored `.lokf/`: there is no diff to show; hand the person the list of changed files and the health line instead.

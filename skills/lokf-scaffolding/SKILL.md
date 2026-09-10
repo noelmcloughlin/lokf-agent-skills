@@ -1,6 +1,7 @@
 ---
 name: lokf-scaffolding
 description: 'Scaffold a `.lokf/` LOKF knowledge-bundle sidecar (tooling, docs, dummy skeleton) into the repository this skill sits in, from bundled templates. Use when: a repo has no `.lokf/` yet and someone asks to add, scaffold, or bootstrap a LOKF/lokf sidecar or machine-readable, SPARQL-queryable knowledge; or to repair a missing/broken scaffolding file. Not for authoring or maintaining concepts - that is the lokf-librarian skill, which this one hands off to when done.'
+license: Apache-2.0
 ---
 
 # LOKF Scaffolding
@@ -117,7 +118,7 @@ silently reports "no changes" for an ignored path forever. GitHub-only; other ho
 
 | Template | Destination |
 | --- | --- |
-| `templates/github/knowledge-validate.yaml` | `.github/workflows/knowledge-validate.yaml` |
+| `templates/github/knowledge-registrar.yaml` | `.github/workflows/knowledge-registrar.yaml` |
 | `templates/github/knowledge-librarian.yaml` | `.github/workflows/knowledge-librarian.yaml` |
 | `templates/scripts/knowledge-librarian.sh` | `.lokf/scripts/knowledge-librarian.sh` (`chmod +x`) |
 

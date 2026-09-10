@@ -30,6 +30,15 @@
     // into a host README after its intro, per lokf-scaffolding Step 2), so
     // it starts at "## For AI Agents" by design - it is never meant to
     // stand alone as its own top-level document.
-    "MD041": false
+    "MD041": false,
+    // CHANGELOG.md follows Keep a Changelog: every release repeats the same
+    // Keep-a-Changelog category headings ("### Added", "### Changed", ...)
+    // under its own "## [x.y.z]" - expected structure, not a duplicate. The
+    // default (checking the whole document) flags that; siblings_only scopes
+    // the check to headings sharing the same parent, where a real duplicate
+    // still gets caught.
+    "MD024": {
+      "siblings_only": true
+    }
   }
 }

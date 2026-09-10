@@ -1,6 +1,7 @@
 ---
 name: lokf-librarian
 description: 'Scrape the host repository this skill sits inside and build/maintain the `.lokf/` knowledge bundle as a sidecar, compliant with the Linked Open Knowledge Format (LOKF) schema (a semantic profile of OKF). Use when: creating or updating concept files under .lokf/knowledge/; adding typed relationships (isPartOf/dependsOn/derivedFrom/about/references/...); choosing a LOKF class (Service/Metric/Dataset/Table/Policy/Playbook/GlossaryTerm/...); setting base_iri/context/id so frontmatter expands to JSON-LD/RDF; validating the bundle with JSON Schema and SHACL via the lokf toolkit; converting/serving the bundle as a graph; auditing .lokf/ for correctness, gaps, or bugs; preparing a LOKF change for human maintainer review; or running the scheduled LLM-librarian task that keeps .lokf/ accurate (Karpathy rule).'
+license: Apache-2.0
 ---
 
 # LOKF Librarian
@@ -209,7 +210,7 @@ If `uv`/the `lokf` package isn't available, there's no substitute for the two ge
 
 ## 3. Hand off for human maintainer review
 
-Open a PR scoped to `.lokf/` with a summary, the `lokf validate` (and, when relevant, SHACL/convert) output, and citations for every claim whose authority lives outside the repository - the standards, ontologies, and upstream systems the bundle's `Reference` concepts point at. A human maintainer verifies against the canonical source and approves before merge. Once `.github/workflows/knowledge-validate.yaml` exists (see [references/scheduled-task.md](references/scheduled-task.md)), it runs `uv run lokf validate knowledge` on every `.lokf/**` PR as the automated gate; until then, paste the local `just lokf-validate` output into the PR.
+Open a PR scoped to `.lokf/` with a summary, the `lokf validate` (and, when relevant, SHACL/convert) output, and citations for every claim whose authority lives outside the repository - the standards, ontologies, and upstream systems the bundle's `Reference` concepts point at. A human maintainer verifies against the canonical source and approves before merge. Once `.github/workflows/knowledge-registrar.yaml` exists (see [references/scheduled-task.md](references/scheduled-task.md)), it runs `uv run lokf validate knowledge` on every `.lokf/**` PR as the automated gate; until then, paste the local `just lokf-validate` output into the PR.
 
 End the PR description - or, when there is no PR, the hand-off message - with a short **For the CURATOR** section in plain words: the health line (confirmed by a person / checked by automation only / nobody has checked / drafts / past review date), the concepts newly marked `draft`, and every `## Open questions` entry, then name the **lokf-curator** skill. That is how a busy person learns that a few minutes of confirmation are wanted; the frontmatter carries the same facts for the curator's own report, so nothing is lost if the summary is skimmed. Curator's own review session ends the same way - a commit and its own PR - so say plainly whether to run it after this PR merges or directly on this branch; without that, confirmations can end up stacked on a PR that hasn't landed yet.
 

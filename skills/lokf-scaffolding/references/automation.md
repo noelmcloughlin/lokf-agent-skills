@@ -2,9 +2,9 @@
 
 Scaffolding these is one-time setup; how they behave at run time is lokf-librarian's operating manual ([`../../lokf-librarian/references/scheduled-task.md`](../../lokf-librarian/references/scheduled-task.md)). Applies only to a **git-tracked** `.lokf/` on **GitHub** - see SKILL.md Step 5 for why a gitignored bundle makes both workflows a permanent no-op.
 
-## `knowledge-validate.yaml` - the validation gate
+## `knowledge-registrar.yaml` - the validation gate
 
-Runs `uv run lokf validate knowledge` on every pull request touching `.lokf/**` (or the workflow itself), weekly (Mondays 06:00 UTC), and on demand. Read-only (`contents: read`); superseded runs on the same ref are cancelled. Keep it green: the bar is that the projected graph describes the repository as it is today.
+Named for the registrar's job: keeping the bundle's records well-formed and provenanced, never judging whether their content is true (that's the curator's job, and this workflow runs no agent code at all). Runs `uv run lokf validate knowledge` on every pull request touching `.lokf/**` (or the workflow itself), weekly (Mondays 06:00 UTC), and on demand. Read-only (`contents: read`); superseded runs on the same ref are cancelled. Keep it green: the bar is that the projected graph describes the repository as it is today.
 
 ## `knowledge-librarian.yaml` - the scheduled refresh loop
 

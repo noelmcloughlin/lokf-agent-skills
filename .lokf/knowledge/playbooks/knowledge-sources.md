@@ -7,10 +7,10 @@ genre: how-to
 resource: .
 generated:
   by: process:lokf-librarian
-  at: "2026-09-10T12:00:00Z"
+  at: "2026-09-10T18:00:00Z"
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-10T12:00:00Z"
+  at: "2026-09-10T18:00:00Z"
 - by: human:noelmcloughlin
   at: "2026-09-10T00:00:00Z"
 stale_after: 2027-09-10
@@ -28,7 +28,7 @@ stale_after: 2027-09-10
 | `SECURITY.md` | the security policy | diff the hardening bullets |
 | `AI_COVENANT.md`, `CODE_OF_CONDUCT.md` | governance policies | diff each; both are adapted from upstream documents that may themselves change |
 | `.github/workflows/validate.yml`, `publish.yml` | the validation and releasing playbooks | diff job names, triggers, and the pinned action SHAs |
-| `.github/workflows/knowledge-validate.yaml`, `knowledge-librarian.yaml` | this repository's dogfooded copies of the two workflow templates scaffolding ships | diff each against its counterpart under `skills/lokf-scaffolding/templates/github/`; they are deliberately kept byte-identical, so any difference is either a template bump not yet copied across or a divergence `.github/dependabot.yml` should explain |
+| `.github/workflows/knowledge-registrar.yaml`, `knowledge-librarian.yaml` | this repository's dogfooded copies of the two workflow templates scaffolding ships | diff each against its counterpart under `skills/lokf-scaffolding/templates/github/`; they are deliberately kept byte-identical, so any difference is either a template bump not yet copied across or a divergence `.github/dependabot.yml` should explain |
 | `.github/ISSUE_TEMPLATE/*.md`, `.github/pull_request_template.md`, `.github/dependabot.yml` | contributor intake forms and pin maintenance | consciously excluded as concepts - see note below; re-check only that each template still names all four skills and that its `AI_COVENANT.md` link is absolute |
 | `scripts/*.sh` | what the validation playbook claims CI enforces | re-read the assertions; a new check is a gap in the playbook |
 | `CHANGELOG.md` | what changed between releases | read the `[Unreleased]` section for behaviour changes not yet reflected in concepts |
@@ -38,6 +38,26 @@ stale_after: 2027-09-10
 
 # Notes for the next run
 
+- **`knowledge-validate.yaml` renamed to `knowledge-registrar.yaml` (2026-09-10,
+  third pass)**: prompted by a maintainer decision that the workflow's job -
+  keeping bundle records well-formed, never judging their truth - is exactly
+  the registrar's role named in `README.md` and
+  `explanation/why-a-registrar-role.md`, so its filename should say so.
+  Renamed `.github/workflows/knowledge-validate.yaml` and its byte-identical
+  template counterpart under `skills/lokf-scaffolding/templates/github/` to
+  `knowledge-registrar.yaml` (workflow `name:`, self-referencing `paths:`
+  filter, and `concurrency.group` updated to match; the `validate` job id/name
+  left as-is - still an accurate description of what that job does). Updated
+  every cross-reference: this file's source-map row, `explanation/why-a-registrar-role.md`,
+  `.github/dependabot.yml`'s manual-bump comment, and the mentions in
+  `lokf-librarian/SKILL.md`, `lokf-librarian/references/scheduled-task.md`,
+  `lokf-scaffolding/SKILL.md`, `lokf-scaffolding/references/automation.md`,
+  and `lokf-curator/references/review-session.md`. Left historical `log.md`
+  and source-map entries referring to the old name alone - they describe past
+  events under the name the workflow had at the time. `.github/workflows/validate.yml`
+  (the unrelated *repository* CI gate covered by `playbooks/repository-validation.md`)
+  merely shares the word "validate" and was left untouched - out of scope for
+  this rename.
 - **Feedback consumed (2026-09-10, second pass)**: lokf-docent recorded a
   Disagreement - `explanation/why-four-roles.md`'s title/description read as
   the total count of roles, but `README.md`'s own "Four roles, three lines of
