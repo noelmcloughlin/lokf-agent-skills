@@ -79,7 +79,7 @@ gh skill install noelmcloughlin/lokf-agent-skills lokf-curator
 gh skill install noelmcloughlin/lokf-agent-skills lokf-docent
 ```
 
-Append `@v0.9.0` to each to pin all four to the same release.
+Append `@v0.10.0` to each to pin all four to the same release.
 
 **Open Skills CLI** ([`npx skills`](https://github.com/vercel-labs/skills)):
 
