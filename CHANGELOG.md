@@ -4,7 +4,7 @@ All notable changes to this repository are documented here. Format follows [Keep
 
 ## [Unreleased]
 
-## [0.10.0] - 2026-09-10
+## [0.11.0] - 2026-09-10
 
 ### Security
 
