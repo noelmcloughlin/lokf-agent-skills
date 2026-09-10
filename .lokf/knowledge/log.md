@@ -1,5 +1,31 @@
 # Change Log
 
+## 2026-09-10
+
+* **`policies/security.md` refreshed** to describe `knowledge-librarian.yaml`'s
+  new two-job, least-privilege split (commit `17d8f3a`): the agent runs
+  `contents: read` with no persisted credentials, and only a separate
+  agent-free `publish` job holds the write scope; enforcement of the bundle
+  write-boundary moved into `.lokf/scripts/knowledge-librarian.sh` itself
+  (non-zero exit on a stray path), rather than a dedicated workflow step.
+  `SECURITY.md`'s own prose still asserts the prior single-job design in one
+  place - recorded under this concept's `## Open questions` since fixing that
+  file is outside this skill's `.lokf/`-only scope.
+* **Added `explanation/why-a-registrar-role.md`**: `README.md` gained a
+  substantive new section describing a "registrar" role - keeping bundle
+  records well-formed and provenanced - filled by tooling (the `lokf`
+  toolkit, CI) or, for hand-edited bundles, two companion Obsidian plugins
+  (LOKF Enforcer, LOKF Curator), rather than by a fifth skill. No prior
+  concept captured this; `explanation/why-four-roles.md` gained a `relatedTo`
+  link to it.
+* **Steady-state refresh**: re-verified `playbooks/releasing.md`,
+  `playbooks/lokf-librarian-skill.md`, `playbooks/lokf-docent-skill.md`,
+  `playbooks/repository-validation.md`, and `policies/versioning.md` against
+  their current sources - no drift found - and refreshed each concept's own
+  `process:lokf-librarian` `verified` event (human `verified` events left
+  untouched). `lokf` on PyPI is still `0.7.0`; the sidecar's `>=0.7.0` floor
+  needs no bump.
+
 ## 2026-09-09
 
 * **`SECURITY.md` gained an "Interactive use: scope is advisory, not
