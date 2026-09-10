@@ -44,7 +44,7 @@ On a fresh repository they run in that order: scaffolding once, then the librari
 
 The one job none of the four does is the **registrar's**: keeping the records themselves in order - each accession properly documented, the provenance paperwork filed, nothing entered in a form the catalogue can't read.
 
-In a repository the `lokf` toolkit does that on every change, and CI does it again on every pull request.
+In a repository the `lokf` toolkit does that on every change, and CI's [`knowledge-registrar.yaml`](.github/workflows/knowledge-registrar.yaml) does it again on every pull request.
 
 In [Obsidian](https://obsidian.md/), where people edit bundles by hand and there is no CI to catch them, two plugins do it at the desk:
 
@@ -79,7 +79,7 @@ gh skill install noelmcloughlin/lokf-agent-skills lokf-curator
 gh skill install noelmcloughlin/lokf-agent-skills lokf-docent
 ```
 
-Append `@v0.11.0` to each to pin all four to the same release.
+Append `@v0.12.0` to each to pin all four to the same release.
 
 **Open Skills CLI** ([`npx skills`](https://github.com/vercel-labs/skills)):
 
