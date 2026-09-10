@@ -2,6 +2,18 @@
 
 ## 2026-09-10
 
+* **Curation**: `human:noelmcloughlin` confirmed 5 concepts this session -
+  `policies/security.md`, `explanation/why-a-registrar-role.md`,
+  `playbooks/knowledge-sources.md`, `policies/ai-covenant.md`,
+  `policies/versioning.md` - each cleared `status: draft`, gained a `verified`
+  event, and a proposed `stale_after` review date (2027-03-10 for
+  `policies/security.md`, given how fast its CI-security content is moving;
+  2027-09-10 for the rest). `policies/security.md`'s `## Open questions`
+  entry (about `SECURITY.md`'s own prose lagging the actual two-job workflow
+  split) was cleared - the person confirmed the gap is real and the
+  concept's claim, not `SECURITY.md`'s prose, reflects current behaviour;
+  fixing `SECURITY.md` itself remains outside this skill's scope.
+
 * **`policies/security.md` refreshed** to describe `knowledge-librarian.yaml`'s
   new two-job, least-privilege split (commit `17d8f3a`): the agent runs
   `contents: read` with no persisted credentials, and only a separate
