@@ -53,6 +53,6 @@ A [LOKF](https://lokf.nolan-nichols.com) knowledge base for LOKF Agent Skills. E
 
 # Explanation
 
-* [Why four roles rather than one skill](explanation/why-four-roles.md)
+* [Why four skill roles rather than one skill](explanation/why-four-roles.md)
 * [Why a registrar role, and why it is not a fifth skill](explanation/why-a-registrar-role.md)
 * [Why the skills live in their own repository](explanation/why-a-distribution-repository.md)

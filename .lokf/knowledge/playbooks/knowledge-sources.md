@@ -7,10 +7,10 @@ genre: how-to
 resource: .
 generated:
   by: process:lokf-librarian
-  at: "2026-09-10T00:00:00Z"
+  at: "2026-09-10T12:00:00Z"
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-10T00:00:00Z"
+  at: "2026-09-10T12:00:00Z"
 - by: human:noelmcloughlin
   at: "2026-09-10T00:00:00Z"
 stale_after: 2027-09-10
@@ -38,6 +38,19 @@ stale_after: 2027-09-10
 
 # Notes for the next run
 
+- **Feedback consumed (2026-09-10, second pass)**: lokf-docent recorded a
+  Disagreement - `explanation/why-four-roles.md`'s title/description read as
+  the total count of roles, but `README.md`'s own "Four roles, three lines of
+  the poem" / "The fifth role, which is not a skill" headers make clear there
+  are five roles named (four skill roles + the registrar, explicitly not a
+  skill). Not a factual contradiction between concept and source - just an
+  ambiguous title left over from before `explanation/why-a-registrar-role.md`
+  existed - so fixed directly: retitled to "Why four **skill** roles rather
+  than one skill", reworded the description, and added a short clarifying
+  paragraph to the body naming both the source's section headers and the
+  registrar concept. Updated `knowledge/index.md`'s bullet to match. No
+  repository changes outside `.lokf/` since the prior librarian pass
+  (`34f01ca`); `lokf` on PyPI is still `0.7.0`, no floor bump needed.
 - **Steady-state refresh (2026-09-10)**: re-verified concepts touched since the
   prior pass against their now-current sources. `.github/workflows/knowledge-librarian.yaml`
   and `.lokf/scripts/knowledge-librarian.sh` were split into two least-privilege
