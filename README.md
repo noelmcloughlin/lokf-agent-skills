@@ -73,7 +73,7 @@ npx skills add noelmcloughlin/lokf-agent-skills \
   --skill lokf-scaffolding \
   --skill lokf-librarian \
   --skill lokf-curator \
-  --skill lokf-docent
+  --skill lokf-docent --yes
 ```
 
 ## For the curious: how a claim gets checked, and where the vocabulary ends
