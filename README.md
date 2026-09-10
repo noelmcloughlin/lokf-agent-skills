@@ -23,7 +23,7 @@ The knowledge already exists - in code, documents, diagrams, policies, operation
 
 A bundle keeps that work instead of discarding it. But it is only worth keeping if you can tell what's sound - otherwise you re-verify everything yourself, the very thing you were trying to avoid, and the files quietly rot.
 
-So ask a question and the answer tells you where it came from and how far it has been checked, in plain words - *confirmed by a person*, or *nobody has checked this yet*. Those labels are computed from the files on every read, never stored, so they cannot drift from what they describe: its deterministic against a unchanged bundle.
+So ask a question and the answer tells you where it came from and how far it has been checked, in plain words - *confirmed by a person*, or *nobody has checked this yet*. Those labels are computed from the files on every read, never stored, so they cannot drift from what they describe: against an unchanged bundle they are deterministic.
 
 ## Four roles, three lines of the poem
 
@@ -40,12 +40,27 @@ A *docent* is the museum's guide - the one who walks visitors through a collecti
 
 On a fresh repository they run in that order: scaffolding once, then the librarian filling the bundle and marking everything it creates a draft, then the curator, where a person turns drafts into confirmed knowledge a few at a time. After that it stops being a sequence and becomes a loop - the librarian refreshes on a schedule, readers send back what the bundle missed, and the curator works through whatever that surfaces.
 
+### The fifth role, which is not a skill
+
+The one job none of the four does is the **registrar's**: keeping the records themselves in order - each accession properly documented, the provenance paperwork filed, nothing entered in a form the catalogue can't read.
+
+In a repository the `lokf` toolkit does that on every change, and CI does it again on every pull request.
+
+In [Obsidian](https://obsidian.md/), where people edit bundles by hand and there is no CI to catch them, two plugins do it at the desk:
+
+| Plugin | At the desk |
+| --- | --- |
+| [LOKF Enforcer](https://github.com/noelmcloughlin/obsidian-lokf-enforcer) | Checks each record is well-formed as it is written - the schema-valid row below, live in the editor. |
+| [LOKF Curator](https://github.com/noelmcloughlin/obsidian-lokf-curator) | Puts the source beside the claim and writes down what a person decided - the human-confirmed row below, running this repository's `lokf-curator` review session without an agent in the loop. |
+
+Neither reaches a verdict of its own: a registrar keeps the provenance honest and leaves the judging to the curator. Both are optional companions in either direction - the plugins work on any LOKF bundle however it was produced, and these skills need no plugin, since `lokf validate` remains the gate they rely on. The only thing all of it shares is the LOKF specification.
+
 ## Trust stays visible
 
 Every concept carries its own trust record, and the curator reports it in plain words rather than ontology terms:
 
 - **Confirmed by a person** - a named person checked it against its source.
-- **Checked by automation only** - the librarian re-checked that the source still matches; no person has.
+- **Checked by automation only** - automation re-checked that the source still matches; no person has.
 - **Nobody has checked this yet** - no check of any kind is recorded.
 - **Still a draft**, **edited since a person last confirmed it**, **past its review date**, **retired** - and, for prioritising, how many other concepts rely on each one.
 
@@ -88,10 +103,10 @@ Each proves less than its name suggests. Only the third yields a claim someone h
 | --- | --- | --- | --- |
 | Schema-valid | the `lokf` toolkit on every change (`just lokf-validate`, and `just lokf-check-refs` for relation targets); `lokf validate` again as the CI gate on every `.lokf/**` pull request | the frontmatter is well-formed, the types and relations are ones the schema knows, and every typed relation points at a concept that exists | that anything in it is true |
 | Source-consistent | `lokf-librarian` on every scheduled refresh - shown as *checked by automation only* | the concept still matches what its source says today | that the source is right, or that the concept says what the team means |
-| Human-confirmed | a named person, through `lokf-curator` - shown as *confirmed by a person* | someone accountable read the source and agreed | that it stays true - which is what review dates are for |
+| Human-confirmed | a named person, through `lokf-curator` or the LOKF Curator plugin - shown as *confirmed by a person* | someone accountable read the source and agreed | that it stays true - which is what review dates are for |
 | Proven in use | readers, through `lokf-docent`, which records misses and disagreements in `.lokf/feedback.md` | the bundle answered a real question - or didn't, and the gap became the librarian's next task | nothing further - this is the feedback loop that feeds the other three |
 
-The schema-valid row also runs live, outside these skills and the CLI: [LOKF Enforcer](https://github.com/noelmcloughlin/obsidian-lokf-enforcer) is an Obsidian plugin that checks the same LOKF layer in the editor, as you write, for anyone maintaining a bundle in Obsidian. It's an optional companion, not a dependency in either direction - `lokf validate` remains the gate these skills rely on.
+The first and third rows also run live, outside these skills and the CLI, for anyone maintaining a bundle in Obsidian rather than through an agent: that is what the two plugins at [the registrar's desk](#the-fifth-role-which-is-not-a-skill) are for.
 
 ### When the vocabulary stops fitting
 
