@@ -7,14 +7,14 @@ genre: explanation
 resource: README.md
 generated:
   by: process:lokf-librarian
-  at: "2026-09-10T00:00:00Z"
+  at: "2026-09-10T18:00:00Z"
 relatedTo:
 - https://lokf-agent-skills.example/knowledge/explanation/why-four-roles
 about:
 - https://lokf-agent-skills.example/knowledge/glossary/knowledge-bundle
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-10T00:00:00Z"
+  at: "2026-09-10T18:00:00Z"
 - by: human:noelmcloughlin
   at: "2026-09-10T00:00:00Z"
 stale_after: 2027-09-10
@@ -30,8 +30,9 @@ splits out ([why four roles](why-four-roles.md)): it does not derive facts
 (librarian), does not decide what is trusted (curator), and does not answer
 questions (docent). It is not a fifth skill here because, in a repository,
 tooling already does it on every change: the `lokf` toolkit (`just
-lokf-validate`, `just lokf-check-refs`) and CI's `Knowledge Bundle Validation`
-gate.
+lokf-validate`, `just lokf-check-refs`) and CI's `Knowledge Registrar`
+gate (`.github/workflows/knowledge-registrar.yaml` - renamed from
+`knowledge-validate.yaml` to match this role by name).
 
 Where a bundle is edited by hand instead - in [Obsidian](https://obsidian.md/),
 with no CI to catch a malformed record - two companion plugins do the same

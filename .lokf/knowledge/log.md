@@ -2,6 +2,18 @@
 
 ## 2026-09-10
 
+* **`knowledge-validate.yaml` renamed to `knowledge-registrar.yaml`**: at a
+  maintainer's request, so the CI gate that keeps bundle records well-formed
+  (never judging their truth) is named for the registrar role it actually
+  performs, matching `explanation/why-a-registrar-role.md`. Renamed the
+  dogfooded workflow and its byte-identical template counterpart under
+  `skills/lokf-scaffolding/templates/github/`, and updated every
+  cross-reference across the four skills' `SKILL.md`/`references/` files,
+  `.github/dependabot.yml`, `explanation/why-a-registrar-role.md`, and this
+  file's own source-map row. Historical `log.md`/source-map entries that
+  named the old workflow stay as they were, describing what it was called
+  at the time.
+
 * **Feedback consumed - Disagreement fixed**: lokf-docent flagged that
   `explanation/why-four-roles.md`'s title/description read as the total
   count of roles, while `README.md`'s own headers ("Four roles, three lines
