@@ -8,12 +8,14 @@ resource: SECURITY.md
 generated:
   by: process:lokf-librarian
   at: "2026-09-10T00:00:00Z"
-status: draft
 references:
   - https://lokf-agent-skills.example/knowledge/playbooks/repository-validation
 verified:
 - by: process:lokf-librarian
   at: "2026-09-10T00:00:00Z"
+- by: human:noelmcloughlin
+  at: "2026-09-10T00:00:00Z"
+stale_after: 2027-03-10
 ---
 
 # Overview
@@ -66,16 +68,3 @@ default branch, and always ends at a human-reviewed PR. Ordinary repository
 content the librarian scrapes has no equivalent per-entry guard - it relies
 on the same branch protection gating every other change to `main`, a
 materially higher trust level than unreviewed reader feedback.
-
-## Open questions
-
-`SECURITY.md` itself (this concept's `resource`) still describes the
-pre-2026-09-10 single-job design in one place - it says the arbitrary-command
-surface was closed "under that job's `contents: write` scope", but the agent
-now runs in the `refresh` job under `contents: read`; `contents: write` moved
-to the separate `publish` job, which never runs agent code. Ground truth here
-is `.github/workflows/knowledge-librarian.yaml`, `.lokf/scripts/knowledge-librarian.sh`,
-and `CHANGELOG.md`'s `[0.10.0]` "Security" entries, which all agree with each
-other and with this concept's body above. Out of this skill's scope to fix
-(it owns only `.lokf/`, not `SECURITY.md`) - flagging for a maintainer to
-bring `SECURITY.md`'s prose in line.

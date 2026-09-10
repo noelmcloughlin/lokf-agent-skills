@@ -8,7 +8,6 @@ resource: README.md
 generated:
   by: process:lokf-librarian
   at: "2026-09-10T00:00:00Z"
-status: draft
 relatedTo:
 - https://lokf-agent-skills.example/knowledge/explanation/why-four-roles
 about:
@@ -16,6 +15,9 @@ about:
 verified:
 - by: process:lokf-librarian
   at: "2026-09-10T00:00:00Z"
+- by: human:noelmcloughlin
+  at: "2026-09-10T00:00:00Z"
+stale_after: 2027-09-10
 ---
 
 # Overview
