@@ -4,6 +4,8 @@ All notable changes to this repository are documented here. Format follows [Keep
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-09-10
+
 ### Security
 
 - `knowledge-librarian` workflow now runs a fixed, reviewed in-repo script (`bash .lokf/scripts/knowledge-librarian.sh`) instead of an arbitrary command string from a repository variable, so changing *what executes* goes through code review rather than an unreviewed Settings edit.
@@ -14,7 +16,7 @@ All notable changes to this repository are documented here. Format follows [Keep
 
 - Arm the scheduled librarian run with the `KNOWLEDGE_LIBRARIAN_ENABLED` repository variable set to `true` (replaces `KNOWLEDGE_LIBRARIAN_CMD`); `AGENT_CLI` is unchanged. Updated the `lokf-scaffolding` templates, the dogfooded workflow, the wrapper-script header, and the `lokf-scaffolding`/`lokf-librarian` automation docs to match.
 
-## [1.0.0] - 2026-09-09
+## [0.9.0] - 2026-09-09
 
 Initial release: four [Agent Skills](https://agentskills.io/home) that turn a repository's scattered knowledge into a maintained, trusted [LOKF](https://lokf.nolan-nichols.com/) knowledge bundle - built once, kept current, and reviewed by a person, rather than rediscovered every session.
 
