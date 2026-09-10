@@ -46,7 +46,7 @@ Maintain `.lokf/` - the host repository's knowledge captured as a [**Linked Open
 |   |-- index.md          # bundle metadata (base_iri, context, versions) + TOC
 |   |-- log.md            # change history (reserved name)
 |   |-- services/  datasets/  references/
-|   |-- playbooks/  glossary/  org/
+|   |-- playbooks/  glossary/  person/
 |-- pyproject.toml        # declares the `lokf` toolkit dependency
 |-- justfile              # lokf-install / lokf-validate / lokf-convert / lokf-serve
 |-- scripts/              # (optional) knowledge-librarian.sh, the scheduled-agent wrapper (references/scheduled-task.md)
@@ -67,7 +67,7 @@ The LOKF **format** is defined once in LinkML (`lokf.yaml`); the JSON Schema, JS
    title: Acme Platform Knowledge Bundle
    description: ...
    license: https://creativecommons.org/licenses/by/4.0/
-   publisher: { type: Organization, id: https://acme.example/knowledge/org/platform-team, name: Acme Platform Team }
+   publisher: { type: Person, id: https://acme.example/knowledge/person/jane-doe, name: Jane Doe }
    ```
 
    `base_iri` + concept ID mints each concept's IRI (`@id`); `context` maps frontmatter keys to IRIs. Do not remove these or the bundle degrades to plain OKF.
