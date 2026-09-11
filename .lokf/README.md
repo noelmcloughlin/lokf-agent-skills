@@ -22,6 +22,9 @@ You write normal Markdown; you get a validated, queryable graph for free.
 |-- feedback.md           # appears once a reader's agent records a gap; input for the librarian, not knowledge
 ```
 
+If a `knowledge_bundle` symlink sits at the repo root, that's this same `knowledge/` directory under an ordinary, visible name - open *it* as an
+Obsidian vault ("Open folder as vault") rather than hunting for the hidden `.lokf/` directory in the file picker.
+
 ## Prerequisites
 
 - [`uv`](https://docs.astral.sh/uv/) - the Python package runner.

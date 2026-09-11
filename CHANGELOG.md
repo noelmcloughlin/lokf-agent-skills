@@ -4,6 +4,10 @@ All notable changes to this repository are documented here. Format follows [Keep
 
 ## [Unreleased]
 
+### Added
+
+- `lokf-scaffolding` Step 2 now also creates a `knowledge_bundle` symlink to `.lokf/knowledge` at the repo root (POSIX hosts) - a visible entry point for humans and their tools, chiefly Obsidian's "Open folder as vault," which like most OS folder pickers hides dot-directories by default. Mirrors the Step 0 tracked/gitignored decision; `templates/gitignore` now excludes the `.obsidian/` folder Obsidian writes through the link into `.lokf/knowledge/` when used as a vault. This repository's own `.lokf/` now carries the symlink too, with matching excludes added to `.markdownlint-cli2.jsonc`, `lychee.toml`, and the `codespell` step so the aliased files aren't linted/checked twice.
+
 ## [0.13.0] - 2026-09-10
 
 - The librarian SKILL now says: A spaced dash ("X - Y") used as punctuation must not be allowed to land at the start of a line after wrapping - Markdown reads a line beginning `-` followed by a space as a list item, so a paragraph never meant to be a list trips `MD032/blanks-around-lists` wherever the consuming repo lints `.lokf/**` (most do, via a `lint-and-docs`-style gate). Reword or rewrap so the dash stays mid-line; when unsure, prefer an unwrapped single line over one that risks the break landing there.

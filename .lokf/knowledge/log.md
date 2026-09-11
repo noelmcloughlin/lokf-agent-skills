@@ -1,5 +1,26 @@
 # Change Log
 
+## 2026-09-11
+
+* **`knowledge_bundle` symlink added to `lokf-scaffolding` Step 2**: a third
+  root-level pointer, alongside `llms.txt` and the README aside - `ln -s
+  .lokf/knowledge knowledge_bundle`, a visible entry point for humans and
+  their tools, chiefly Obsidian's "Open folder as vault," which like most OS
+  folder pickers hides dot-directories by default. `templates/gitignore` now
+  excludes `.obsidian/`, which Obsidian writes through the link into the real
+  `.lokf/knowledge/.obsidian/` when used as a vault. Added
+  `playbooks/open-bundle-in-obsidian.md` and refreshed
+  `playbooks/lokf-scaffolding-skill.md`'s Overview (Step 2 now three
+  additions, not two). Re-verified `glossary/knowledge-bundle.md` and
+  `playbooks/repository-validation.md` against their now-touched resources -
+  no body drift, `verified` timestamps only. This repository's own bundle
+  gained the symlink too, plus matching excludes in
+  `.markdownlint-cli2.jsonc`, `lychee.toml`, and the `codespell` step so the
+  aliased files aren't linted/checked twice - those two config files stay
+  outside the bundle, per the existing convention noted in
+  `playbooks/knowledge-sources.md`. Targeted pass, not a full steady-state
+  sweep - concepts untouched by this change were not re-checked this run.
+
 ## 2026-09-10
 
 * **`knowledge-validate.yaml` renamed to `knowledge-registrar.yaml`**: at a

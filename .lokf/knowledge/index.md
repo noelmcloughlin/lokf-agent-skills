@@ -19,6 +19,7 @@ A [LOKF](https://lokf.nolan-nichols.com) knowledge base for LOKF Agent Skills. E
 # Playbooks
 
 * [lokf-scaffolding skill](playbooks/lokf-scaffolding-skill.md) - one-shot bootstrap of a `.lokf/` sidecar from templates.
+* [Open the knowledge bundle in Obsidian](playbooks/open-bundle-in-obsidian.md) - the root `knowledge_bundle` symlink as an Obsidian vault entry point.
 * [lokf-librarian skill](playbooks/lokf-librarian-skill.md) - derives and maintains the concepts; facts, never verdicts.
 * [lokf-curator skill](playbooks/lokf-curator-skill.md) - a human curator's assistant; verdicts, never facts.
 * [lokf-docent skill](playbooks/lokf-docent-skill.md) - answers from the bundle and records what it lacked.

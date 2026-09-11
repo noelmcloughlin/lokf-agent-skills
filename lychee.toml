@@ -9,3 +9,10 @@ exclude = [
   # w3id.org redirect is registered.
   '^https://w3id\.org/lokf/context\.jsonld$',
 ]
+
+# knowledge_bundle is a symlink to .lokf/knowledge (the Obsidian vault entry
+# point, see lokf-scaffolding Step 2) - exclude it so lychee doesn't walk the
+# same files twice, once at each path.
+exclude_path = [
+  "(^|/)knowledge_bundle/",
+]

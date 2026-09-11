@@ -3,3 +3,8 @@
 __pycache__/
 *.pyc
 lokf-tables/
+
+# Written into knowledge/ (not this directory) when the root knowledge_bundle
+# symlink (Step 2) is opened as an Obsidian vault - workspace state, not
+# bundle content.
+.obsidian/

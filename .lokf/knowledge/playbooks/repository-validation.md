@@ -14,7 +14,7 @@ references:
   - https://lokf-agent-skills.example/knowledge/references/open-skills-cli
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-10T00:00:00Z"
+  at: "2026-09-11T09:42:00Z"
 ---
 
 # Overview
