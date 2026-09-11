@@ -47,7 +47,7 @@ Resolve every placeholder from real project sources before writing anything; nev
 
 `<BASE_IRI>` is load-bearing: `base_iri` + concept path mints each concept's `@id`. It need not resolve today, but must be stable and in a namespace the project controls (lokf-librarian Rule 2 has the authority test and migration steps). A plain directory tree with no manifest/CODEOWNERS/repo: use the directory name, any document in the tree, and the `.example` fallback - and flag every guess in Step 6.
 
-**Tracked or gitignored - decide now.** Check whether the root `.gitignore` already excludes `.lokf/` (ask if unclear). Committing `.lokf/` is the default four skills assume; gitignoring it is equally valid (personal bundle, or a policy against committing agent-authored content) but changes three things: still create every file (the bundle is filesystem-based either way); skip the commit in Step 4 and all of Step 5; say so in the Step 6 handoff. This is unrelated to `.lokf/.gitignore` below, which only excludes tool build noise.
+**Tracked or gitignored - decide now.** Check whether the root `.gitignore` already excludes `.lokf/` (ask if unclear). Committing `.lokf/` is the default four skills assume; gitignoring it is equally valid (personal bundle, or a policy against committing agent-authored content) but changes four things: still create every file (the bundle is filesystem-based either way); skip the commit in Step 4 and all of Step 5; add the Step 2 `knowledge_bundle` symlink to the root `.gitignore` instead of committing it; say so in the Step 6 handoff. This is unrelated to `.lokf/.gitignore` below, which only excludes tool build noise.
 
 > Repo hygiene note: if the host repo installs AI skills locally, the generated runtime directories `.agents/`, `.claude/`, and the lockfile `skills-lock.json` are not source content and should be excluded from the root `.gitignore` rather than committed as project changes.
 
@@ -79,15 +79,31 @@ grep -rl -e '<PROJ_' -e '<BASE_IRI>' -e '<OWNER_' -e '<TODAY>' .lokf \
 
 (If a value contains `|`, substitute with your editor instead of sed.)
 
-## Step 2 - Point agents at the bundle (optional, root-level)
+## Step 2 - Point agents and humans at the bundle (optional, root-level)
 
-Two additions at the **repo root**, outside `.lokf/`. Add only, never overwrite, and check for an existing pointer first. Both templates are worded
-to stay true **whether or not `.lokf/` exists later**, so nothing ever needs cleaning up if the bundle is removed - keep that self-qualifying phrasing.
+Three additions at the **repo root**, outside `.lokf/`. Add only, never overwrite, and check for an existing item first. All three stay true
+**whether or not `.lokf/` exists later**, so nothing ever needs cleaning up if the bundle is removed - keep that self-qualifying phrasing (a dangling
+symlink is harmless and easy to spot).
 
 - **`llms.txt`** - copy `templates/llms.txt` (PROJ_NAME, PROJ_DESC) if absent. If it exists, leave it intact and append only the `## Agent context`
   section, and only if the file doesn't already mention `.lokf/`.
 - **README pointer** - if `README.md` exists and doesn't already link to `.lokf/knowledge/` anywhere (check the path, not a heading string), insert
   `templates/readme-for-ai-agents.md` after the intro, before the first `##`. It is a one-paragraph blockquote aside, not a section: agents read the top of a README, a human skims past an aside, and the trust-weighing detail lives in `llms.txt` rather than being repeated here. Don't invent a README on a host that has none.
+- **`knowledge_bundle` symlink** - a visible, ordinary-looking entry point into the hidden `.lokf/` directory for humans and their tools, most
+  concretely Obsidian's "Open folder as vault": OS folder pickers (Obsidian's included) commonly hide dot-directories, so `.lokf/knowledge` is easy
+  to open by typing the path but awkward to browse to. If nothing named `knowledge_bundle` already exists at the repo root:
+
+  ```bash
+  ln -s .lokf/knowledge knowledge_bundle
+  ```
+
+  Run from the repo root - the target is relative, which keeps the link valid after a clone or move. Mirror the Step 0 tracked/gitignored decision:
+  commit it alongside a tracked `.lokf/`, or add `knowledge_bundle` to the root `.gitignore` alongside a gitignored one. POSIX only - on Windows
+  without WSL/Git Bash, or on a filesystem without symlink support, skip it (see [references/portability.md](references/portability.md)); the
+  bundle works identically without it. Opening `knowledge_bundle` as an Obsidian vault makes Obsidian write its workspace state through the link,
+  landing it in the real `.lokf/knowledge/.obsidian/` - invisible to `lokf validate` (Step 4 reads only `*.md`), and already excluded by
+  `templates/gitignore`. If the host repo lints, spell-checks, or link-checks `**/*.md` repo-wide, exclude `knowledge_bundle/` from that config -
+  otherwise the same files under `.lokf/knowledge/` are processed twice, once at each path.
 
 ## Step 3 - Verify the skeleton
 
