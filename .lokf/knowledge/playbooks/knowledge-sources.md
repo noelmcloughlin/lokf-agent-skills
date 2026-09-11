@@ -10,7 +10,7 @@ generated:
   at: "2026-09-10T18:00:00Z"
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-10T18:00:00Z"
+  at: "2026-09-11T09:42:00Z"
 - by: human:noelmcloughlin
   at: "2026-09-10T00:00:00Z"
 stale_after: 2027-09-10
@@ -38,6 +38,25 @@ stale_after: 2027-09-10
 
 # Notes for the next run
 
+- **Targeted addition, not committed (2026-09-11)**: `lokf-scaffolding` Step 2
+  gained a third root-level pointer - a `knowledge_bundle` symlink to
+  `.lokf/knowledge`, so Obsidian's "Open folder as vault" (and any OS folder
+  picker that hides dot-directories) has a visible entry point. Added
+  `playbooks/open-bundle-in-obsidian.md`; refreshed
+  `playbooks/lokf-scaffolding-skill.md`'s Overview (Step 2 now reads three
+  additions, not two) and re-verified `glossary/knowledge-bundle.md` and
+  `playbooks/repository-validation.md` against their now-touched resources
+  (`skills/lokf-scaffolding/templates/README.md`; `.github/workflows/validate.yml`
+  plus new `knowledge_bundle`-excluding args in `.markdownlint-cli2.jsonc` and
+  `lychee.toml`, both still consciously excluded as concepts per the note
+  below) - no body drift in either, `verified` timestamps refreshed only.
+  Scoped to this one addition at the requesting user's direction, not a full
+  steady-state sweep - other concepts were not re-checked this run. This
+  repository's own `.lokf/` gained the symlink too (git-tracked, matching
+  `.lokf/` itself). As of this note, none of it is committed yet - it sits in
+  the working tree pending the maintainer's review, so the next run (bootstrap
+  or steady-state) should confirm it actually landed before trusting this
+  entry.
 - **`knowledge-validate.yaml` renamed to `knowledge-registrar.yaml` (2026-09-10,
   third pass)**: prompted by a maintainer decision that the workflow's job -
   keeping bundle records well-formed, never judging their truth - is exactly

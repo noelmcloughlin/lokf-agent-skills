@@ -17,17 +17,19 @@ references:
   - https://lokf-agent-skills.example/knowledge/references/lokf-toolkit
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-09T17:00:00Z"
+  at: "2026-09-11T09:42:00Z"
 ---
 
 # Overview
 
 Runs **once** per repository, or to repair a single missing scaffolding file;
 it never authors concepts. Six steps: gather the host project's facts (Step 0),
-copy each file from `templates/` and substitute placeholders (Step 1), add the
-root-level `llms.txt`/README pointer (Step 2), verify no placeholder survives
-(Step 3), validate (Step 4), optionally scaffold the CI automation (Step 5),
-and hand off (Step 6).
+copy each file from `templates/` and substitute placeholders (Step 1), add
+three root-level pointers - `llms.txt`, a README aside, and a `knowledge_bundle`
+symlink into `.lokf/knowledge` for humans and Obsidian (Step 2, see
+[Open the knowledge bundle in Obsidian](open-bundle-in-obsidian.md)) - verify no
+placeholder survives (Step 3), validate (Step 4), optionally scaffold the CI
+automation (Step 5), and hand off (Step 6).
 
 Its detail lives in two reference files - `references/portability.md` (non-git,
 non-GitHub, non-POSIX hosts) and `references/automation.md` (what the Step 5
