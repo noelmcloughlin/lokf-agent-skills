@@ -7,14 +7,14 @@ genre: explanation
 resource: README.md
 generated:
   by: process:lokf-librarian
-  at: "2026-09-12T16:00:00Z"
+  at: "2026-09-12T17:00:00Z"
 relatedTo:
 - https://lokf-agent-skills.example/knowledge/explanation/why-four-roles
 about:
 - https://lokf-agent-skills.example/knowledge/glossary/knowledge-bundle
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-10T18:00:00Z"
+  at: "2026-09-12T19:00:00Z"
 - by: human:noelmcloughlin
   at: "2026-09-10T00:00:00Z"
 stale_after: 2027-09-10
@@ -39,7 +39,7 @@ with no CI to catch a malformed record - one plugin does the same job at the
 desk rather than after a commit, and a second brings the curator's session
 to that desk:
 
-- [LOKF Enforcer](https://github.com/noelmcloughlin/obsidian-lokf-enforcer) -
+- [LOKF Registrar](https://github.com/noelmcloughlin/obsidian-lokf-registrar) -
   the registrar in the editor: checks a record is well-formed as it is
   written.
 - [LOKF Curator](https://github.com/noelmcloughlin/obsidian-lokf-curator) -

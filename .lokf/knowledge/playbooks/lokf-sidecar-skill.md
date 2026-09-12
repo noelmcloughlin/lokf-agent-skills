@@ -17,7 +17,7 @@ references:
   - https://lokf-agent-skills.example/knowledge/references/lokf-toolkit
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-12T15:00:00Z"
+  at: "2026-09-12T19:00:00Z"
 ---
 
 # Overview

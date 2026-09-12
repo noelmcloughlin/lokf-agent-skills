@@ -15,6 +15,9 @@ about:
 relatedTo:
   - https://lokf-agent-skills.example/knowledge/glossary/knowledge-bundle
   - https://lokf-agent-skills.example/knowledge/explanation/why-a-registrar-role
+verified:
+- by: process:lokf-librarian
+  at: "2026-09-12T19:00:00Z"
 ---
 
 # The pattern

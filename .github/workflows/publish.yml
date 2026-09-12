@@ -39,14 +39,32 @@ jobs:
           fetch-depth: 0
 
       - name: Validate semantic version
+        env:
+          VERSION: ${{ inputs.version }}
         run: |
-          version="${{ inputs.version }}"
-          if [[ ! "$version" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "::error::'$version' is not vMAJOR.MINOR.PATCH."
+          if [[ ! "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::'$VERSION' is not vMAJOR.MINOR.PATCH."
             exit 1
           fi
-          if git rev-parse "$version" >/dev/null 2>&1; then
-            echo "::error::Tag '$version' already exists."
+          if git rev-parse "$VERSION" >/dev/null 2>&1; then
+            echo "::error::Tag '$VERSION' already exists."
+            exit 1
+          fi
+
+      # semantic-release.yml computes each release's version from commits and
+      # promotes it into CHANGELOG.md on every qualifying push to main (see
+      # that workflow's header comment for why it stops short of tagging
+      # itself); this only checks the human-typed input above still agrees
+      # with what it promoted, catching the transcription error a manual
+      # version number invites - not re-deciding the version.
+      - name: Cross-check against the promoted changelog
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          bare="${VERSION#v}"
+          top="$(grep -m1 -E '^## \[[0-9]' CHANGELOG.md | sed -E 's/^## \[([^]]+)\].*/\1/')"
+          if [ "$bare" != "$top" ]; then
+            echo "::error::Typed version '$VERSION' (bare '$bare') doesn't match CHANGELOG.md's top entry '## [$top]'. If semantic-release.yml already promoted the changelog for this release, publish '$top' instead; if it hasn't run yet on the merge you mean to release, this input is premature."
             exit 1
           fi
 
@@ -61,4 +79,5 @@ jobs:
       - name: Publish
         env:
           GH_TOKEN: ${{ github.token }}
-        run: gh skill publish --tag "${{ inputs.version }}"
+          VERSION: ${{ inputs.version }}
+        run: gh skill publish --tag "$VERSION"

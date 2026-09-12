@@ -1,7 +1,79 @@
 # Change Log
 
+## 2026-09-12 (3)
+
+* **Steady-state refresh against the security-hardening pass** (uncommitted
+  at the time of this run: 19 files touched, none of them `.lokf/`).
+  `policies/security.md` rewritten from the current `SECURITY.md`
+  (`generated`/`verified` refreshed): harden-runner now runs on every
+  workflow that installs packages or runs third-party/agent code, not only
+  `validate.yml`/`publish.yml`; a new `## human: attribution is a claim, not
+  a credential` section records `knowledge-registrar.yaml`'s `provenance`
+  gate, lokf-curator's `gh api user`-only identity rule, its refusal to run
+  unattended, and the optional `attestation` job; the blast-radius paragraph
+  now correctly attributes boundary enforcement to the privileged `publish`
+  job (re-deriving the allow-list from the patch itself on a clean
+  checkout) rather than the wrapper script, and records the wrapper's new
+  `.git/config`/`.git/hooks/` snapshot-and-restore and its checks moving
+  into a `main()` called last. `playbooks/lokf-docent-skill.md` and
+  `playbooks/lokf-librarian-skill.md` (`generated`/`verified` refreshed on
+  both) gained the docent's new never-repeat-a-secret guard and the
+  librarian's own scheduled-run-only caveat on the tooling-version check,
+  respectively. `playbooks/releasing.md` (`generated`/`verified` refreshed)
+  gained the `env:`-var injection-hardening note on `publish.yml`'s two
+  version checks, and a fact from a previously unlisted source,
+  `.releaserc.json`: the release-rule mapping is the Angular preset's
+  defaults plus one addition, `security:` -> patch. `knowledge-sources.md`'s
+  source map gained a row for `semantic-release.yml` /
+  `changelog-release.mjs` / `.releaserc.json`, none of which had one.
+  Re-verified without body changes (`verified` refreshed only, confirmed
+  still matching their current, unchanged-by-this-pass resources):
+  `playbooks/lokf-sidecar-skill.md`, `playbooks/open-bundle-in-obsidian.md`,
+  `playbooks/contributing.md`, `policies/versioning.md`,
+  `explanation/hosts-and-doorways.md` (its first `verified` event),
+  `explanation/why-a-distribution-repository.md`,
+  `explanation/why-a-registrar-role.md`, `explanation/why-four-roles.md`,
+  `glossary/lokf.md`, `glossary/okf.md`, `glossary/knowledge-bundle.md`.
+  `.lokf/feedback.md` held no real entries (its unfilled template only), so
+  nothing was consumed. `lokf` on PyPI is still `0.7.0`, matching this
+  sidecar's floor - no bump needed. Not re-checked this run: the policy
+  concepts whose resources this pass never touched
+  (`policies/ai-covenant.md`, `policies/code-of-conduct.md`), the two
+  concepts sourced from `skills/lokf-curator/` (`playbooks/lokf-curator-skill.md`,
+  `glossary/trust-label.md`), `playbooks/repository-validation.md`, and the
+  seven external `Reference` concepts - none of their resources appear
+  among this pass's changed files, so they were left as last verified.
+
+## 2026-09-12 (2)
+
+* **Semantic-release, hardened - version and changelog only** (maintainer
+  decision): `playbooks/releasing.md` rewritten (`generated`/`verified`
+  refreshed). `semantic-release.yml`'s `release` job, behind the `release`
+  GitHub Environment, computes the next version from Conventional Commits on
+  every push to `main`, but only ever runs semantic-release `--dry-run` -
+  `gh skill publish` stays this repository's one tag creator, so nothing here
+  writes, commits, tags, or publishes on the tool's own initiative. A plain
+  shell step reads the dry run's computed version, promotes `CHANGELOG.md`'s
+  `## [Unreleased]` section itself, and commits directly. `publish.yml` gains
+  a cross-check: the maintainer's typed version must match what got
+  promoted, or the run fails before touching the registry.
+
 ## 2026-09-12
 
+* **LOKF Enforcer is now LOKF Registrar** (maintainer decision; the plugin
+  was renamed for its role before its first release):
+  `explanation/why-a-registrar-role.md` (`generated` refreshed),
+  `playbooks/lokf-librarian-skill.md`, `playbooks/open-bundle-in-obsidian.md`,
+  and `playbooks/knowledge-sources.md` name it so, repository link
+  `obsidian-lokf-registrar`. The `diataxis.md` actor the librarian leaves
+  alone reads `lokf-registrar/<version>`; a map from a build before the
+  rename carries `lokf-enforcer/<version>` and is left alone the same.
+  `glossary/knowledge-bundle.md` (`generated` refreshed) now records the
+  README's three pictures for the bundle - the librarian's *catalogue*, the
+  museum's *exhibition* as the hall visitors are shown into, and the
+  *workshop* of sources both stand against - after the README's opening
+  section was made to say that its catalogue and its exhibition are the same
+  folder. Earlier entries keep the old plugin name.
 * **`lokf-scaffolding` renamed to `lokf-sidecar`** (maintainer decision):
   `playbooks/lokf-scaffolding-skill.md` moved to
   `playbooks/lokf-sidecar-skill.md` with its `id`, `title`, `resource`, and
@@ -74,6 +146,9 @@
   the workshop and the bundle the exhibition. `explanation/why-a-registrar-role.md` no longer files
   LOKF Curator under the registrar or calls the plugin a curator: the Enforcer is the registrar in the
   editor, the Curator plugin is the person's assistant, and the curator is always a person.
+* **Vocabulary**: `glossary/knowledge-bundle.md` now records the museum synonyms the READMEs
+  use - the bundle is the *exhibition*, a concept an *exhibit*, the sources or notes the
+  *workshop* - so the three words are defined once, at the term of record.
 
 ## 2026-09-11
 

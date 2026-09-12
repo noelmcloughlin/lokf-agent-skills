@@ -12,7 +12,7 @@ about:
   - https://lokf-agent-skills.example/knowledge/playbooks/releasing
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-10T00:00:00Z"
+  at: "2026-09-12T19:00:00Z"
 - by: human:noelmcloughlin
   at: "2026-09-10T00:00:00Z"
 stale_after: 2027-09-10

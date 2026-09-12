@@ -11,17 +11,26 @@ Four [Agent Skills](https://agentskills.io/home) that turn a repository's scatte
   <img src=".assets/lokf-agent-skills-card.svg" alt="LOKF Agent Skills overview graphic" width="720" />
 </p>
 
-> **For AI agents:** if `.lokf/knowledge/index.md` exists in this repository,
-> read it first - it is a queryable [LOKF](https://lokf.nolan-nichols.com)
-> knowledge bundle of repository-specific context; `llms.txt` says how to weigh
-> what you find there (drafts vs. person-confirmed) and names the `lokf-docent`
-> skill for answering from it.
+> **Two ways in.** This README is one; the other is a docent. Install
+> [`lokf-docent`](https://github.com/noelmcloughlin/lokf-agent-skills) into
+> whatever agent you already use -
+> `npx skills add noelmcloughlin/lokf-agent-skills --skill lokf-docent --yes` -
+> and ask it anything about this project - *Which skill do I run first?*, say,
+> or *How do lokf-librarian and lokf-curator relate?*
+> ([EXAMPLES.md](EXAMPLES.md) shows eight such answers, captured, not invented).
+> It answers from `.lokf/knowledge/`, the checked part of what the project
+> knows, says how far each answer has been trusted (still a draft, checked by
+> automation only, or confirmed by a named person), opens the source for exact
+> values, and records what it couldn't answer so the gap gets filled. One door
+> for a person at a prompt, an agent reading this file, or a chatbot that can
+> load a skill. **Agents:** if `.lokf/knowledge/index.md` exists, read it first -
+> `llms.txt` says how to weigh it.
 
 ## Why libraries have catalogues
 
 The knowledge already exists - in code, documents, diagrams, policies, operational records. What's missing is a layer that sits between those sources and whoever needs them next, and stays put. Without it, every task starts the same way: find the material, work out how it connects, judge what's still true. That's real work, and the collected context dies with the task - the next person, or next conversation with an assistant, pays for it again.
 
-A bundle keeps that work instead of discarding it. But it is only worth keeping if you can tell what's sound - otherwise you re-verify everything yourself, the very thing you were trying to avoid, and the files quietly rot.
+A **knowledge bundle** - that folder of concept files - is that catalogue: it keeps the work instead of discarding it. Two more words this README keeps coming back to: the bundle is the **exhibition**, the hall visitors are shown into, and each concept in it an exhibit, as against the workshop of sources and notes it was distilled from. But an exhibition is only worth keeping if you can tell what's sound - otherwise you re-verify everything yourself, the very thing you were trying to avoid, and the files quietly rot.
 
 So ask a question and the answer tells you where it came from and how far it has been checked, in plain words - *confirmed by a person*, or *nobody has checked this yet*. Those labels are computed from the files on every read, never stored, so they cannot drift from what they describe: against an unchanged bundle they are deterministic.
 
@@ -50,7 +59,7 @@ In [Obsidian](https://obsidian.md/), where people edit bundles by hand and there
 
 | Plugin | Role at the desk |
 | --- | --- |
-| [LOKF Enforcer](https://github.com/noelmcloughlin/obsidian-lokf-enforcer) | The **registrar**: checks each record is well-formed as it is written - the schema-valid row below, live in the editor. |
+| [LOKF Registrar](https://github.com/noelmcloughlin/obsidian-lokf-registrar) | The **registrar**: checks each record is well-formed as it is written - the schema-valid row below, live in the editor. |
 | [LOKF Curator](https://github.com/noelmcloughlin/obsidian-lokf-curator) | The **curator's assistant**, not the curator: puts the source beside the claim and writes down what the person decided - the human-confirmed row below, running this repository's `lokf-curator` review session without an agent in the loop. |
 
 The curator is always a person; the skill and the plugin that carry the name are that person's assistants, in a terminal and in Obsidian. Neither plugin reaches a verdict of its own: the registrar keeps the paperwork honest, the assistant keeps the record of the decisions, and the judging stays with the person. Both are optional companions in either direction - the plugins work on any LOKF bundle however it was produced, and these skills need no plugin, since `lokf validate` remains the gate they rely on. The only thing all of it shares is the LOKF specification.
@@ -63,7 +72,7 @@ The four skills are built around a **sidecar**: `.lokf/` sits beside the raw sou
 | --- | --- | --- |
 | Lays the sidecar | `lokf-sidecar` | - |
 | Librarian | `lokf-librarian` | - (deriving is an agent's job) |
-| Registrar | `lokf validate`, `knowledge-registrar.yaml` | LOKF Enforcer |
+| Registrar | `lokf validate`, `knowledge-registrar.yaml` | LOKF Registrar |
 | Curator - always a person | `lokf-curator`, the person's assistant | LOKF Curator - the same assistant, at the desk |
 | Docent | `lokf-docent`, `lokf serve` | - |
 
@@ -82,7 +91,7 @@ The number to watch is **confirmed by a person: n of N**, and it is meant to ris
 
 ## Install
 
-**Install what you need - each skill stands alone.** The sidecar plus the librarian is enough to see the idea: the bundle gets built, everything in it marked a draft. Add the curator once there is a bundle worth trusting; until then the librarian's pull requests keep pointing at it. Already have a healthy `.lokf/`? Skip the sidecar skill. The docent goes anywhere an agent only *reads* a bundle.
+**Install what you need - each skill stands alone.** The sidecar plus the librarian is enough to see the idea: the bundle gets built, everything in it marked a draft. Add the curator once there is a bundle worth trusting; until then the librarian's pull requests keep pointing at it. Already have a healthy `.lokf/`? Skip the sidecar skill. The docent goes anywhere an agent only *reads* a bundle - this repository included: install it, ask a question, and compare the answer with [EXAMPLES.md](EXAMPLES.md).
 
 **GitHub CLI** ([`gh skill`](https://cli.github.com/manual/gh_skill_install), GitHub CLI v2.90.0+):
 
@@ -120,11 +129,11 @@ Each proves less than its name suggests. Only the third yields a claim someone h
 | Human-confirmed | a named person, through `lokf-curator` or the LOKF Curator plugin - shown as *confirmed by a person* | someone accountable read the source and agreed | that it stays true - which is what review dates are for |
 | Proven in use | readers, through `lokf-docent`, which records misses and disagreements in `.lokf/feedback.md` | the bundle answered a real question - or didn't, and the gap became the librarian's next task | nothing further - this is the feedback loop that feeds the other three |
 
-The first and third rows also run live, outside these skills and the CLI, for anyone maintaining a bundle in Obsidian rather than through an agent: LOKF Enforcer for the first, LOKF Curator for the third - see [the fifth role](#the-fifth-role-which-is-not-a-skill).
+The first and third rows also run live, outside these skills and the CLI, for anyone maintaining a bundle in Obsidian rather than through an agent: LOKF Registrar for the first, LOKF Curator for the third - see [the fifth role](#the-fifth-role-which-is-not-a-skill).
 
 ### When the vocabulary stops fitting
 
-LOKF's vocabulary is deliberately small - 15 classes, ten typed relations - which is what keeps bundles portable. When concepts stop fitting those classes, typically in a deep or safety-critical domain (medicine, law, finance, safety engineering), the answer is a domain schema written in [LinkML](https://linkml.io) that extends LOKF's, not a looser bundle. The curator flags the drift; the team decides; the librarian applies it. What it costs (no new tooling), how to write one, and how to validate values it binds to an external domain ontology: [`lokf-curator/references/domain-schemas.md`](skills/lokf-curator/references/domain-schemas.md).
+LOKF's vocabulary is deliberately small - 15 classes, ten typed relations - which is what keeps bundles portable. When concepts stop fitting those classes, typically in a deep or safety-critical domain (medicine, law, finance, safety engineering), the answer is a domain schema written in [LinkML](https://linkml.io) that extends LOKF's, not a looser bundle. The curator flags the drift; the team decides; the librarian applies it. What it costs (no new tooling), how to write one, what to do when the domain already has a LinkML vocabulary of its own, and how to validate values it binds to an external domain ontology: [`lokf-curator/references/domain-schemas.md`](skills/lokf-curator/references/domain-schemas.md).
 
 ## Repository layout
 

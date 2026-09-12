@@ -1,0 +1,127 @@
+name: Semantic release (version + changelog only)
+
+# Computes the next version from Conventional Commits on `main`, using the
+# same pinned semantic-release tool as the sibling plugin repositories, but
+# never lets it create a tag or a release itself: `publish.yml`'s
+# `gh skill publish --tag` is this repository's one and only tag creator
+# (see that workflow's own header comment for why), and two tools racing to
+# create the same tag would be worse than either alone. So this workflow
+# only ever runs semantic-release with `--dry-run` - which performs no
+# writes, no commit, no tag, no publish, by design - to learn the next
+# version and this repository's CHANGELOG.md "## [Unreleased]" section text
+# via .github/scripts/changelog-release.mjs, then promotes that section and
+# commits it itself in a plain, reviewable step below, outside the tool's
+# own publish lifecycle.
+#
+# `plan` previews every pull request into main. `release` runs on push to
+# main behind the `release` GitHub Environment - the same gate `publish.yml`
+# already uses, so configure required reviewers on it once, in this
+# repository's Settings > Environments, and both workflows honor it.
+# `publish.yml` itself is unchanged in spirit: a maintainer still runs it
+# by hand with an explicit version, but that version must now match what
+# this workflow already promoted into CHANGELOG.md, so a typo can no longer
+# ship a version nobody wrote release notes for.
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: semantic-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: audit
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - name: Install semantic-release (pinned, not a project dependency)
+        run: |
+          npm install --no-save --no-audit --no-fund --ignore-scripts \
+            semantic-release@25.0.9 \
+            @semantic-release/commit-analyzer@13.0.1 \
+            @semantic-release/exec@7.1.0
+
+      - name: Preview the next version
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx --no-install semantic-release --dry-run
+
+  release:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write
+    steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: audit
+
+      # This job pushes a commit to `main` itself (see below), so - like the
+      # equivalent job in the sibling plugin repositories - it keeps the
+      # checkout action's default credential helper rather than disabling
+      # it: nothing untrusted runs here, only the pinned release tool above
+      # and this repository's own reviewed script below.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - name: Install semantic-release (pinned, not a project dependency)
+        run: |
+          npm install --no-save --no-audit --no-fund --ignore-scripts \
+            semantic-release@25.0.9 \
+            @semantic-release/commit-analyzer@13.0.1 \
+            @semantic-release/exec@7.1.0
+
+      # Always --dry-run: semantic-release computes the next version and
+      # this repository's Unreleased notes but writes nothing and creates no
+      # tag - see this workflow's header comment for why. The command
+      # writes `next_version` to $GITHUB_OUTPUT itself (see
+      # changelog-release.mjs's `notes` subcommand) only when a release is
+      # actually due; a push with no feat/fix/etc. commit since the last tag
+      # leaves it unset and the step below is skipped.
+      - name: Compute the next version (writes nothing)
+        id: plan
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx --no-install semantic-release --dry-run
+
+      - name: Promote CHANGELOG.md and commit
+        if: steps.plan.outputs.next_version != ''
+        env:
+          VERSION: ${{ steps.plan.outputs.next_version }}
+          GIT_AUTHOR_NAME: github-actions[bot]
+          GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+        run: |
+          node .github/scripts/changelog-release.mjs promote "$VERSION" "$(date -u +%Y-%m-%d)"
+          git add CHANGELOG.md
+          git commit -m "chore(release): $VERSION - changelog promoted [skip ci]"
+          git push origin HEAD:main

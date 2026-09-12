@@ -34,6 +34,13 @@ jobs:
       questions: ${{ steps.curator.outputs.questions }}
       human: ${{ steps.curator.outputs.human }}
     steps:
+      # Same audit-mode egress monitor this repository's other workflows run;
+      # this job installs packages and runs a third-party agent.
+      - name: Harden the runner
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: audit
+
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -48,7 +55,7 @@ jobs:
       - name: Install the lokf sidecar
         id: install-lokf
         continue-on-error: true
-        run: uv sync
+        run: uv sync --locked
         working-directory: .lokf
 
       # Wire this up under Settings -> Secrets and variables -> Actions:
@@ -74,8 +81,25 @@ jobs:
       - name: Run the librarian agent
         if: vars.KNOWLEDGE_LIBRARIAN_ENABLED == 'true'
         env:
-          AGENT_CLI: ${{ vars.AGENT_CLI }}
+          AGENT_CLI: ${{ vars.AGENT_CLI || secrets.AGENT_CLI }}
         run: bash .lokf/scripts/knowledge-librarian.sh
+
+      # The wrapper enforces this same boundary itself, immediately after the
+      # agent returns (and restores .git/config and .git/hooks around the call
+      # so a poisoned core.fsmonitor/hooksPath can't blind either check - see
+      # the wrapper's own comments). This is the second, independent layer: it
+      # runs even when the wrapper didn't get to (agent disarmed, early exit),
+      # so no path outside the bundle can reach `publish` in the patch.
+      - name: Enforce the agent's write scope
+        if: vars.KNOWLEDGE_LIBRARIAN_ENABLED == 'true'
+        run: |
+          set -euo pipefail
+          out="$(git status --porcelain -- . ':!.lokf/knowledge' ':!knowledge_bundle' ':!.lokf/feedback.md' ':!.lokf/uv.lock')"
+          if [ -n "$out" ]; then
+            echo "::error::The librarian agent touched files outside .lokf/knowledge/ and .lokf/feedback.md:"
+            echo "$out"
+            exit 1
+          fi
 
       - name: Validate the LOKF bundle
         id: validate-lokf
@@ -155,6 +179,11 @@ jobs:
       contents: write # create/push the librarian branch
       pull-requests: write # open the review PR
     steps:
+      - name: Harden the runner
+        uses: step-security/harden-runner@e14015d583714f6e62063499dc959a02595150a1 # v2.21.1
+        with:
+          egress-policy: audit
+
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
@@ -168,6 +197,28 @@ jobs:
         id: push
         run: |
           set -euo pipefail
+          # Trust nothing the `refresh` job decided on its own - it shared a
+          # workspace with the agent, so its checks can in principle be
+          # blinded or skipped (see the wrapper script's comments). Re-derive
+          # the path check here, on this job's clean checkout, before
+          # anything from the patch touches disk.
+          paths="$(git apply --numstat "$RUNNER_TEMP/librarian.patch" | cut -f3-)"
+          bad="$(printf '%s\n' "$paths" | grep -Ev '^(\.lokf/knowledge/|knowledge_bundle/|\.lokf/feedback\.md$)' || true)"
+          if [ -n "${bad//[$'\n\t ']/}" ]; then
+            echo "::error::Patch touches paths outside the allowed bundle:"
+            printf '%s\n' "$bad" | sed '/^$/d; s/^/  /'
+            exit 1
+          fi
+          # This skill never writes a human: confirmation (see lokf-librarian's
+          # SKILL.md). A PR opened with GITHUB_TOKEN never fires
+          # knowledge-registrar.yaml's own pull_request-triggered provenance
+          # job - GitHub does not start pull_request workflows for a PR
+          # authored by the default token - so this is that check's only
+          # backstop for this particular PR; see scheduled-task.md.
+          if grep -Eq '^\+ *-? *by: *human:' "$RUNNER_TEMP/librarian.patch"; then
+            echo "::error::Patch adds a 'by: human:' claim - the scheduled librarian must never author one."
+            exit 1
+          fi
           # Apply the agent's proposed change onto a clean checkout; fails safe if
           # the default branch moved since `refresh` ran.
           git apply --index --whitespace=nowarn "$RUNNER_TEMP/librarian.patch"

@@ -28,6 +28,7 @@ stale_after: 2027-09-10
 | `SECURITY.md` | the security policy | diff the hardening bullets |
 | `AI_COVENANT.md`, `CODE_OF_CONDUCT.md` | governance policies | diff each; both are adapted from upstream documents that may themselves change |
 | `.github/workflows/validate.yml`, `publish.yml` | the validation and releasing playbooks | diff job names, triggers, and the pinned action SHAs |
+| `.github/workflows/semantic-release.yml`, `.github/scripts/changelog-release.mjs`, `.releaserc.json` | the version-and-changelog automation `playbooks/releasing.md` describes | diff the `release` job's steps, the script's `verifyRelease`/`generateNotes` behaviour, and `.releaserc.json`'s `releaseRules` (which commit types map to which bump) against the concept's Overview; all three sit behind the `release` Environment along with `publish.yml` |
 | `.github/workflows/knowledge-registrar.yaml`, `knowledge-librarian.yaml` | this repository's dogfooded copies of the two workflow templates the sidecar skill ships | diff each against its counterpart under `skills/lokf-sidecar/templates/github/`; they are deliberately kept byte-identical, so any difference is either a template bump not yet copied across or a divergence `.github/dependabot.yml` should explain |
 | `.github/ISSUE_TEMPLATE/*.md`, `.github/pull_request_template.md`, `.github/dependabot.yml` | contributor intake forms and pin maintenance | consciously excluded as concepts - see note below; re-check only that each template still names all four skills and that its `AI_COVENANT.md` link is absolute |
 | `scripts/*.sh` | what the validation playbook claims CI enforces | re-read the assertions; a new check is a gap in the playbook |
@@ -112,7 +113,7 @@ stale_after: 2027-09-10
   place - flagged under that concept's `## Open questions` since fixing
   `SECURITY.md` itself is outside this skill's `.lokf/`-only scope. `README.md`
   gained a substantive new section, "The fifth role, which is not a skill" (the
-  registrar, plus two companion Obsidian plugins, LOKF Enforcer and LOKF
+  registrar, plus two companion Obsidian plugins, LOKF Registrar and LOKF
   Curator) - a real gap, not yet a concept, so added
   `explanation/why-a-registrar-role.md`. Confirmed `skills/lokf-librarian/SKILL.md`'s
   layout diagram and bundle-root `publisher` example already use `person/`/`Person`

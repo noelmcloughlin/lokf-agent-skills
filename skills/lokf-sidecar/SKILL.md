@@ -54,7 +54,7 @@ Resolve every placeholder from real project sources before writing anything; nev
 | Host | Real folder | Link | Why |
 | --- | --- | --- | --- |
 | **Code repository** (the default) | `.lokf/knowledge/` | `knowledge_bundle` → `.lokf/knowledge` (Step 2) | readers are developers, agents and CI; the bundle stays out of the way, and Obsidian is an occasional desk reached through the doorway |
-| **Notes vault or shared folder** - an `.obsidian/` at the host root, or a path inside OneDrive/SharePoint, Dropbox, Drive or iCloud | `knowledge_bundle/` at the host root | `.lokf/knowledge` → `../knowledge_bundle` | readers live in Obsidian or a sync client: the bundle is an ordinary visible folder (explorer, graph, search, Sync, mobile), the LOKF Enforcer and LOKF Curator plugins detect it with nothing to configure, and the tools still find it at the name they know |
+| **Notes vault or shared folder** - an `.obsidian/` at the host root, or a path inside OneDrive/SharePoint, Dropbox, Drive or iCloud | `knowledge_bundle/` at the host root | `.lokf/knowledge` → `../knowledge_bundle` | readers live in Obsidian or a sync client: the bundle is an ordinary visible folder (explorer, graph, search, Sync, mobile), the LOKF Registrar and LOKF Curator plugins detect it with nothing to configure, and the tools still find it at the name they know |
 
 Ask when the signals conflict. Everything below is written for the default; the **visible layout** differs only where marked ▸.
 
@@ -81,14 +81,22 @@ Copy each template to its destination, then substitute the placeholders it lists
 
 ```bash
 mkdir -p .lokf/knowledge/services
-# ...copy the rows above, then e.g.:
+# ...copy the rows above, then substitute placeholders as literal text via
+# Python, not sed: sed's replacement is a fragment of its own s/// script, so
+# a value containing sed's delimiter or GNU sed's `e` (execute) command
+# changes what the command does, not just what text gets inserted - Python's
+# str.replace() has no such mini-language, so no value can do that.
+export PROJ_NAME PROJ_DESC PROJ_SLUG BASE_IRI OWNER_NAME OWNER_SLUG TODAY
 grep -rl -e '<PROJ_' -e '<BASE_IRI>' -e '<OWNER_' -e '<TODAY>' .lokf \
-  | xargs sed -i -e "s|<PROJ_NAME>|$PROJ_NAME|g" -e "s|<PROJ_DESC>|$PROJ_DESC|g" \
-      -e "s|<PROJ_SLUG>|$PROJ_SLUG|g" -e "s|<BASE_IRI>|$BASE_IRI|g" \
-      -e "s|<OWNER_NAME>|$OWNER_NAME|g" -e "s|<OWNER_SLUG>|$OWNER_SLUG|g" -e "s|<TODAY>|$TODAY|g"
+  | xargs -I{} python3 -c '
+import os, sys
+path = sys.argv[1]
+text = open(path, encoding="utf-8").read()
+for token in ("PROJ_NAME", "PROJ_DESC", "PROJ_SLUG", "BASE_IRI", "OWNER_NAME", "OWNER_SLUG", "TODAY"):
+    text = text.replace("<" + token + ">", os.environ[token])
+open(path, "w", encoding="utf-8").write(text)
+' {}
 ```
-
-(If a value contains `|`, substitute with your editor instead of sed.)
 
 ▸ **Visible layout:** create the real folder and the tools' link onto it *before* copying - `mkdir knowledge_bundle && ln -s ../knowledge_bundle .lokf/knowledge` (Windows: `mklink /J .lokf\knowledge %CD%\knowledge_bundle`) - then copy the `templates/knowledge/*` rows to their listed `.lokf/knowledge/...` destinations exactly as written; the link puts them in `knowledge_bundle/`. Every recipe, script and workflow addresses `.lokf/knowledge` and follows the link, and `just lokf-link` recreates it on a machine where a sync service dropped it (its `visible` variable names the folder; the default is `../knowledge_bundle`).
 
@@ -101,7 +109,7 @@ symlink is harmless and easy to spot).
 - **`llms.txt`** - copy `templates/llms.txt` (PROJ_NAME, PROJ_DESC) if absent. If it exists, leave it intact and append only the `## Agent context`
   section, and only if the file doesn't already mention `.lokf/`.
 - **README pointer** - if `README.md` exists and doesn't already link to `.lokf/knowledge/` anywhere (check the path, not a heading string), insert
-  `templates/readme-for-ai-agents.md` after the intro, before the first `##`. It is a one-paragraph blockquote aside, not a section: agents read the top of a README, a human skims past an aside, and the trust-weighing detail lives in `llms.txt` rather than being repeated here. Don't invent a README on a host that has none.
+  `templates/readme-for-ai-agents.md` after the intro, before the first `##`. It is a one-paragraph blockquote aside, not a section, and it speaks to both readers a README has: a person, who learns there is a second way in - install `lokf-docent` and ask - and an agent, which reads the top of a README and is told to read the bundle first; the trust-weighing detail lives in `llms.txt` rather than being repeated here. If one question this host's readers keep asking comes to mind, put it in the aside as the example - a concrete question is what makes a person try it. Don't invent a README on a host that has none.
 - **`knowledge_bundle` symlink** - a visible, ordinary-looking doorway into the hidden `.lokf/` directory for humans and their tools, most
   concretely Obsidian's **File → Open folder as vault**: OS folder pickers (Obsidian's included) hide dot-directories, so `.lokf/knowledge` is easy
   to open by typing the path but awkward to browse to. If nothing named `knowledge_bundle` already exists at the repo root:
@@ -169,6 +177,12 @@ The wrapper looks for `lokf-librarian/SKILL.md` under `.claude/skills/`, `.githu
 publishes the skills it also uses) - if this repo uses another directory, add it to the script's `candidate` list now, and run the script once to confirm:
 a mismatch otherwise fails at scheduled-run time, not now. What each file does, the repo variables to wire, and the runner/SHA-pin notes:
 [references/automation.md](references/automation.md).
+
+These three files land unlinted. Check whether the host already runs something like ShellCheck and `actionlint` over its own tree; if it doesn't, say
+so and suggest adding coverage for `scripts/knowledge-librarian.sh` and the two `.github/workflows/*.yaml` specifically, rather than leaving a
+scheduled agent's own wrapper unchecked indefinitely. That's a one-line suggestion, not a scaffold: a full lint/release CI setup is outside this
+skill's scope and every host's own choice to make - see `lint-and-docs.yaml` in this skill's home repository for one example shape, adapted to
+what that repository actually ships, not copied wholesale.
 
 ## Step 6 - Hand off to lokf-librarian
 
