@@ -11,11 +11,20 @@ Four [Agent Skills](https://agentskills.io/home) that turn a repository's scatte
   <img src=".assets/lokf-agent-skills-card.svg" alt="LOKF Agent Skills overview graphic" width="720" />
 </p>
 
-> **For AI agents:** if `.lokf/knowledge/index.md` exists in this repository,
-> read it first - it is a queryable [LOKF](https://lokf.nolan-nichols.com)
-> knowledge bundle of repository-specific context; `llms.txt` says how to weigh
-> what you find there (drafts vs. person-confirmed) and names the `lokf-docent`
-> skill for answering from it.
+> **Two ways in.** This README is one; the other is a docent. Install
+> [`lokf-docent`](https://github.com/noelmcloughlin/lokf-agent-skills) into
+> whatever agent you already use -
+> `npx skills add noelmcloughlin/lokf-agent-skills --skill lokf-docent --yes` -
+> and ask it anything about this project - *Which skill do I run first?*, say,
+> or *How do lokf-librarian and lokf-curator relate?*
+> ([EXAMPLES.md](EXAMPLES.md) shows eight such answers, captured, not invented).
+> It answers from `.lokf/knowledge/`, the checked part of what the project
+> knows, says how far each answer has been trusted (still a draft, checked by
+> automation only, or confirmed by a named person), opens the source for exact
+> values, and records what it couldn't answer so the gap gets filled. One door
+> for a person at a prompt, an agent reading this file, or a chatbot that can
+> load a skill. **Agents:** if `.lokf/knowledge/index.md` exists, read it first -
+> `llms.txt` says how to weigh it.
 
 ## Why libraries have catalogues
 
@@ -82,7 +91,7 @@ The number to watch is **confirmed by a person: n of N**, and it is meant to ris
 
 ## Install
 
-**Install what you need - each skill stands alone.** The sidecar plus the librarian is enough to see the idea: the bundle gets built, everything in it marked a draft. Add the curator once there is a bundle worth trusting; until then the librarian's pull requests keep pointing at it. Already have a healthy `.lokf/`? Skip the sidecar skill. The docent goes anywhere an agent only *reads* a bundle.
+**Install what you need - each skill stands alone.** The sidecar plus the librarian is enough to see the idea: the bundle gets built, everything in it marked a draft. Add the curator once there is a bundle worth trusting; until then the librarian's pull requests keep pointing at it. Already have a healthy `.lokf/`? Skip the sidecar skill. The docent goes anywhere an agent only *reads* a bundle - this repository included: install it, ask a question, and compare the answer with [EXAMPLES.md](EXAMPLES.md).
 
 **GitHub CLI** ([`gh skill`](https://cli.github.com/manual/gh_skill_install), GitHub CLI v2.90.0+):
 
@@ -124,7 +133,7 @@ The first and third rows also run live, outside these skills and the CLI, for an
 
 ### When the vocabulary stops fitting
 
-LOKF's vocabulary is deliberately small - 15 classes, ten typed relations - which is what keeps bundles portable. When concepts stop fitting those classes, typically in a deep or safety-critical domain (medicine, law, finance, safety engineering), the answer is a domain schema written in [LinkML](https://linkml.io) that extends LOKF's, not a looser bundle. The curator flags the drift; the team decides; the librarian applies it. What it costs (no new tooling), how to write one, and how to validate values it binds to an external domain ontology: [`lokf-curator/references/domain-schemas.md`](skills/lokf-curator/references/domain-schemas.md).
+LOKF's vocabulary is deliberately small - 15 classes, ten typed relations - which is what keeps bundles portable. When concepts stop fitting those classes, typically in a deep or safety-critical domain (medicine, law, finance, safety engineering), the answer is a domain schema written in [LinkML](https://linkml.io) that extends LOKF's, not a looser bundle. The curator flags the drift; the team decides; the librarian applies it. What it costs (no new tooling), how to write one, what to do when the domain already has a LinkML vocabulary of its own, and how to validate values it binds to an external domain ontology: [`lokf-curator/references/domain-schemas.md`](skills/lokf-curator/references/domain-schemas.md).
 
 ## Repository layout
 

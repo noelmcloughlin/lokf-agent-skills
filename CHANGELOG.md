@@ -2,27 +2,23 @@
 
 All notable changes to this repository are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows the rules in [README.md](README.md#versioning). All skills release together under one tag.
 
-## [Unreleased]
-
-### Added
-
-- **Semantic-release, hardened - version and changelog only.** [`semantic-release.yml`](.github/workflows/semantic-release.yml) computes the next version from Conventional Commits on `main` and promotes this file's `## [Unreleased]` section into a dated heading, via the same new `.github/scripts/changelog-release.mjs` the two plugin repositories use, run only as the tool's `--dry-run`-safe `verifyRelease`/`generateNotes` hooks - it never lets semantic-release itself tag or publish, since `gh skill publish` (`publish.yml`) remains this repository's one tag creator. `publish.yml` now cross-checks its hand-typed version input against what got promoted, catching a transcription error before it reaches the registry. Both workflows' write-scoped steps sit behind the `release` GitHub Environment already in use. See `CONTRIBUTING.md`'s "Release process" for the maintainer-facing flow.
-
 ## [0.15.0] - 2026-09-12
 
 ### Changed
 
+- **`lokf-curator/references/domain-schemas.md`** gains "When the domain already has a schema": a regulated domain may already have a LinkML vocabulary of its own and a domain schema then imports it beside LOKF's rather than re-describing it. What such a vocabulary lacks - who encoded a record, who confirmed it, when to look again - OKF v0.2 defines for documents only; whether it belongs on domain records is left to the domain's owners and the OKF specification. The README's summary line points at the new section.
 - **`lokf-scaffolding` renamed `lokf-sidecar`**, matching what it produces: directory, frontmatter, install commands, this repository's own bundle, and every cross-reference. A bundle already laid down needs nothing - the files it wrote are identical.
 - **Corrected Obsidian guidance for `knowledge_bundle`**: the link is opened *itself* as a vault, never the repository root (Obsidian skips a symlink resolving inside the vault it's indexing, and never indexes a dot-folder). Linking a repository's `.lokf/knowledge` *into* a personal vault - the reverse direction - is supported and now documented.
-- **`README.md`** gains "Where the skills meet an Obsidian vault": the bundle's two names and which is real per host, a plugin-for-skill table, and the vault-as-**workshop**/bundle-as-**exhibition** framing - the exhibition being the hall visitors are shown into, and the bundle also the catalogue of the opening section's heading. "The fifth role" no longer calls LOKF Curator a registrar: it is the curator's assistant, and the curator is always a person.
-- **LOKF Enforcer is now LOKF Registrar** wherever the README, the librarian and sidecar skills, and this repository's bundle name the plugin - renamed for the role before its first release; its repository is `obsidian-lokf-registrar`. The `diataxis.md` map it writes is stamped `lokf-registrar/<version>`; a map from a build before the rename carries `lokf-enforcer/<version>`, and the librarian leaves both alone.
+- **`README.md`** gains "Where the skills meet an Obsidian vault": the bundle's two names and which is real per host, a plugin-for-skill table, and the vault-as-**workshop**/bundle-as-**exhibition** framing. "The fifth role" no longer calls LOKF Curator a registrar: it is the curator's assistant, and the curator is always a person.
+- **LOKF Enforcer is now LOKF Registrar** (repository `obsidian-lokf-registrar`), renamed for its role before its first release, wherever the README, the skills and this repository's bundle name it.
 
 ### Added
 
 - **`lokf-sidecar` lays the bundle down by host.** Two names, one real folder: `.lokf/knowledge` (what the tools address) and `knowledge_bundle` (what people and Obsidian open). A code repository keeps the hidden folder real with `knowledge_bundle` as the doorway link; a notes vault or shared folder (Step 0 asks) makes `knowledge_bundle/` real and `.lokf/knowledge` the link - detected by both plugins with nothing to configure.
 - **`just lokf-link`** recreates the visible layout's link where a sync service drops it, follows a new `visible` variable for a vault nested inside its repository (e.g. `../MSc-AI/knowledge_bundle`), and refuses a dangling link instead of failing on `ln`.
 - **`scripts/test-sidecar-layouts.sh`**, run by the repository-contract check: builds throwaway hosts in both layouts and pins the wrapper's boundary check, the librarian workflow's change detection and packaging, the registrar's triggers, and `lokf-link`, all against both bundle names.
-- **`lokf-librarian`** now leaves LOKF Enforcer's Obsidian affordances alone by rule - the `<!-- lokf:related -->` block and the `diataxis.md` map - and addresses the bundle by both paths when scoping a diff or PR.
+- **`lokf-librarian`** now leaves LOKF Registrar's Obsidian affordances alone by rule - the `<!-- lokf:related -->` block and the `diataxis.md` map - and addresses the bundle by both paths when scoping a diff or PR.
+- **Semantic release**, version and changelog only: the version is computed from Conventional Commits on `main` and `CHANGELOG.md`'s `## [Unreleased]` section promoted into a dated heading. It never tags - `gh skill publish` remains the one tag creator - and `publish.yml` now refuses a typed version that disagrees with what was promoted. See [CONTRIBUTING.md](CONTRIBUTING.md#release-process).
 
 ### Fixed
 
