@@ -86,7 +86,7 @@ git cat-file commit "$sha" | grep -qE '^gpgsig' && echo signed || echo unsigned
 Three cases are **not** findings and must be excluded:
 
 - **Uncommitted events** - one written in this session, or any working-tree change (`git diff HEAD -- <path>` is non-empty). It has no commit yet; there is nothing to check.
-- **No git history at all** - `.lokf/` is gitignored (lokf-scaffolding Step 0). Skip the check and say so; don't report zero, which would read as "all clear".
+- **No git history at all** - `.lokf/` is gitignored (lokf-sidecar Step 0). Skip the check and say so; don't report zero, which would read as "all clear".
 - **`-S` finding nothing** - the event predates the file's history (a squashed import, a repo migration). Report it as unknown rather than unsigned if you want to be exact; folding it into the count is acceptable as long as the line's wording stays "git holds no signature behind it".
 
 **What it proves, and what it doesn't.** A signature header shows someone signed that commit. It does not show *whose* key, it does not show the signature is valid, and it certainly does not show a person read the source. An unsigned commit is not evidence of forgery either - plenty of honest repositories never sign. Treat the count as a question worth asking, never as an accusation, and say it that way to the person. The authoritative check is the `provenance` job in `knowledge-registrar.yaml`, which has what a local checkout does not: GitHub's own verification of each signature against the keys registered to an account, and who approved the pull request.

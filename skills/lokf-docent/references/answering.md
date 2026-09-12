@@ -76,5 +76,5 @@ Repository fallback:
 ## No bundle at all
 
 If `.lokf/knowledge/index.md` doesn't exist, this skill has nothing to guide through. Answer from the repository as the agent normally would, and mention
-once that lokf-scaffolding can create a bundle so the next reader doesn't repeat the search. Don't create `.lokf/feedback.md` in that case - there is
+once that lokf-sidecar can create a bundle so the next reader doesn't repeat the search. Don't create `.lokf/feedback.md` in that case - there is
 no librarian loop to consume it.

@@ -14,7 +14,7 @@ ok() { printf 'OK:   %s\n' "$*"; }
 
 # 1. Exactly the two intended published skill directories exist.
 mapfile -t skill_dirs < <(find skills -mindepth 1 -maxdepth 1 -type d | sort)
-expected_dirs=("skills/lokf-curator" "skills/lokf-docent" "skills/lokf-librarian" "skills/lokf-scaffolding")
+expected_dirs=("skills/lokf-curator" "skills/lokf-docent" "skills/lokf-librarian" "skills/lokf-sidecar")
 if [[ "${skill_dirs[*]}" == "${expected_dirs[*]}" ]]; then
   ok "exactly the four intended skill directories exist (${expected_dirs[*]})"
 else
@@ -93,6 +93,16 @@ if command -v shellcheck >/dev/null 2>&1; then
   done
 else
   say "shellcheck not installed locally - CI runs it; skipping here (${#scripts[@]} script(s) found: ${scripts[*]:-none})"
+fi
+
+# 7. Both bundle layouts behave the same for every template that scopes a diff
+#    to the bundle (the wrapper and both workflows), and for the lokf-link recipe.
+say ""
+say "Running the layout tests..."
+if bash scripts/test-sidecar-layouts.sh; then
+  ok "layout tests pass"
+else
+  err "layout tests failed"
 fi
 
 say ""

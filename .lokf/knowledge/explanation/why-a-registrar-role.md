@@ -7,7 +7,7 @@ genre: explanation
 resource: README.md
 generated:
   by: process:lokf-librarian
-  at: "2026-09-10T18:00:00Z"
+  at: "2026-09-12T16:00:00Z"
 relatedTo:
 - https://lokf-agent-skills.example/knowledge/explanation/why-four-roles
 about:
@@ -35,19 +35,22 @@ gate (`.github/workflows/knowledge-registrar.yaml` - renamed from
 `knowledge-validate.yaml` to match this role by name).
 
 Where a bundle is edited by hand instead - in [Obsidian](https://obsidian.md/),
-with no CI to catch a malformed record - two companion plugins do the same
-job at the desk rather than after a commit:
+with no CI to catch a malformed record - one plugin does the same job at the
+desk rather than after a commit, and a second brings the curator's session
+to that desk:
 
 - [LOKF Enforcer](https://github.com/noelmcloughlin/obsidian-lokf-enforcer) -
-  checks a record is well-formed as it is written, live in the editor.
+  the registrar in the editor: checks a record is well-formed as it is
+  written.
 - [LOKF Curator](https://github.com/noelmcloughlin/obsidian-lokf-curator) -
-  puts a source beside a claim and records what a person decided, running
-  this repository's `lokf-curator` review session without an agent in the
-  loop.
+  the curator's assistant, not the curator: puts a source beside a claim and
+  records what a person decided, running this repository's `lokf-curator`
+  review session without an agent in the loop.
 
-Neither plugin reaches a verdict of its own - a registrar keeps the
-provenance honest and leaves judging to the curator (human, or the plugin
-that carries that name). Both directions are optional companions rather than
+Neither plugin reaches a verdict of its own - the registrar keeps the
+provenance honest, the assistant keeps the record of the decisions, and the
+judging stays with the curator, who is always a person; the skill and the
+plugin that carry that name are that person's assistants. Both directions are optional companions rather than
 a dependency: the plugins work on any LOKF bundle however it was produced,
 and these four skills need no plugin, since `lokf validate` remains the gate
 they rely on. The only thing every path shares is the LOKF specification

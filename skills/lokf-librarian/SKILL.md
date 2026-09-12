@@ -14,7 +14,7 @@ Maintain `.lokf/` - the host repository's knowledge captured as a [**Linked Open
 > would be owned by some separate **okf-librarian** type skill. Every LOKF bundle
 > is also a valid OKF bundle - keep the two consistent, but edit each through its
 > own skill. If `.lokf/` doesn't exist yet, or the layout below is incomplete,
-> run the **lokf-scaffolding** skill first - it creates `knowledge/index.md` with
+> run the **lokf-sidecar** skill first - it creates `knowledge/index.md` with
 > the semantic header (Rule 2), `knowledge/log.md`, the domain directories, plus
 > `pyproject.toml` and the `justfile` that `just lokf-validate` needs. This
 > skill assumes all of that is already in place. Trust verdicts - a *person*
@@ -29,13 +29,13 @@ Maintain `.lokf/` - the host repository's knowledge captured as a [**Linked Open
 > `dependsOn` vs `derivedFrom` backwards is a named bug class - section 2), and
 > judging trust/provenance (Rule 6: record only what the origin attests) need
 > real reasoning over an unfamiliar repo, with no sign-off gate catching a
-> wrong call. lokf-scaffolding is the opposite case and says so.
+> wrong call. lokf-sidecar is the opposite case and says so.
 
 > Sources: [lokf.nolan-nichols.com](https://lokf.nolan-nichols.com/specification/)
 > is the canonical site for what LOKF *means*; the Golden Rules below are drawn
 > from it. The `lokf validate`/`convert`/`serve` tooling section 2 runs is the
 > [`lokf` PyPI package](https://pypi.org/project/lokf/) (installed by
-> lokf-scaffolding), not the website; the raw schema
+> lokf-sidecar), not the website; the raw schema
 > <https://raw.githubusercontent.com/nicholsn/lokf/main/lokf.yaml> is the
 > no-Python fallback for audits.
 
@@ -53,12 +53,14 @@ Maintain `.lokf/` - the host repository's knowledge captured as a [**Linked Open
 |-- scripts/              # (optional) knowledge-librarian.sh, the scheduled-agent wrapper (references/scheduled-task.md)
 ```
 
+`knowledge/` may itself be a link: in lokf-sidecar's **visible layout** (a notes vault or a shared folder as the host) the real folder is `knowledge_bundle/` at the host root - or inside the vault, when the vault is a subfolder of the host - and `.lokf/knowledge` points at it. Address the bundle as `.lokf/knowledge` regardless and let the link resolve - but expect git to report your changes under `knowledge_bundle/`, and name both paths when you scope a diff or a PR.
+
 The LOKF **format** is defined once in LinkML (`lokf.yaml`); the JSON Schema, JSON-LD context, SHACL shapes, and OWL ontology are **generated** from it and MUST NOT be hand-edited. This repo's `.lokf/` is a *consumer* of that published schema - you author concepts, the toolkit validates and projects them.
 
 ## Golden Rules (LOKF v0.2)
 
 1. **It's [OKF first](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md).** One concept per file, path = concept ID, `type` is the only strictly required field, permissive consumption. Everything plain OKF requires (enforced by the okf-librarian skill, when the repo maintains an `okf/` sibling) still holds here.
-2. **The bundle-root `index.md` carries the semantic header.** It declares the keys that lift the whole bundle into RDF (values shown are illustrative - the real ones are minted at scaffolding time):
+2. **The bundle-root `index.md` carries the semantic header.** It declares the keys that lift the whole bundle into RDF (values shown are illustrative - the real ones are minted when the sidecar is laid down):
 
    ```yaml
    lokf_version: "0.2"
@@ -158,7 +160,8 @@ Record the resulting map as a concept: **`playbooks/knowledge-sources.md`** (`ty
 2. **Re-walk `playbooks/knowledge-sources.md`.** Sources listed there may have grown new assets since the last run.
 3. **Sweep for orphans.** Repository files or directories that no concept and no source-map entry accounts for are gap candidates: add a concept, extend the source map, or consciously leave them out.
 4. **Update the source map** whenever the repository's knowledge geography changes - it must stay as accurate as the concepts it feeds.
-5. **Check sidecar tooling versions.** Run `uv pip index versions lokf 2>&1 | head -3` and compare the latest PyPI release against the `>=` floor in `.lokf/pyproject.toml`. For a **minor/patch** bump: update the floor, run `uv sync`, re-run `just lokf-validate`. For a **major** bump or changelog-noted breaking change: **ask the human first** - concept frontmatter may need updates. Never bump `linkml` independently; let `lokf`'s resolver govern it. If PyPI is unreachable, skip and note it in the handoff.
+5. **Leave Obsidian's affordances alone.** LOKF Enforcer (an Obsidian plugin) may project the bundle's own facts into Obsidian conventions: a marker-delimited `<!-- lokf:related -->` … `<!-- /lokf:related -->` block in a concept's body (a `#genre` tag and `[[wikilinks]]` for its typed relations) and a `diataxis.md` Map of Content at the bundle root (`type: Document`, `generated.by: lokf-enforcer/<version>`). They are derived from frontmatter you maintain, so never edit, move, or delete them; when you rewrite a concept's body, carry its block over verbatim; and treat `diataxis.md` like `index.md` and `log.md` - reserved, never a concept to derive, list in a TOC, audit as an orphan, or count.
+6. **Check sidecar tooling versions.** Run `uv pip index versions lokf 2>&1 | head -3` and compare the latest PyPI release against the `>=` floor in `.lokf/pyproject.toml`. For a **minor/patch** bump: update the floor, run `uv sync`, re-run `just lokf-validate`. For a **major** bump or changelog-noted breaking change: **ask the human first** - concept frontmatter may need updates. Never bump `linkml` independently; let `lokf`'s resolver govern it. If PyPI is unreachable, skip and note it in the handoff.
 
 Then add the semantic layer: pick the right class, set `id`, and wire typed relationships instead of guessing. Give every concept derived from the repository a `resource` (and `derivedFrom`/`source` where provenance is external) so the next refresh can re-verify it. The example below is **fictional** - an imaginary "Acme Platform" repo, not a concept of any real project; never copy its values, mint IRIs from the bundle's real `base_iri`:
 
@@ -204,11 +207,11 @@ just lokf-serve            # SPARQL endpoint + live graph explorer (optional)
 
 - **Correctness** - class matches the asset; typed relations point the right way (`isPartOf` vs `hasPart`, `dependsOn` vs `derivedFrom`); relation targets resolve to the *intended* concept, not merely *a* concept (`lokf-check-refs` can't catch this half); `id`/`base_iri` mint the expected IRIs and the namespace passes Rule 2's authority test (not inside a URL space the project doesn't control); `endpoint`/`resource` still resolve.
 - **Gaps** - new code/data files with no concept; untyped body links that should be typed relations; missing `id` on concepts other bundles link to; classes left as generic `lokf:Concept` that have a proper vocabulary type; concepts whose provenance/trust is knowable but unrecorded (missing `generated`, `sources`, or a `status`/`stale_after` on content that has clearly gone `deprecated` or stale).
-- **Bugs** - malformed YAML, invalid enum/datatype (fails JSON Schema or SHACL), a relation target that resolves to nothing at all (`lokf-check-refs`), missing `base_iri`/`context` in the root `index.md`, `pyproject.toml` `lokf` constraint missing a `>=` floor or behind the latest release (see step 5).
+- **Bugs** - malformed YAML, invalid enum/datatype (fails JSON Schema or SHACL), a relation target that resolves to nothing at all (`lokf-check-refs`), missing `base_iri`/`context` in the root `index.md`, `pyproject.toml` `lokf` constraint missing a `>=` floor or behind the latest release (see step 6).
 
 Report findings as a checklist; fix mechanical issues directly and re-run `just lokf-validate`.
 
-If `uv`/the `lokf` package isn't available, there's no substitute for the two generated validators above - fall back to the manual, structural cross-check against the raw schema described in lokf-scaffolding's Step 4, and say so in the audit report rather than silently claiming full coverage. That fallback cannot catch everything the generated JSON Schema does - it has no cardinality check, so a bare-scalar value where a slot is `multivalued: true` (Rule 4) passes it silently and only fails real `lokf validate`. A bundle that has only passed the manual fallback is not proven schema-valid; report it as such.
+If `uv`/the `lokf` package isn't available, there's no substitute for the two generated validators above - fall back to the manual, structural cross-check against the raw schema described in lokf-sidecar's Step 4, and say so in the audit report rather than silently claiming full coverage. That fallback cannot catch everything the generated JSON Schema does - it has no cardinality check, so a bare-scalar value where a slot is `multivalued: true` (Rule 4) passes it silently and only fails real `lokf validate`. A bundle that has only passed the manual fallback is not proven schema-valid; report it as such.
 
 ## 3. Hand off for human maintainer review
 
@@ -216,8 +219,8 @@ Open a PR scoped to `.lokf/` with a summary, the `lokf validate` (and, when rele
 
 End the PR description - or, when there is no PR, the hand-off message - with a short **For the CURATOR** section in plain words: the health line (confirmed by a person / checked by automation only / nobody has checked / drafts / past review date), the concepts newly marked `draft`, and every `## Open questions` entry, then name the **lokf-curator** skill. That is how a busy person learns that a few minutes of confirmation are wanted; the frontmatter carries the same facts for the curator's own report, so nothing is lost if the summary is skimmed. Curator's own review session ends the same way - a commit and its own PR - so say plainly whether to run it after this PR merges or directly on this branch; without that, confirmations can end up stacked on a PR that hasn't landed yet.
 
-If `.lokf/` is gitignored - a legitimate choice, see lokf-scaffolding's Step 0 - none of this applies: there is no diff for git to show and no PR to open. Review by handing the human maintainer the `just lokf-validate` output directly and pointing at the changed files on disk instead; the scheduled automation doesn't apply either (same reference).
+If `.lokf/` is gitignored - a legitimate choice, see lokf-sidecar's Step 0 - none of this applies: there is no diff for git to show and no PR to open. Review by handing the human maintainer the `just lokf-validate` output directly and pointing at the changed files on disk instead; the scheduled automation doesn't apply either (same reference).
 
 ## 4. Scheduled librarian task (Karpathy rule)
 
-Keep the graph continuously accurate rather than rewriting it in bursts. Two GitHub workflows and a wrapper script - scaffolded by lokf-scaffolding's Step 5 - run this skill on a schedule and open a review PR with whatever changed. Their operating manual (behaviour, guardrails, the repo variables to wire, and why none of it applies to a gitignored `.lokf/`) is [references/scheduled-task.md](references/scheduled-task.md).
+Keep the graph continuously accurate rather than rewriting it in bursts. Two GitHub workflows and a wrapper script - scaffolded by lokf-sidecar's Step 5 - run this skill on a schedule and open a review PR with whatever changed. Their operating manual (behaviour, guardrails, the repo variables to wire, and why none of it applies to a gitignored `.lokf/`) is [references/scheduled-task.md](references/scheduled-task.md).

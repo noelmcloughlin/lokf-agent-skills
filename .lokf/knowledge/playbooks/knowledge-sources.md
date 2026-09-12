@@ -22,13 +22,13 @@ stale_after: 2027-09-10
 | --- | --- | --- |
 | `skills/*/SKILL.md` | the four skill Playbooks | re-read each router; a changed step list, guardrail, or frontmatter `description` is a drift signal |
 | `skills/*/references/*.md` | detail behind each skill Playbook | diff against the claims in the corresponding concept body |
-| `skills/lokf-scaffolding/templates/` | what scaffolding actually writes; the toolkit dependency and its `[build]` extra | diff `pyproject.toml` (the `lokf` floor) and the template list in the skill's Step 1 table |
+| `skills/lokf-sidecar/templates/` | what the sidecar skill actually writes; the toolkit dependency and its `[build]` extra | diff `pyproject.toml` (the `lokf` floor) and the template list in the skill's Step 1 table |
 | `README.md` | project identity, the four-role narrative, versioning policy, install commands | diff the roles table and the Versioning section |
 | `CONTRIBUTING.md` | the contributing playbook | diff the layout table and the pre-PR checklist |
 | `SECURITY.md` | the security policy | diff the hardening bullets |
 | `AI_COVENANT.md`, `CODE_OF_CONDUCT.md` | governance policies | diff each; both are adapted from upstream documents that may themselves change |
 | `.github/workflows/validate.yml`, `publish.yml` | the validation and releasing playbooks | diff job names, triggers, and the pinned action SHAs |
-| `.github/workflows/knowledge-registrar.yaml`, `knowledge-librarian.yaml` | this repository's dogfooded copies of the two workflow templates scaffolding ships | diff each against its counterpart under `skills/lokf-scaffolding/templates/github/`; they are deliberately kept byte-identical, so any difference is either a template bump not yet copied across or a divergence `.github/dependabot.yml` should explain |
+| `.github/workflows/knowledge-registrar.yaml`, `knowledge-librarian.yaml` | this repository's dogfooded copies of the two workflow templates the sidecar skill ships | diff each against its counterpart under `skills/lokf-sidecar/templates/github/`; they are deliberately kept byte-identical, so any difference is either a template bump not yet copied across or a divergence `.github/dependabot.yml` should explain |
 | `.github/ISSUE_TEMPLATE/*.md`, `.github/pull_request_template.md`, `.github/dependabot.yml` | contributor intake forms and pin maintenance | consciously excluded as concepts - see note below; re-check only that each template still names all four skills and that its `AI_COVENANT.md` link is absolute |
 | `scripts/*.sh` | what the validation playbook claims CI enforces | re-read the assertions; a new check is a gap in the playbook |
 | `CHANGELOG.md` | what changed between releases | read the `[Unreleased]` section for behaviour changes not yet reflected in concepts |
@@ -38,15 +38,26 @@ stale_after: 2027-09-10
 
 # Notes for the next run
 
-- **Targeted addition, not committed (2026-09-11)**: `lokf-scaffolding` Step 2
+- **Rename and correction (2026-09-12)**: `skills/lokf-scaffolding/` is now
+  `skills/lokf-sidecar/` (frontmatter `name: lokf-sidecar`); every row above
+  already uses the new path. `open-bundle-in-obsidian.md` was rewritten to
+  withdraw the "open the repository root as a vault" route (Obsidian ignores
+  a symlink whose target is inside the same vault, per its own help) - the
+  next run should confirm `skills/lokf-sidecar/SKILL.md` Step 2 still says
+  the same, and that the two plugin repositories' READMEs still agree.
+  Later the same day the two-name layout rule landed in Step 0 (see
+  `explanation/hosts-and-doorways.md`): the next run should check that the
+  wrapper script, both workflow templates, and the three dogfooded copies
+  still name both `.lokf/knowledge` and `knowledge_bundle` in every pathspec.
+- **Targeted addition, not committed (2026-09-11)**: `lokf-sidecar` Step 2
   gained a third root-level pointer - a `knowledge_bundle` symlink to
   `.lokf/knowledge`, so Obsidian's "Open folder as vault" (and any OS folder
   picker that hides dot-directories) has a visible entry point. Added
   `playbooks/open-bundle-in-obsidian.md`; refreshed
-  `playbooks/lokf-scaffolding-skill.md`'s Overview (Step 2 now reads three
+  `playbooks/lokf-sidecar-skill.md`'s Overview (Step 2 now reads three
   additions, not two) and re-verified `glossary/knowledge-bundle.md` and
   `playbooks/repository-validation.md` against their now-touched resources
-  (`skills/lokf-scaffolding/templates/README.md`; `.github/workflows/validate.yml`
+  (`skills/lokf-sidecar/templates/README.md`; `.github/workflows/validate.yml`
   plus new `knowledge_bundle`-excluding args in `.markdownlint-cli2.jsonc` and
   `lychee.toml`, both still consciously excluded as concepts per the note
   below) - no body drift in either, `verified` timestamps refreshed only.
@@ -63,14 +74,14 @@ stale_after: 2027-09-10
   the registrar's role named in `README.md` and
   `explanation/why-a-registrar-role.md`, so its filename should say so.
   Renamed `.github/workflows/knowledge-validate.yaml` and its byte-identical
-  template counterpart under `skills/lokf-scaffolding/templates/github/` to
+  template counterpart under `skills/lokf-sidecar/templates/github/` to
   `knowledge-registrar.yaml` (workflow `name:`, self-referencing `paths:`
   filter, and `concurrency.group` updated to match; the `validate` job id/name
   left as-is - still an accurate description of what that job does). Updated
   every cross-reference: this file's source-map row, `explanation/why-a-registrar-role.md`,
   `.github/dependabot.yml`'s manual-bump comment, and the mentions in
   `lokf-librarian/SKILL.md`, `lokf-librarian/references/scheduled-task.md`,
-  `lokf-scaffolding/SKILL.md`, `lokf-scaffolding/references/automation.md`,
+  `lokf-sidecar/SKILL.md`, `lokf-sidecar/references/automation.md`,
   and `lokf-curator/references/review-session.md`. Left historical `log.md`
   and source-map entries referring to the old name alone - they describe past
   events under the name the workflow had at the time. `.github/workflows/validate.yml`
@@ -133,7 +144,7 @@ stale_after: 2027-09-10
   the LOKF specification site and the raw `lokf.yaml` schema on GitHub, which
   agree: `sameAs` maps to `schema:sameAs`. This wasn't just a documentation
   slip - `just lokf-check-refs`'s SPARQL query (in both `.lokf/justfile` and
-  the `skills/lokf-scaffolding/templates/justfile` it was copied from) filters
+  the `skills/lokf-sidecar/templates/justfile` it was copied from) filters
   on the same predicate list, so any `sameAs` relation would have silently
   never been checked for a dangling target. Fixed in all three places, no
   `sameAs` relations exist in this bundle yet so nothing else changed;
@@ -179,7 +190,7 @@ stale_after: 2027-09-10
   same run (not separately itemized in `CHANGELOG.md`, which for this
   first release describes the shipped feature rather than its pre-release
   fix history): both issue templates offered only
-  `lokf-librarian` and `lokf-scaffolding` under "Which skill?", all three
+  `lokf-librarian` and `lokf-sidecar` under "Which skill?", all three
   templates linked `AI_COVENANT.md` relatively (which 404s in GitHub's
   rendered forms), and the two shipped workflow templates lagged the pins
   Dependabot had already applied to the dogfooded copies.

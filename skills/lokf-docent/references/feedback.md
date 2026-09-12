@@ -42,7 +42,7 @@ curator).
 
 - Questions the bundle answered fine.
 - Things a future reader would not plausibly ask again.
-- Anything about the bundle's *tooling* (a broken `justfile`, a missing `pyproject.toml`) - that is lokf-scaffolding's repair path, not knowledge
+- Anything about the bundle's *tooling* (a broken `justfile`, a missing `pyproject.toml`) - that is lokf-sidecar's repair path, not knowledge
   feedback.
 - Your opinion of a concept. If you think it is wrong but the source agrees with it, it isn't a Disagreement; say your doubt in the answer and leave the bundle alone.
 

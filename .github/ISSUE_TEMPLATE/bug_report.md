@@ -7,7 +7,7 @@ assignees: ''
 ---
 
 **Which skill?**
-lokf-scaffolding / lokf-librarian / lokf-curator / lokf-docent
+lokf-sidecar / lokf-librarian / lokf-curator / lokf-docent
 
 **Installed via**
 `gh skill install` / `npx skills add` / manual copy - and which version/tag

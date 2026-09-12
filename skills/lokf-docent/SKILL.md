@@ -6,7 +6,7 @@ license: Apache-2.0
 
 # LOKF Docent
 
-A docent guides visitors through a collection. This skill guides an agent through the `.lokf/` knowledge bundle: answer from it first, say which concepts the answer rests on and how far each has been trusted, and go to the raw repository only when the bundle can't answer - leaving a note so the gap
+A docent guides visitors through an exhibition. This skill guides an agent through the `.lokf/` knowledge bundle: answer from it first, say which concepts the answer rests on and how far each has been trusted, and go to the raw repository only when the bundle can't answer - leaving a note so the gap
 gets filled. It is the reader's side of the loop the other three skills run: the miss you record today is the concept the librarian derives on its next
 run and a person confirms after that.
 
@@ -19,9 +19,9 @@ run and a person confirms after that.
 > Scope: **read-only on `.lokf/knowledge/`.** The only file this skill ever
 > writes is `.lokf/feedback.md`, and only after asking once per session. It
 > never edits concepts (lokf-librarian), never confirms them (lokf-curator),
-> never creates the bundle (lokf-scaffolding). No `.lokf/knowledge/index.md`?
+> never creates the bundle (lokf-sidecar). No `.lokf/knowledge/index.md`?
 > Answer from the repository as you normally would, and mention that
-> lokf-scaffolding can create a bundle.
+> lokf-sidecar can create a bundle.
 
 > Model: whatever the calling agent already uses. Nothing here needs more
 > capability; it needs the discipline below.

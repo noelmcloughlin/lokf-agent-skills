@@ -8,5 +8,5 @@ endpoint: https://<PROJ_SLUG>.example/api/example-a
 
 # Overview
 
-**Example Service A** is a dummy concept created by scaffolding. Replace its frontmatter and body with a real service, and wire it to other concepts with
+**Example Service A** is a dummy concept laid down by the lokf-sidecar skill. Replace its frontmatter and body with a real service, and wire it to other concepts with
 typed relations (e.g. `dependsOn`, `about`, `references`).
