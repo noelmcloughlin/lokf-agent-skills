@@ -42,9 +42,10 @@ and a claim it cannot settle gets an `## Open questions` section instead of a
 guess.
 
 Two things it now leaves alone by rule (added 2026-09-12): the Obsidian
-affordances LOKF Enforcer may write into a bundle - a marker-delimited
+affordances LOKF Registrar may write into a bundle - a marker-delimited
 `<!-- lokf:related -->` block in a concept body and a `diataxis.md` Map of
-Content (`type: Document`, `generated.by: lokf-enforcer/<version>`), which it
+Content (`type: Document`, `generated.by: lokf-registrar/<version>`, or
+`lokf-enforcer/<version>` from a build before the plugin's rename), which it
 never edits, lists, audits as orphans, or counts - and the bundle's second
 name: in lokf-sidecar's visible layout `.lokf/knowledge` is a link onto
 `knowledge_bundle/`, so it addresses the bundle by the tools' name and names

@@ -10,7 +10,8 @@ All notable changes to this repository are documented here. Format follows [Keep
 
 - **`lokf-scaffolding` renamed `lokf-sidecar`**, matching what it produces: directory, frontmatter, install commands, this repository's own bundle, and every cross-reference. A bundle already laid down needs nothing - the files it wrote are identical.
 - **Corrected Obsidian guidance for `knowledge_bundle`**: the link is opened *itself* as a vault, never the repository root (Obsidian skips a symlink resolving inside the vault it's indexing, and never indexes a dot-folder). Linking a repository's `.lokf/knowledge` *into* a personal vault - the reverse direction - is supported and now documented.
-- **`README.md`** gains "Where the skills meet an Obsidian vault": the bundle's two names and which is real per host, a plugin-for-skill table, and the vault-as-**workshop**/bundle-as-**exhibition** framing. "The fifth role" no longer calls LOKF Curator a registrar: it is the curator's assistant, and the curator is always a person.
+- **`README.md`** gains "Where the skills meet an Obsidian vault": the bundle's two names and which is real per host, a plugin-for-skill table, and the vault-as-**workshop**/bundle-as-**exhibition** framing - the exhibition being the hall visitors are shown into, and the bundle also the catalogue of the opening section's heading. "The fifth role" no longer calls LOKF Curator a registrar: it is the curator's assistant, and the curator is always a person.
+- **LOKF Enforcer is now LOKF Registrar** wherever the README, the librarian and sidecar skills, and this repository's bundle name the plugin - renamed for the role before its first release; its repository is `obsidian-lokf-registrar`. The `diataxis.md` map it writes is stamped `lokf-registrar/<version>`; a map from a build before the rename carries `lokf-enforcer/<version>`, and the librarian leaves both alone.
 
 ### Added
 

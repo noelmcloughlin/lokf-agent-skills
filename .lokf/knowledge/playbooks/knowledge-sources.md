@@ -112,7 +112,7 @@ stale_after: 2027-09-10
   place - flagged under that concept's `## Open questions` since fixing
   `SECURITY.md` itself is outside this skill's `.lokf/`-only scope. `README.md`
   gained a substantive new section, "The fifth role, which is not a skill" (the
-  registrar, plus two companion Obsidian plugins, LOKF Enforcer and LOKF
+  registrar, plus two companion Obsidian plugins, LOKF Registrar and LOKF
   Curator) - a real gap, not yet a concept, so added
   `explanation/why-a-registrar-role.md`. Confirmed `skills/lokf-librarian/SKILL.md`'s
   layout diagram and bundle-root `publisher` example already use `person/`/`Person`

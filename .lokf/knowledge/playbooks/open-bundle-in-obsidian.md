@@ -31,7 +31,7 @@ name a person needs to know.
 # How it is opened
 
 Open **`knowledge_bundle` itself** as a vault. The bundle becomes a small vault of its own - one
-bundle, every note a concept, nothing to configure in either Obsidian plugin (LOKF Enforcer, LOKF
+bundle, every note a concept, nothing to configure in either Obsidian plugin (LOKF Registrar, LOKF
 Curator), since both default to "the vault root is the bundle root". Obsidian treats the linked folder
 like any other vault and writes its workspace state through the link, landing it in the real
 `.lokf/knowledge/.obsidian/` - harmless to `lokf validate` (it reads only `*.md`), and excluded from

@@ -2,6 +2,20 @@
 
 ## 2026-09-12
 
+* **LOKF Enforcer is now LOKF Registrar** (maintainer decision; the plugin
+  was renamed for its role before its first release):
+  `explanation/why-a-registrar-role.md` (`generated` refreshed),
+  `playbooks/lokf-librarian-skill.md`, `playbooks/open-bundle-in-obsidian.md`,
+  and `playbooks/knowledge-sources.md` name it so, repository link
+  `obsidian-lokf-registrar`. The `diataxis.md` actor the librarian leaves
+  alone reads `lokf-registrar/<version>`; a map from a build before the
+  rename carries `lokf-enforcer/<version>` and is left alone the same.
+  `glossary/knowledge-bundle.md` (`generated` refreshed) now records the
+  README's three pictures for the bundle - the librarian's *catalogue*, the
+  museum's *exhibition* as the hall visitors are shown into, and the
+  *workshop* of sources both stand against - after the README's opening
+  section was made to say that its catalogue and its exhibition are the same
+  folder. Earlier entries keep the old plugin name.
 * **`lokf-scaffolding` renamed to `lokf-sidecar`** (maintainer decision):
   `playbooks/lokf-scaffolding-skill.md` moved to
   `playbooks/lokf-sidecar-skill.md` with its `id`, `title`, `resource`, and
@@ -74,6 +88,9 @@
   the workshop and the bundle the exhibition. `explanation/why-a-registrar-role.md` no longer files
   LOKF Curator under the registrar or calls the plugin a curator: the Enforcer is the registrar in the
   editor, the Curator plugin is the person's assistant, and the curator is always a person.
+* **Vocabulary**: `glossary/knowledge-bundle.md` now records the museum synonyms the READMEs
+  use - the bundle is the *exhibition*, a concept an *exhibit*, the sources or notes the
+  *workshop* - so the three words are defined once, at the term of record.
 
 ## 2026-09-11
 

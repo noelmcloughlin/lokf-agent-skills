@@ -54,7 +54,7 @@ Resolve every placeholder from real project sources before writing anything; nev
 | Host | Real folder | Link | Why |
 | --- | --- | --- | --- |
 | **Code repository** (the default) | `.lokf/knowledge/` | `knowledge_bundle` → `.lokf/knowledge` (Step 2) | readers are developers, agents and CI; the bundle stays out of the way, and Obsidian is an occasional desk reached through the doorway |
-| **Notes vault or shared folder** - an `.obsidian/` at the host root, or a path inside OneDrive/SharePoint, Dropbox, Drive or iCloud | `knowledge_bundle/` at the host root | `.lokf/knowledge` → `../knowledge_bundle` | readers live in Obsidian or a sync client: the bundle is an ordinary visible folder (explorer, graph, search, Sync, mobile), the LOKF Enforcer and LOKF Curator plugins detect it with nothing to configure, and the tools still find it at the name they know |
+| **Notes vault or shared folder** - an `.obsidian/` at the host root, or a path inside OneDrive/SharePoint, Dropbox, Drive or iCloud | `knowledge_bundle/` at the host root | `.lokf/knowledge` → `../knowledge_bundle` | readers live in Obsidian or a sync client: the bundle is an ordinary visible folder (explorer, graph, search, Sync, mobile), the LOKF Registrar and LOKF Curator plugins detect it with nothing to configure, and the tools still find it at the name they know |
 
 Ask when the signals conflict. Everything below is written for the default; the **visible layout** differs only where marked ▸.
 

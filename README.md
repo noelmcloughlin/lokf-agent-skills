@@ -21,7 +21,7 @@ Four [Agent Skills](https://agentskills.io/home) that turn a repository's scatte
 
 The knowledge already exists - in code, documents, diagrams, policies, operational records. What's missing is a layer that sits between those sources and whoever needs them next, and stays put. Without it, every task starts the same way: find the material, work out how it connects, judge what's still true. That's real work, and the collected context dies with the task - the next person, or next conversation with an assistant, pays for it again.
 
-A bundle keeps that work instead of discarding it. But it is only worth keeping if you can tell what's sound - otherwise you re-verify everything yourself, the very thing you were trying to avoid, and the files quietly rot.
+A **knowledge bundle** - that folder of concept files - is that catalogue: it keeps the work instead of discarding it. Two more words this README keeps coming back to: the bundle is the **exhibition**, the hall visitors are shown into, and each concept in it an exhibit, as against the workshop of sources and notes it was distilled from. But an exhibition is only worth keeping if you can tell what's sound - otherwise you re-verify everything yourself, the very thing you were trying to avoid, and the files quietly rot.
 
 So ask a question and the answer tells you where it came from and how far it has been checked, in plain words - *confirmed by a person*, or *nobody has checked this yet*. Those labels are computed from the files on every read, never stored, so they cannot drift from what they describe: against an unchanged bundle they are deterministic.
 
@@ -50,7 +50,7 @@ In [Obsidian](https://obsidian.md/), where people edit bundles by hand and there
 
 | Plugin | Role at the desk |
 | --- | --- |
-| [LOKF Enforcer](https://github.com/noelmcloughlin/obsidian-lokf-enforcer) | The **registrar**: checks each record is well-formed as it is written - the schema-valid row below, live in the editor. |
+| [LOKF Registrar](https://github.com/noelmcloughlin/obsidian-lokf-registrar) | The **registrar**: checks each record is well-formed as it is written - the schema-valid row below, live in the editor. |
 | [LOKF Curator](https://github.com/noelmcloughlin/obsidian-lokf-curator) | The **curator's assistant**, not the curator: puts the source beside the claim and writes down what the person decided - the human-confirmed row below, running this repository's `lokf-curator` review session without an agent in the loop. |
 
 The curator is always a person; the skill and the plugin that carry the name are that person's assistants, in a terminal and in Obsidian. Neither plugin reaches a verdict of its own: the registrar keeps the paperwork honest, the assistant keeps the record of the decisions, and the judging stays with the person. Both are optional companions in either direction - the plugins work on any LOKF bundle however it was produced, and these skills need no plugin, since `lokf validate` remains the gate they rely on. The only thing all of it shares is the LOKF specification.
@@ -63,7 +63,7 @@ The four skills are built around a **sidecar**: `.lokf/` sits beside the raw sou
 | --- | --- | --- |
 | Lays the sidecar | `lokf-sidecar` | - |
 | Librarian | `lokf-librarian` | - (deriving is an agent's job) |
-| Registrar | `lokf validate`, `knowledge-registrar.yaml` | LOKF Enforcer |
+| Registrar | `lokf validate`, `knowledge-registrar.yaml` | LOKF Registrar |
 | Curator - always a person | `lokf-curator`, the person's assistant | LOKF Curator - the same assistant, at the desk |
 | Docent | `lokf-docent`, `lokf serve` | - |
 
@@ -120,7 +120,7 @@ Each proves less than its name suggests. Only the third yields a claim someone h
 | Human-confirmed | a named person, through `lokf-curator` or the LOKF Curator plugin - shown as *confirmed by a person* | someone accountable read the source and agreed | that it stays true - which is what review dates are for |
 | Proven in use | readers, through `lokf-docent`, which records misses and disagreements in `.lokf/feedback.md` | the bundle answered a real question - or didn't, and the gap became the librarian's next task | nothing further - this is the feedback loop that feeds the other three |
 
-The first and third rows also run live, outside these skills and the CLI, for anyone maintaining a bundle in Obsidian rather than through an agent: LOKF Enforcer for the first, LOKF Curator for the third - see [the fifth role](#the-fifth-role-which-is-not-a-skill).
+The first and third rows also run live, outside these skills and the CLI, for anyone maintaining a bundle in Obsidian rather than through an agent: LOKF Registrar for the first, LOKF Curator for the third - see [the fifth role](#the-fifth-role-which-is-not-a-skill).
 
 ### When the vocabulary stops fitting
 
