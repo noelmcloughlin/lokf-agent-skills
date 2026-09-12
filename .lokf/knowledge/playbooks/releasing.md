@@ -2,12 +2,12 @@
 type: Playbook
 id: https://lokf-agent-skills.example/knowledge/playbooks/releasing
 title: Releasing
-description: The maintainer-gated release path - a workflow_dispatch run of publish.yml that validates the version, re-checks the contract and spec, then lets gh skill publish create the tag and release.
+description: semantic-release.yml computes the version and promotes CHANGELOG.md on merge to main but never tags; a workflow_dispatch run of publish.yml then validates that version against the promoted changelog, re-checks the contract and spec, and lets gh skill publish create the tag and release.
 genre: how-to
 resource: .github/workflows/publish.yml
 generated:
   by: process:lokf-librarian
-  at: "2026-09-09T10:00:00Z"
+  at: "2026-09-12T18:00:00Z"
 status: draft
 dependsOn:
 - https://lokf-agent-skills.example/knowledge/references/gh-skill-cli
@@ -16,18 +16,33 @@ references:
   - https://lokf-agent-skills.example/knowledge/playbooks/repository-validation
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-10T00:00:00Z"
+  at: "2026-09-12T18:00:00Z"
 ---
 
 # Overview
 
-Releases are never tag-triggered. `gh skill publish` creates the tag *and* the
-GitHub release itself, so a tag-push trigger would race the tag the command is
-about to create; `workflow_dispatch` keeps the timing an explicit human
-decision, and the `release` environment adds a maintainer-approval gate in
-front of the `contents: write` scope.
+A person no longer hand-picks the version, but two tools never race to tag
+it. `semantic-release.yml`'s `release` job runs on every push to `main`,
+behind the `release` GitHub Environment: `@semantic-release/commit-analyzer`
+computes the next version from Conventional Commits since the last tag, and
+`@semantic-release/exec` runs `.github/scripts/changelog-release.mjs`
+`--dry-run` only - refusing to proceed if `CHANGELOG.md`'s
+`## [Unreleased]` section is empty - which means semantic-release itself
+never writes, commits, tags, or publishes anything here. A plain shell step
+afterward reads the version `--dry-run` computed, promotes that section to a
+dated heading itself, and commits the change directly - `gh skill publish`
+stays this repository's one and only tag creator, per the reasoning below.
 
-Each run validates that the input is `vMAJOR.MINOR.PATCH` and that the tag does
-not already exist, re-runs the repository contract and `gh skill publish
+Releases are still never tag-triggered. `gh skill publish` creates the tag
+*and* the GitHub release itself, so a tag-push trigger would race the tag the
+command is about to create; `workflow_dispatch` keeps the timing an explicit
+human decision, and the `release` environment adds a maintainer-approval gate
+in front of the `contents: write` scope - the same Environment
+`semantic-release.yml`'s write-scoped job now sits behind too.
+
+Each `publish.yml` run validates that the input is `vMAJOR.MINOR.PATCH`, that
+the tag does not already exist, and - new - that the bare version matches
+CHANGELOG.md's top heading (catching a typed version nobody wrote release
+notes for), then re-runs the repository contract and `gh skill publish
 --dry-run`, and only then publishes. All four skills ship together under one
 tag, so a consumer can pin them to a single release.

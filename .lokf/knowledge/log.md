@@ -1,5 +1,19 @@
 # Change Log
 
+## 2026-09-12 (2)
+
+* **Semantic-release, hardened - version and changelog only** (maintainer
+  decision): `playbooks/releasing.md` rewritten (`generated`/`verified`
+  refreshed). `semantic-release.yml`'s `release` job, behind the `release`
+  GitHub Environment, computes the next version from Conventional Commits on
+  every push to `main`, but only ever runs semantic-release `--dry-run` -
+  `gh skill publish` stays this repository's one tag creator, so nothing here
+  writes, commits, tags, or publishes on the tool's own initiative. A plain
+  shell step reads the dry run's computed version, promotes `CHANGELOG.md`'s
+  `## [Unreleased]` section itself, and commits directly. `publish.yml` gains
+  a cross-check: the maintainer's typed version must match what got
+  promoted, or the run fails before touching the registry.
+
 ## 2026-09-12
 
 * **LOKF Enforcer is now LOKF Registrar** (maintainer decision; the plugin

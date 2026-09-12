@@ -50,6 +50,22 @@ jobs:
             exit 1
           fi
 
+      # semantic-release.yml computes each release's version from commits and
+      # promotes it into CHANGELOG.md on every qualifying push to main (see
+      # that workflow's header comment for why it stops short of tagging
+      # itself); this only checks the human-typed input above still agrees
+      # with what it promoted, catching the transcription error a manual
+      # version number invites - not re-deciding the version.
+      - name: Cross-check against the promoted changelog
+        run: |
+          version="${{ inputs.version }}"
+          bare="${version#v}"
+          top="$(grep -m1 -E '^## \[[0-9]' CHANGELOG.md | sed -E 's/^## \[([^]]+)\].*/\1/')"
+          if [ "$bare" != "$top" ]; then
+            echo "::error::Typed version '$version' (bare '$bare') doesn't match CHANGELOG.md's top entry '## [$top]'. If semantic-release.yml already promoted the changelog for this release, publish '$top' instead; if it hasn't run yet on the merge you mean to release, this input is premature."
+            exit 1
+          fi
+
       - name: Verify repository contract
         run: bash scripts/validate-repository.sh
 

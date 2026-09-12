@@ -4,6 +4,10 @@ All notable changes to this repository are documented here. Format follows [Keep
 
 ## [Unreleased]
 
+### Added
+
+- **Semantic-release, hardened - version and changelog only.** [`semantic-release.yml`](.github/workflows/semantic-release.yml) computes the next version from Conventional Commits on `main` and promotes this file's `## [Unreleased]` section into a dated heading, via the same new `.github/scripts/changelog-release.mjs` the two plugin repositories use, run only as the tool's `--dry-run`-safe `verifyRelease`/`generateNotes` hooks - it never lets semantic-release itself tag or publish, since `gh skill publish` (`publish.yml`) remains this repository's one tag creator. `publish.yml` now cross-checks its hand-typed version input against what got promoted, catching a transcription error before it reaches the registry. Both workflows' write-scoped steps sit behind the `release` GitHub Environment already in use. See `CONTRIBUTING.md`'s "Release process" for the maintainer-facing flow.
+
 ## [0.15.0] - 2026-09-12
 
 ### Changed
