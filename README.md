@@ -53,7 +53,7 @@ In [Obsidian](https://obsidian.md/), where people edit bundles by hand and there
 | [LOKF Enforcer](https://github.com/noelmcloughlin/obsidian-lokf-enforcer) | Checks each record is well-formed as it is written - the schema-valid row below, live in the editor. |
 | [LOKF Curator](https://github.com/noelmcloughlin/obsidian-lokf-curator) | Puts the source beside the claim and writes down what a person decided - the human-confirmed row below, running this repository's `lokf-curator` review session without an agent in the loop. |
 
-Neither reaches a verdict of its own: a registrar keeps the provenance honest and leaves the judging to the curator. Both are optional companions in either direction - the plugins work on any LOKF bundle however it was produced, and these skills need no plugin, since `lokf validate` remains the gate they rely on. The only thing all of it shares is the LOKF specification.
+Neither reaches a verdict of its own: a **registrar** keeps the provenance honest and leaves the judging to the curator. Both are optional companions in either direction - the plugins work on any LOKF bundle however it was produced, and these skills need no plugin, since `lokf validate` remains the gate they rely on. The only thing all of it shares is the LOKF specification.
 
 ## Trust stays visible
 
@@ -106,11 +106,11 @@ Each proves less than its name suggests. Only the third yields a claim someone h
 | Human-confirmed | a named person, through `lokf-curator` or the LOKF Curator plugin - shown as *confirmed by a person* | someone accountable read the source and agreed | that it stays true - which is what review dates are for |
 | Proven in use | readers, through `lokf-docent`, which records misses and disagreements in `.lokf/feedback.md` | the bundle answered a real question - or didn't, and the gap became the librarian's next task | nothing further - this is the feedback loop that feeds the other three |
 
-The first and third rows also run live, outside these skills and the CLI, for anyone maintaining a bundle in Obsidian rather than through an agent: that is what the two plugins at [the registrar's desk](#the-fifth-role-which-is-not-a-skill) are for.
+The first and third rows also run live, outside these skills and the CLI, for anyone maintaining a bundle in Obsidian rather than through an agent: that is what the two (Obsidian) plugins at [the registrar's desk](#the-fifth-role-which-is-not-a-skill) are for.
 
 ### When the vocabulary stops fitting
 
-LOKF's vocabulary is deliberately small - 15 classes, ten typed relations - which is what keeps bundles portable. When concepts stop fitting those classes, typically in a deep or safety-critical domain (medicine, law, finance, safety engineering), the answer is a domain schema written in [LinkML](https://linkml.io) that extends LOKF's, not a looser bundle. The curator flags the drift; the team decides; the librarian applies it. What it costs (no new tooling), how to write one, and how to validate values it binds to an external ontology: [`lokf-curator/references/domain-schemas.md`](skills/lokf-curator/references/domain-schemas.md).
+LOKF's vocabulary is deliberately small - 15 classes, ten typed relations - which is what keeps bundles portable. When concepts stop fitting those classes, typically in a deep or safety-critical domain (medicine, law, finance, safety engineering), the answer is a domain schema written in [LinkML](https://linkml.io) that extends LOKF's, not a looser bundle. The curator flags the drift; the team decides; the librarian applies it. What it costs (no new tooling), how to write one, and how to validate values it binds to an external domain ontology: [`lokf-curator/references/domain-schemas.md`](skills/lokf-curator/references/domain-schemas.md).
 
 ## Repository layout
 
@@ -132,9 +132,7 @@ Each `SKILL.md` is a lean router; anything not needed on every invocation lives 
 
 ## Versioning
 
-All four skills ship from this repository under one semantic version - `vMAJOR.MINOR.PATCH`, released together, so pinning them to the same tag always gives you a set that agrees with itself. What each level means: [CONTRIBUTING.md](CONTRIBUTING.md#release-process).
-
-See [CHANGELOG.md](CHANGELOG.md) for what changed in each release.
+All four skills ship from this repository under one semantic version - `vMAJOR.MINOR.PATCH`, released together, so pinning them to the same tag always gives you a set that agrees with itself. What each level means: [CONTRIBUTING.md](CONTRIBUTING.md#release-process).  See [CHANGELOG.md](CHANGELOG.md) for what changed in each release.
 
 ## Contributing
 
