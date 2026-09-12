@@ -138,6 +138,8 @@ silently reports "no changes" for an ignored path forever. GitHub-only; other ho
 | `templates/github/knowledge-librarian.yaml` | `.github/workflows/knowledge-librarian.yaml` |
 | `templates/scripts/knowledge-librarian.sh` | `.lokf/scripts/knowledge-librarian.sh` (`chmod +x`) |
 
+The registrar's `provenance` job needs no wiring, but check one thing and report it here: `git config --get commit.gpgsign`, and whether `HEAD` carries a signature (`git cat-file commit HEAD | grep -qE '^gpgsig'`). If signing is off, say so now - GitHub blocks self-approval, so a **solo maintainer**'s own curation PRs pass only if they sign, and otherwise every confirmation lokf-curator records will be rejected at the gate. Show the three `git config` lines from [references/automation.md](references/automation.md) and let them run those; do not run them yourself and never touch their `--global` config. The optional `KNOWLEDGE_CURATION_ENVIRONMENT` escape hatch is in the same file; it requires creating an Environment *with required reviewers* first, and is a no-op if that part is skipped.
+
 The wrapper looks for `lokf-librarian/SKILL.md` under `.claude/skills/`, `.github/skills/`, `.agents/skills/`, then bare `skills/` (a repo that
 publishes the skills it also uses) - if this repo uses another directory, add it to the script's `candidate` list now, and run the script once to confirm:
 a mismatch otherwise fails at scheduled-run time, not scaffold time. What each file does, the repo variables to wire, and the runner/SHA-pin notes:

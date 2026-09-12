@@ -2,13 +2,43 @@
 
 ## Who is recording
 
-Resolve once per session, in this order, and confirm aloud before the first write ("I'll record your answers as `human:<id>` - ok?"):
+One source, resolved once per session, and confirmed aloud before the first write ("I'll record your answers as `human:<id>` - ok?"):
 
-1. `gh api user --jq .login` (GitHub login - stable, matches `CODEOWNERS`).
-2. `git config user.name`, slugified (`Ada Lovelace` -> `ada-lovelace`).
-3. Ask.
+```sh
+gh api user --jq .login
+```
+
+A GitHub login: stable, matching `CODEOWNERS`, and - the reason it is now the only accepted source - the identity that `knowledge-registrar.yaml`'s `provenance` job can check an event against afterwards, by asking whether that account approved the pull request carrying it.
+
+The two fallbacks this skill used to allow are gone, and it matters why:
+
+- **`git config user.name`** is an ordinary writable config value. Anything with shell access to the checkout can set it to a maintainer's slug before the session starts.
+- **Asking** takes the identity from the conversation - the one channel an attacker fully controls. A name typed at you is a claim, not an identity.
+
+**With no authenticated login**, *Confirm* and *Correct now* are unavailable for the session. Say so, and offer the three verbs that assert nothing about who checked what: *Wrong - send back*, *Retire*, *Later*. Do not fall back, do not guess, and never write a `human:` event whose id you cannot name a source for.
+
+**Non-GitHub forges**: use the identity behind signed commits (the key in `git config user.signingkey`, resolved to that forge's account) together with that forge's approval gate. The principle is the rule, not the tool - the id must be one that something outside the bundle can independently confirm.
 
 Never use an email address - the bundle may be public. The actor string is `human:<id>` exactly (OKF §7); it is a literal, never turned into a link.  Timestamps are UTC, ISO 8601, quoted in YAML: `"2026-09-08T14:00:00Z"`.
+
+## Before the first verb: will the gate accept this?
+
+Only when `.lokf/` is git-tracked **and** `.github/workflows/knowledge-registrar.yaml` exists. Two cheap questions:
+
+```sh
+git config --get commit.gpgsign                      # is signing on at all?
+git cat-file commit HEAD | grep -qE '^gpgsig' \
+  && echo "HEAD is signed" || echo "HEAD is unsigned"
+```
+
+If signing is off and this person would be the one opening the curation PR, tell them before they spend twenty minutes confirming things. GitHub does not let anyone approve their own pull request, so the `provenance` job's only remaining evidence is their signature - and without it every confirmation from this session is rejected at the gate.
+
+What to say, and what not to do:
+
+- Show the three `git config` lines from lokf-scaffolding's [`references/automation.md`](../../lokf-scaffolding/references/automation.md), and the part that catches people out: the same key must also be added at `github.com/settings/keys` **as a signing key**, because the job reads GitHub's verdict, not the local one.
+- **Never run them yourself.** This skill records what a person says; it does not reconfigure their machine. A `--global` change would alter how they commit in every unrelated repository, and a wrong `user.signingkey` breaks `git commit` everywhere until they find it.
+- A committed `.gitconfig` is not an option, and it is worth saying so when someone suggests it: git reads only `.git/config`, `~/.gitconfig`, and system config - never a file in the working tree. Git refuses this deliberately, since a config file arriving with a clone could otherwise run commands. A tracked one sits there doing nothing.
+- Then carry on regardless. It is their call, and *Wrong - send back*, *Retire* and *Later* record no `human:` actor, so they pass the gate untouched.
 
 ## The verbs
 
@@ -72,6 +102,8 @@ verified:
   - by: human:ada-lovelace
     at: "2026-09-08T14:05:00Z"
 ```
+
+This is the widest verb in the skill, and the only one that writes *content*: what it stamps as human-authored, lokf-librarian will not rewrite (section 1), so a wrong fact recorded here survives every later refresh and is caught only if the repository actively contradicts it. Use it only for a fact the person states themselves, keep the edit as small as that fact, and never reach for it when *Wrong - send back* would do.
 
 `generated` is replaced, not appended - it records who produced the *current* content. From now on the librarian will not rewrite this concept; if the repository later disagrees, it raises an open question instead (lokf-librarian, section 1). Never propose the correction yourself; if you think you know it, say so and let them decide.
 
@@ -164,6 +196,6 @@ Add a bullet to the nearest `index.md`? No - `index.md` is the librarian's; it w
 
 ## Handing off
 
-Git-tracked `.lokf/`: open a pull request scoped to `.lokf/` titled "Curation: <date>", body = the health line before and after, the verbs taken, and the `just lokf-validate` output (or "validation skipped - no `uv`"). The `knowledge-registrar.yaml` gate, if scaffolded, runs on it.
+Git-tracked `.lokf/`: open a pull request scoped to `.lokf/` titled "Curation: <date>", body = the health line before and after, the verbs taken, and the `just lokf-validate` output (or "validation skipped - no `uv`"). The `knowledge-registrar.yaml` gate, if scaffolded, runs on it - including its `provenance` job, which re-checks every `human:` event the PR adds: each named person must have approved the pull request, or, when the PR is their own (GitHub won't let authors approve themselves), have signed its commits. Tell the person plainly that the PR needs their approval or signature before the confirmations they just gave will pass - and if they are the repository's only maintainer, that GitHub will not let them approve their own PR, so signing their commits is the path (lokf-scaffolding's `references/automation.md` has the three-line setup). That is the gate working, not a snag in it: it is what makes their confirmation something a later reader can check rather than take on faith.
 
 Gitignored `.lokf/`: there is no diff to show; hand the person the list of changed files and the health line instead.
