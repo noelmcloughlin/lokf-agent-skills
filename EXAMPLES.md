@@ -30,14 +30,14 @@ From the bundle:
 
 ## 3. "I have a repo with no `.lokf/` yet - which skill do I run first?"
 
-> Run `lokf-scaffolding` first. It's the one-shot bootstrap that creates the
+> Run `lokf-sidecar` first. It's the one-shot bootstrap that creates the
 > `.lokf/` sidecar - tooling, docs, and a dummy skeleton - from bundled
 > templates, then hands off to `lokf-librarian` to fill it with real
 > knowledge.
 
 ```text
 From the bundle:
-- lokf-scaffolding skill (playbooks/lokf-scaffolding-skill.md) - checked by automation only
+- lokf-sidecar skill (playbooks/lokf-sidecar-skill.md) - checked by automation only
 ```
 
 ## 4. "How do lokf-librarian and lokf-curator relate?"
@@ -63,7 +63,7 @@ From the bundle:
 > Before opening a pull request, run five checks: the repository-contract
 > script, `gh skill publish --dry-run` (if the GitHub CLI is installed),
 > `shellcheck` on any changed script, `actionlint` on any changed workflow
-> (including the templates under `skills/lokf-scaffolding/templates/github/`),
+> (including the templates under `skills/lokf-sidecar/templates/github/`),
 > and a `CHANGELOG.md` entry under `[Unreleased]` if the change alters
 > behavior.
 

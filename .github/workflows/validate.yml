@@ -92,7 +92,7 @@ jobs:
       # Catches what YAML parsing alone misses (bad expressions, wrong
       # contexts, invalid `needs:`, shellcheck on `run:` blocks) - and,
       # unlike `gh skill publish --dry-run`, reaches the two workflow
-      # templates under skills/lokf-scaffolding/templates/github/ that get
+      # templates under skills/lokf-sidecar/templates/github/ that get
       # copied into other repositories and run there.
       - name: actionlint
         uses: docker://rhysd/actionlint@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667 # v1.7.12
@@ -159,6 +159,6 @@ jobs:
         with:
           path: '**/*.md'
           # knowledge_bundle is a symlink to .lokf/knowledge (Obsidian vault
-          # entry point, see lokf-scaffolding Step 2) - already checked at
+          # entry point, see lokf-sidecar Step 2) - already checked at
           # its real path.
           skip: knowledge_bundle

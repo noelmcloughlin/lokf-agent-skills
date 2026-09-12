@@ -4,7 +4,7 @@
 
 This repository is mostly Markdown. Three things in it execute or are executed by other systems, and are the actual attack surface:
 
-- `skills/lokf-scaffolding/templates/scripts/knowledge-librarian.sh` and the two GitHub Actions workflow templates next to it (`skills/lokf-scaffolding/templates/github/*.yaml`) - these get **copied into other repositories** by the scaffolding skill and run there.
+- `skills/lokf-sidecar/templates/scripts/knowledge-librarian.sh` and the two GitHub Actions workflow templates next to it (`skills/lokf-sidecar/templates/github/*.yaml`) - these get **copied into other repositories** by the sidecar skill and run there.
 - This repository's own `.github/workflows/*.yml`, which run with a `GITHUB_TOKEN` on every PR and (for `publish.yml`) with `contents: write` behind a maintainer-approval environment.
 - The four skills' `SKILL.md`/`references/` prose **is executed too - by whichever LLM agent runs it**, here and in every consumer repository that installs the skills. Anywhere that prose sends an agent to read content it didn't author - a repository file, an external URL, a reader's question, `.lokf/feedback.md` - is a prompt-injection surface. See **Prompt-injection guards** below. Separately, anywhere that prose lets an agent record *who vouched for something* is an attribution surface, because the caller may be another agent rather than a person: see **Human attribution** below.
 
@@ -28,8 +28,8 @@ Only the latest published tag receives fixes. Point releases (patch) are issued 
 - Pull requests require passing validation before merge; force-pushes and branch deletion are blocked on `main`.
 - Secret scanning and push protection are enabled.
 - `publish.yml`'s write scope is gated behind a `release` environment with required reviewers - no workflow can create a release unattended.
-- Third-party Actions are pinned to a reviewed commit SHA (not a floating tag) in every workflow, including the templates under `skills/lokf-scaffolding/templates/github/`.
-- `.github/dependabot.yml` keeps this repository's own workflow pins current. It does **not** reach the two templates under `skills/lokf-scaffolding/templates/github/` - Dependabot's `github-actions` ecosystem only scans `.github/workflows/` (a known upstream limitation), so those pins are still bumped by hand; `lint-workflows`' `actionlint` step catches syntax drift there, not staleness.
+- Third-party Actions are pinned to a reviewed commit SHA (not a floating tag) in every workflow, including the templates under `skills/lokf-sidecar/templates/github/`.
+- `.github/dependabot.yml` keeps this repository's own workflow pins current. It does **not** reach the two templates under `skills/lokf-sidecar/templates/github/` - Dependabot's `github-actions` ecosystem only scans `.github/workflows/` (a known upstream limitation), so those pins are still bumped by hand; `lint-workflows`' `actionlint` step catches syntax drift there, not staleness.
 - Dependency review and CodeQL are intentionally **not** enabled: this repository has no dependency manifests or compiled code to scan (the templates' `pyproject.toml` is a template for consumers, not this repo's own dependency). If that changes, add them then rather than carrying unused overhead now.
 - `knowledge-registrar.yaml` (this repository's own, and the template copied into consumers) gates every newly added `human:` verification on evidence GitHub holds rather than evidence the bundle asserts - see **Human attribution** below.
 - `knowledge-librarian.yaml`'s agent step always runs the pinned, reviewed wrapper script directly - never a repository variable's content as a shell command. The `AGENT_CLI` variable can only choose *which* non-interactive agent runs, never *what command* runs, closing an earlier arbitrary-command-execution surface under that job's `contents: write` scope.

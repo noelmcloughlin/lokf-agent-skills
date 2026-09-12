@@ -12,7 +12,7 @@ skill is that person's assistant: it shows what needs a look, puts the evidence 
 frontmatter. It decides nothing itself.
 
 > Curator, in the museum sense: the person who authenticates, weighs
-> provenance, and decides what is exhibited as trusted. (In data-management
+> provenance, and decides what is put on **exhibit** as trusted. (In data-management
 > usage "curation" means the librarian's work - not what this skill does.)
 
 > Model: a small/mid-tier model is fine. Step 1 is arithmetic over
@@ -23,7 +23,7 @@ frontmatter. It decides nothing itself.
 > `verified` (a person's events), `status`, `stale_after`, `generated` (only
 > on *Correct now*), and `## Open questions`. Everything else under `.lokf/`
 > belongs to lokf-librarian (content, relations, `index.md`) or
-> lokf-scaffolding (tooling). It needs an existing bundle: if
+> lokf-sidecar (tooling). It needs an existing bundle: if
 > `.lokf/knowledge/` is missing, run those two first.
 
 ## Words this skill uses
@@ -56,7 +56,7 @@ Read every concept's frontmatter under `.lokf/knowledge/` (skip `index.md` and `
 7. `N more not yet checked. Run again anytime - every confirmation counts.`
 8. Offer Step 2: "Want to go through these now?"
 
-Write nothing in Step 1. If `.lokf/knowledge/` doesn't exist, stop and point at lokf-scaffolding. The full template is in [references/trust-fields.md](references/trust-fields.md).
+Write nothing in Step 1. If `.lokf/knowledge/` doesn't exist, stop and point at lokf-sidecar. The full template is in [references/trust-fields.md](references/trust-fields.md).
 
 ## Step 2 - Review session (only if the human says yes)
 

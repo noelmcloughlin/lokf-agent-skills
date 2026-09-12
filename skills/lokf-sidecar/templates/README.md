@@ -23,7 +23,11 @@ You write normal Markdown; you get a validated, queryable graph for free.
 ```
 
 If a `knowledge_bundle` symlink sits at the repo root, that's this same `knowledge/` directory under an ordinary, visible name - open *it* as an
-Obsidian vault ("Open folder as vault") rather than hunting for the hidden `.lokf/` directory in the file picker.
+Obsidian vault ("Open folder as vault") rather than hunting for the hidden `.lokf/` directory in the file picker. Open the link itself, not the
+repository root: Obsidian ignores a symlink whose target is inside the same vault, and never indexes a dot-folder, so a repo-root vault cannot see
+this bundle. (In lokf-sidecar's *visible layout* - a notes vault or a shared folder as the host - it is the other way round: `knowledge_bundle/` is
+the real folder and `.lokf/knowledge` the link; every command below still works, and `just lokf-link` recreates the link on a machine where a sync
+service dropped it, onto `../knowledge_bundle` or the path its `visible` variable names.)
 
 ## Prerequisites
 

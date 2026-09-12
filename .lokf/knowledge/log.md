@@ -1,8 +1,83 @@
 # Change Log
 
+## 2026-09-12
+
+* **`lokf-scaffolding` renamed to `lokf-sidecar`** (maintainer decision):
+  `playbooks/lokf-scaffolding-skill.md` moved to
+  `playbooks/lokf-sidecar-skill.md` with its `id`, `title`, `resource`, and
+  description updated (the description now records the former name); every
+  relation that targeted the old `id` - `why-four-roles.md`'s `about`,
+  `lokf-librarian-skill.md`'s `dependsOn`, `open-bundle-in-obsidian.md`'s
+  `isPartOf` - re-pointed; `index.md` and `playbooks/index.md` bullets,
+  `knowledge-sources.md`'s source-map rows, and `glossary/knowledge-bundle.md`'s
+  `resource` path updated. Historical entries below keep the wording they
+  had, except where the maintainer's own find-and-replace already touched
+  them.
+* **Corrected `playbooks/open-bundle-in-obsidian.md`** (rewritten, `generated`
+  refreshed): it now states the one supported route - open `knowledge_bundle`
+  *itself* as a vault - and records why the repository-root route cannot
+  work, citing Obsidian's help on symbolic links ("ignores a symlink ... from
+  one folder in the vault to another folder in the same vault") and its
+  dot-folder rule. The two companion plugin READMEs had claimed otherwise;
+  both were corrected the same day. Added the supported reverse direction
+  (linking a repository's bundle *into* a personal vault). Source:
+  `skills/lokf-sidecar/SKILL.md` Step 2, whose symlink paragraph was
+  rewritten to match.
+* **Re-verified** `playbooks/lokf-sidecar-skill.md` against the renamed
+  router (Step 5 heading and Step 6 wording changed, step list unchanged) -
+  `verified` timestamp refreshed only. Not a full steady-state sweep.
+* **Second pass, same day**: `playbooks/open-bundle-in-obsidian.md` rewritten
+  again after the maintainer asked for the architecture, not the Obsidian
+  community's habits, to lead. The symlink rule is now stated from Obsidian
+  1.13.7's own file reconciler (`reconcileSymbolicLinkCreation`, read from the
+  installed application bundle): a link is skipped when its resolved path
+  equals, contains, or lies inside a folder already being watched, the vault
+  root included - so the doorway opened *as* a vault works exactly as Step 2
+  intends (the maintainer's own MSc-AI vault does this daily), and a host-root
+  vault merely does not list it, which for a notes-vault host is the property
+  that keeps the sidecar safe inside the vault. Added the Windows junction
+  (`mklink /J`, no elevated rights) and the OneDrive note (syncs neither
+  symlinks nor junctions; no rule against dot-folders) to the playbook,
+  `skills/lokf-sidecar/SKILL.md` Step 2, and `references/portability.md`.
+  Added `explanation/hosts-and-doorways.md` (`status: draft`, with open
+  questions for the maintainer): the two-name rule (`.lokf/knowledge` for
+  tools, `knowledge_bundle` for people, one of them a link) and the proposal
+  to let a vault or shared-drive host make the visible name the real folder.
+* **Third pass, same day - the proposal adopted**: the maintainer asked for
+  the recommended fixes to be implemented. `skills/lokf-sidecar/SKILL.md`
+  Step 0 now decides the layout by host (code repository: hidden real folder,
+  visible doorway link; notes vault or shared folder: visible real
+  `knowledge_bundle/`, `.lokf/knowledge` as the tools' link), with Steps 1, 2,
+  3, 5 and 6 marked where the visible layout differs; the wrapper script and
+  both workflow templates name the bundle under both names (a git pathspec
+  never traverses a symlink; `git add` refuses an empty pathspec, hence a
+  guard), the registrar triggers on `knowledge_bundle/**`, and the justfile
+  gained `just lokf-link`. `skills/lokf-librarian/SKILL.md` gained the
+  layout note and a rule to leave LOKF Enforcer's Obsidian affordances
+  (`<!-- lokf:related -->` blocks, `diataxis.md`) alone. Updated
+  `explanation/hosts-and-doorways.md` (proposal → adopted, open questions
+  resolved), `playbooks/open-bundle-in-obsidian.md` (visible-layout section),
+  `playbooks/lokf-sidecar-skill.md` (Step 0 decision) and
+  `playbooks/lokf-librarian-skill.md` (also corrected "14-class" to the
+  schema's 15, matching `README.md`'s earlier fix). `templates/README.md`
+  and this sidecar's `README.md` explain the layout in one sentence.
+* **Fourth pass - the vault-in-a-subfolder host, and layout tests.** `lokf-sidecar` Step 0
+  gained the case of a vault one level below the repository root (the maintainer's
+  `msc-ai-galway-2026`, vault `MSc-AI/`): the real folder goes inside the vault,
+  `MSc-AI/knowledge_bundle/`, the link is `.lokf/knowledge -> ../MSc-AI/knowledge_bundle`, the
+  justfile's new `visible` variable names that path for `just lokf-link`, and Step 5's three files
+  name it in place of `knowledge_bundle`. `explanation/hosts-and-doorways.md` gained the table row
+  and the note that `scripts/test-sidecar-layouts.sh` now pins both layouts - the wrapper's
+  boundary check, both workflows' pathspecs, and the recipe - from the repository-contract check;
+  `playbooks/open-bundle-in-obsidian.md` and `playbooks/lokf-sidecar-skill.md` say the same in a
+  clause. The README's Obsidian section now states the two-name rule outright and names the vault
+  the workshop and the bundle the exhibition. `explanation/why-a-registrar-role.md` no longer files
+  LOKF Curator under the registrar or calls the plugin a curator: the Enforcer is the registrar in the
+  editor, the Curator plugin is the person's assistant, and the curator is always a person.
+
 ## 2026-09-11
 
-* **`knowledge_bundle` symlink added to `lokf-scaffolding` Step 2**: a third
+* **`knowledge_bundle` symlink added to `lokf-sidecar` Step 2**: a third
   root-level pointer, alongside `llms.txt` and the README aside - `ln -s
   .lokf/knowledge knowledge_bundle`, a visible entry point for humans and
   their tools, chiefly Obsidian's "Open folder as vault," which like most OS
@@ -10,7 +85,7 @@
   excludes `.obsidian/`, which Obsidian writes through the link into the real
   `.lokf/knowledge/.obsidian/` when used as a vault. Added
   `playbooks/open-bundle-in-obsidian.md` and refreshed
-  `playbooks/lokf-scaffolding-skill.md`'s Overview (Step 2 now three
+  `playbooks/lokf-sidecar-skill.md`'s Overview (Step 2 now three
   additions, not two). Re-verified `glossary/knowledge-bundle.md` and
   `playbooks/repository-validation.md` against their now-touched resources -
   no body drift, `verified` timestamps only. This repository's own bundle
@@ -28,7 +103,7 @@
   (never judging their truth) is named for the registrar role it actually
   performs, matching `explanation/why-a-registrar-role.md`. Renamed the
   dogfooded workflow and its byte-identical template counterpart under
-  `skills/lokf-scaffolding/templates/github/`, and updated every
+  `skills/lokf-sidecar/templates/github/`, and updated every
   cross-reference across the four skills' `SKILL.md`/`references/` files,
   `.github/dependabot.yml`, `explanation/why-a-registrar-role.md`, and this
   file's own source-map row. Historical `log.md`/source-map entries that
@@ -140,7 +215,7 @@
   4 - confirmed wrong against both the LOKF specification site and the raw
   `lokf.yaml` schema. Not just documentation: `just lokf-check-refs`'s SPARQL
   query filtered on the same wrong predicate in both `.lokf/justfile` and the
-  `lokf-scaffolding` template it's copied from, so a `sameAs` relation's
+  `lokf-sidecar` template it's copied from, so a `sameAs` relation's
   target would have silently never been checked for existing. Fixed all
   three; `lokf validate` and `lokf-check-refs` still pass.
 * **Tooling floor bumped**: `lokf` reached 0.7.0 on PyPI (floor was

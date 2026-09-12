@@ -3,7 +3,7 @@
 ## Which skill(s) changed?
 
 - [ ] lokf-librarian
-- [ ] lokf-scaffolding
+- [ ] lokf-sidecar
 - [ ] lokf-curator
 - [ ] lokf-docent
 - [ ] repository packaging only (CI, docs, templates unrelated to skill content)

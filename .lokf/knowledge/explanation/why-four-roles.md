@@ -10,7 +10,7 @@ generated:
   at: "2026-09-10T12:00:00Z"
 status: draft
 about:
-  - https://lokf-agent-skills.example/knowledge/playbooks/lokf-scaffolding-skill
+  - https://lokf-agent-skills.example/knowledge/playbooks/lokf-sidecar-skill
   - https://lokf-agent-skills.example/knowledge/playbooks/lokf-librarian-skill
   - https://lokf-agent-skills.example/knowledge/playbooks/lokf-curator-skill
   - https://lokf-agent-skills.example/knowledge/playbooks/lokf-docent-skill

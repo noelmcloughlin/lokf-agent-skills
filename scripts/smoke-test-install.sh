@@ -37,7 +37,7 @@ mkdir -p "$test_root/consumer"
   git init -q
   npx --yes skills add "$source_arg" \
     --skill lokf-librarian \
-    --skill lokf-scaffolding \
+    --skill lokf-sidecar \
     --skill lokf-curator \
     --skill lokf-docent \
     --yes
@@ -59,14 +59,14 @@ assert() {
 
 assert "lokf-librarian discovered by name" \
   "[[ -n \"\$(find \"\$test_root/consumer\" -path \"*.agents/skills/lokf-librarian\" -o -path \"*.claude/skills/lokf-librarian\" 2>/dev/null)\" ]]"
-assert "lokf-scaffolding discovered by name" \
-  "[[ -n \"\$(find \"\$test_root/consumer\" -path \"*.agents/skills/lokf-scaffolding\" -o -path \"*.claude/skills/lokf-scaffolding\" 2>/dev/null)\" ]]"
+assert "lokf-sidecar discovered by name" \
+  "[[ -n \"\$(find \"\$test_root/consumer\" -path \"*.agents/skills/lokf-sidecar\" -o -path \"*.claude/skills/lokf-sidecar\" 2>/dev/null)\" ]]"
 assert "lokf-librarian SKILL.md installed" \
   "[[ -n \"\$(find \"\$test_root/consumer\" -path \"*.agents/skills/lokf-librarian/SKILL.md\" -o -path \"*.claude/skills/lokf-librarian/SKILL.md\" 2>/dev/null)\" ]]"
-assert "lokf-scaffolding SKILL.md installed" \
-  "[[ -n \"\$(find \"\$test_root/consumer\" -path \"*.agents/skills/lokf-scaffolding/SKILL.md\" -o -path \"*.claude/skills/lokf-scaffolding/SKILL.md\" 2>/dev/null)\" ]]"
-assert "lokf-scaffolding templates/ carried along" \
-  "[[ -n \"\$(find \"\$test_root/consumer\" \( -path \"*.agents/skills/lokf-scaffolding/templates\" -o -path \"*.claude/skills/lokf-scaffolding/templates\" \) -type d 2>/dev/null)\" ]]"
+assert "lokf-sidecar SKILL.md installed" \
+  "[[ -n \"\$(find \"\$test_root/consumer\" -path \"*.agents/skills/lokf-sidecar/SKILL.md\" -o -path \"*.claude/skills/lokf-sidecar/SKILL.md\" 2>/dev/null)\" ]]"
+assert "lokf-sidecar templates/ carried along" \
+  "[[ -n \"\$(find \"\$test_root/consumer\" \( -path \"*.agents/skills/lokf-sidecar/templates\" -o -path \"*.claude/skills/lokf-sidecar/templates\" \) -type d 2>/dev/null)\" ]]"
 assert "lokf-curator discovered by name" \
   "[[ -n \"\$(find \"\$test_root/consumer\" -path \"*.agents/skills/lokf-curator\" -o -path \"*.claude/skills/lokf-curator\" 2>/dev/null)\" ]]"
 assert "lokf-curator SKILL.md installed" \
