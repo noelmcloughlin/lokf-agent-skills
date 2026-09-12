@@ -7,7 +7,7 @@ genre: how-to
 resource: skills/lokf-librarian/SKILL.md
 generated:
   by: process:lokf-librarian
-  at: "2026-09-12T15:00:00Z"
+  at: "2026-09-12T19:00:00Z"
 dependsOn:
 - https://lokf-agent-skills.example/knowledge/playbooks/lokf-sidecar-skill
 about:
@@ -19,7 +19,7 @@ references:
   - https://lokf-agent-skills.example/knowledge/references/okf-specification
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-12T15:00:00Z"
+  at: "2026-09-12T19:00:00Z"
 - by: human:noelmcloughlin
   at: "2026-09-09T18:36:00Z"
 stale_after: 2027-09-09
@@ -50,3 +50,15 @@ never edits, lists, audits as orphans, or counts - and the bundle's second
 name: in lokf-sidecar's visible layout `.lokf/knowledge` is a link onto
 `knowledge_bundle/`, so it addresses the bundle by the tools' name and names
 both paths when scoping a diff or a PR.
+
+The tooling-version check (rule 6) now runs **only in interactive
+sessions**: the scheduled workflow's wrapper permits edits solely under
+`.lokf/knowledge/`, `knowledge_bundle/` and `.lokf/feedback.md`, so a
+scheduled run that touched `.lokf/pyproject.toml` would fail the whole run
+closed rather than land a partial change - added 2026-09-12 as part of a
+security-hardening pass that also added a second, independent enforcement
+of that same path boundary in `knowledge-librarian.yaml`'s privileged
+`publish` job (re-derived from the proposed patch on a clean checkout,
+never trusting the `refresh` job's own check alone), plus harden-runner and
+`.git/config`/`.git/hooks/` snapshot-and-restore around the agent call in
+the wrapper script. See `policies/security.md` for the detail.

@@ -17,7 +17,7 @@ relatedTo:
   - https://lokf-agent-skills.example/knowledge/explanation/hosts-and-doorways
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-12T12:00:00Z"
+  at: "2026-09-12T19:00:00Z"
 ---
 
 # Overview

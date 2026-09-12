@@ -7,7 +7,7 @@ genre: how-to
 resource: .github/workflows/publish.yml
 generated:
   by: process:lokf-librarian
-  at: "2026-09-12T18:00:00Z"
+  at: "2026-09-12T19:00:00Z"
 status: draft
 dependsOn:
 - https://lokf-agent-skills.example/knowledge/references/gh-skill-cli
@@ -16,7 +16,7 @@ references:
   - https://lokf-agent-skills.example/knowledge/playbooks/repository-validation
 verified:
 - by: process:lokf-librarian
-  at: "2026-09-12T18:00:00Z"
+  at: "2026-09-12T19:00:00Z"
 ---
 
 # Overview
@@ -24,7 +24,10 @@ verified:
 A person no longer hand-picks the version, but two tools never race to tag
 it. `semantic-release.yml`'s `release` job runs on every push to `main`,
 behind the `release` GitHub Environment: `@semantic-release/commit-analyzer`
-computes the next version from Conventional Commits since the last tag, and
+computes the next version from Conventional Commits since the last tag,
+using `.releaserc.json`'s `releaseRules` - the Angular preset's defaults
+(`fix:` -> patch, `feat:` -> minor, a `BREAKING CHANGE:` footer or `!` ->
+major) plus one addition, `security:` -> patch - and
 `@semantic-release/exec` runs `.github/scripts/changelog-release.mjs`
 `--dry-run` only - refusing to proceed if `CHANGELOG.md`'s
 `## [Unreleased]` section is empty - which means semantic-release itself
@@ -46,3 +49,8 @@ CHANGELOG.md's top heading (catching a typed version nobody wrote release
 notes for), then re-runs the repository contract and `gh skill publish
 --dry-run`, and only then publishes. All four skills ship together under one
 tag, so a consumer can pin them to a single release.
+
+Both checks read the `workflow_dispatch` version input through an `env:`
+var rather than interpolating `${{ inputs.version }}` straight into the
+shell script - a hardening change (2026-09-12) that closes a
+script-injection vector without changing what the checks verify.
