@@ -110,7 +110,7 @@ The first and third rows also run live, outside these skills and the CLI, for an
 
 ### When the vocabulary stops fitting
 
-LOKF's vocabulary is deliberately small - 14 classes, ten typed relations - which is what keeps bundles portable. When concepts stop fitting those classes, typically in a deep or safety-critical domain (medicine, law, finance, safety engineering), the answer is a domain schema written in [LinkML](https://linkml.io) that extends LOKF's, not a looser bundle. The curator flags the drift; the team decides; the librarian applies it. What it costs (no new tooling), how to write one, and how to validate values it binds to an external ontology: [`lokf-curator/references/domain-schemas.md`](skills/lokf-curator/references/domain-schemas.md).
+LOKF's vocabulary is deliberately small - 15 classes, ten typed relations - which is what keeps bundles portable. When concepts stop fitting those classes, typically in a deep or safety-critical domain (medicine, law, finance, safety engineering), the answer is a domain schema written in [LinkML](https://linkml.io) that extends LOKF's, not a looser bundle. The curator flags the drift; the team decides; the librarian applies it. What it costs (no new tooling), how to write one, and how to validate values it binds to an external ontology: [`lokf-curator/references/domain-schemas.md`](skills/lokf-curator/references/domain-schemas.md).
 
 ## Repository layout
 

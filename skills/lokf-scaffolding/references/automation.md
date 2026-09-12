@@ -2,9 +2,46 @@
 
 Scaffolding these is one-time setup; how they behave at run time is lokf-librarian's operating manual ([`../../lokf-librarian/references/scheduled-task.md`](../../lokf-librarian/references/scheduled-task.md)). Applies only to a **git-tracked** `.lokf/` on **GitHub** - see SKILL.md Step 5 for why a gitignored bundle makes both workflows a permanent no-op.
 
-## `knowledge-registrar.yaml` - the validation gate
+## `knowledge-registrar.yaml` - the validation and provenance gate
 
 Named for the registrar's job: keeping the bundle's records well-formed and provenanced, never judging whether their content is true (that's the curator's job, and this workflow runs no agent code at all). Runs `uv run lokf validate knowledge` on every pull request touching `.lokf/**` (or the workflow itself), weekly (Mondays 06:00 UTC), and on demand. Read-only (`contents: read`); superseded runs on the same ref are cancelled. Keep it green: the bar is that the projected graph describes the repository as it is today.
+
+Its second job, `provenance`, runs on pull requests only and enforces the other half of the registrar's remit - that the paperwork is *provenanced*, not merely well-formed. A `human:<id>` verification claims a named person checked a concept against its source, but nothing in the format proves one: any writer that can edit the file can type the string, and `lokf validate` sees a perfectly valid event. So the job collects every `human:` actor the PR newly adds under `.lokf/knowledge/` (anchored on `by:`, so an id quoted in an `## Open questions` note doesn't count) and requires evidence from the forge for each: an **APPROVED** review from that account, or - when that person opened the PR, since GitHub won't let authors approve their own - a signature of *theirs* on the commit that introduced the event. Signature status is read from GitHub's API rather than `git log %G?`: a runner has neither a GPG keyring nor an allowed-signers file, so locally every signature reads as unverifiable no matter how good it is. The API also names the account each commit is attributed to, which is what ties a signature to a person rather than merely proving one exists. Needs `pull-requests: read` and `contents: read`; `fetch-depth: 0` because it diffs against the merge base.
+
+This is what makes lokf-curator's confirmations mean anything to a later reader: without it, "confirmed by a person" is only as good as whatever wrote the file. The cost is intended: a curation PR now needs its curator's approval or signature before it can merge.
+
+### Solo maintainers: sign your commits
+
+GitHub will not let anyone approve their own pull request, so on a one-person repository the signature branch is the path - and it is the better one anyway. A signature is cryptographic and still checkable years later; a review approval is a mutable record that a force-push can dismiss. One-time setup, reusing the SSH key you already push with:
+
+```sh
+git config --global gpg.format ssh
+git config --global user.signingkey ~/.ssh/id_ed25519.pub
+git config --global commit.gpgsign true
+```
+
+Then add that same key again at `github.com/settings/keys`, this time as a **signing** key. That step is not optional, and skipping it is the usual reason the gate still fails after someone has started signing: GitHub keeps authentication and signing keys in separate lists, and this check reads GitHub's own verdict, so a key registered only for auth leaves every commit Unverified however correct the local setup is. The commit's email must also be a verified email on that account. Commits made through GitHub's web editor are signed by GitHub automatically and pass without any of this.
+
+**Why the skills tell you to run these rather than running them for you.** `--global` would change how you commit in every unrelated repository on the machine, and a wrong `user.signingkey` makes `git commit` fail everywhere until you find it - too large a side effect for a knowledge sidecar to cause on its own. More to the point, a skill can only do the half that doesn't help: registering the key with GitHub is the step the gate actually reads, and doing the local half alone produces Unverified commits while leaving you believing it is set up.
+
+**A committed `.gitconfig` cannot do it either**, if that occurs to you as a shortcut. Git reads `/etc/gitconfig`, `~/.gitconfig`, and `.git/config` - never a file in the working tree. It refuses this deliberately: a config file arriving with a clone could otherwise set `core.sshCommand` or an alias and run commands on checkout. A tracked `.gitconfig` is inert. Committing one and relying on it is a silent no-op.
+
+### If you genuinely cannot sign: the `attestation` job
+
+The third job is an opt-in escape hatch, and its shape is deliberate. It is **not** a setting that turns the check off. A permanent "provenance: off" switch gets flipped for one urgent afternoon and never flipped back, and from then on the bundle asserts confirmations nothing supports while the health line and these docs still promise otherwise - worse than never having built the gate. So instead of disabling anything, it asks for a fresh human action on each pull request that needs one: the run pauses, GitHub emails the environment's reviewers, and a person clicks Approve in a browser. Crucially, an environment reviewer **may** be the person who opened the pull request - environments do not carry the self-approval ban that pull-request reviews do - which is exactly what makes this usable by a lone maintainer. Each click is recorded in the deployment log, so it stays auditable afterwards.
+
+Enabling it takes two steps, and the first is the one that does the work:
+
+1. **Settings -> Environments -> New environment** (say `knowledge-curation`), tick **Required reviewers**, add yourself, save.
+2. **Settings -> Secrets and variables -> Actions -> Variables**: set `KNOWLEDGE_CURATION_ENVIRONMENT` to that environment's name.
+
+Do not do the second without the first. An environment with no required reviewers approves itself the instant it is reached, so setting the variable while skipping the reviewers silently disables the gate entirely - the failure mode this design exists to avoid. With the variable unset (the default), the `attestation` job never runs and `provenance` simply fails on an unbacked confirmation.
+
+What the attestation does and does not mean is worth saying plainly to whoever clicks: it records that a person with repository access vouched for the confirmation out of band. It is not evidence that anyone opened the concept's source. That distinction is why signing is the recommended path and this is the fallback.
+
+### Marking the required checks
+
+Mark `validate` and `provenance` as required in branch protection, and `attestation` too if you enable it. When a confirmation is backed, `attestation` is skipped rather than run; if your branch-protection configuration treats a skipped required check as blocking, that errs toward a stuck pull request rather than a silent bypass - annoying, but the safe direction.
 
 ## `knowledge-librarian.yaml` - the scheduled refresh loop
 

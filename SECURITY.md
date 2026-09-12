@@ -2,11 +2,11 @@
 
 ## Scope
 
-This repository is mostly Markdown. Two things in it execute or are executed by other systems, and are the actual attack surface:
+This repository is mostly Markdown. Three things in it execute or are executed by other systems, and are the actual attack surface:
 
 - `skills/lokf-scaffolding/templates/scripts/knowledge-librarian.sh` and the two GitHub Actions workflow templates next to it (`skills/lokf-scaffolding/templates/github/*.yaml`) - these get **copied into other repositories** by the scaffolding skill and run there.
 - This repository's own `.github/workflows/*.yml`, which run with a `GITHUB_TOKEN` on every PR and (for `publish.yml`) with `contents: write` behind a maintainer-approval environment.
-- The four skills' `SKILL.md`/`references/` prose **is executed too - by whichever LLM agent runs it**, here and in every consumer repository that installs the skills. Anywhere that prose sends an agent to read content it didn't author - a repository file, an external URL, a reader's question, `.lokf/feedback.md` - is a prompt-injection surface. See **Prompt-injection guards** below.
+- The four skills' `SKILL.md`/`references/` prose **is executed too - by whichever LLM agent runs it**, here and in every consumer repository that installs the skills. Anywhere that prose sends an agent to read content it didn't author - a repository file, an external URL, a reader's question, `.lokf/feedback.md` - is a prompt-injection surface. See **Prompt-injection guards** below. Separately, anywhere that prose lets an agent record *who vouched for something* is an attribution surface, because the caller may be another agent rather than a person: see **Human attribution** below.
 
 ## Interactive use: scope is advisory, not enforced
 
@@ -31,7 +31,25 @@ Only the latest published tag receives fixes. Point releases (patch) are issued 
 - Third-party Actions are pinned to a reviewed commit SHA (not a floating tag) in every workflow, including the templates under `skills/lokf-scaffolding/templates/github/`.
 - `.github/dependabot.yml` keeps this repository's own workflow pins current. It does **not** reach the two templates under `skills/lokf-scaffolding/templates/github/` - Dependabot's `github-actions` ecosystem only scans `.github/workflows/` (a known upstream limitation), so those pins are still bumped by hand; `lint-workflows`' `actionlint` step catches syntax drift there, not staleness.
 - Dependency review and CodeQL are intentionally **not** enabled: this repository has no dependency manifests or compiled code to scan (the templates' `pyproject.toml` is a template for consumers, not this repo's own dependency). If that changes, add them then rather than carrying unused overhead now.
+- `knowledge-registrar.yaml` (this repository's own, and the template copied into consumers) gates every newly added `human:` verification on evidence GitHub holds rather than evidence the bundle asserts - see **Human attribution** below.
 - `knowledge-librarian.yaml`'s agent step always runs the pinned, reviewed wrapper script directly - never a repository variable's content as a shell command. The `AGENT_CLI` variable can only choose *which* non-interactive agent runs, never *what command* runs, closing an earlier arbitrary-command-execution surface under that job's `contents: write` scope.
+
+## Human attribution: `human:` is a claim, not a credential
+
+The bundle's central trust signal is a `verified` event whose actor starts with `human:` - "a named person checked this concept against its source". Everything downstream keys off it: lokf-curator's health line, lokf-docent's answer footers, and the OKF trust tiers themselves.
+
+It is also just a string in a Markdown file. Any writer that can edit the bundle can type one, and `lokf validate` accepts it, because a forged event is perfectly well-formed. The realistic threat is not an outside attacker but the ordinary shape of agent work: **another agent** driving lokf-curator - an orchestrator, a subagent, a scheduled run, or a session where the "person" answering is really a tool result - recording confirmations nobody gave. An identity resolved from the local environment cannot separate that from a real session, because both arrive through the same channel.
+
+Four measures, in descending order of how much weight they carry:
+
+- **The forge is the authority** (`knowledge-registrar.yaml`, `provenance` job). On each pull request it collects the `human:` actors newly added under `.lokf/knowledge/` and requires evidence GitHub holds: an APPROVED review from that account, or - since GitHub blocks approving your own pull request - a signature of theirs on the commit that introduced the event, as verified by GitHub against the keys registered to that account. This is the only measure an adversarial or confused writer cannot simply decline to follow, because it runs outside the agent.
+- **lokf-curator writes `human:` only for an authenticated identity** - `gh api user` alone. The former `git config user.name` fallback (an ordinary writable config value) and the "just ask" fallback (the one channel an attacker fully controls) are both gone. Without an authenticated id the two verbs that assert a person vouched for something are refused; the three that assert nothing about who checked what stay available.
+- **lokf-curator refuses to run a review session unattended** - CI, headless, subagent, scheduled, or answers arriving from a file or tool result rather than a live turn. Its read-only reporting step remains safe to run anywhere.
+- **Detection, not only prevention.** lokf-curator's report counts `human:` events whose introducing commit carries no signature, so one that arrived by some other route is visible to the next person who looks instead of being silently trusted.
+
+**Limits, stated plainly.** A signature proves a key holder made a commit and an approval proves an account clicked a button; neither proves anyone read the source. The gate raises forgery from "type four lines of YAML" to "control that person's GitHub account or signing key" - it does not make a confirmation true. And where `.lokf/` is gitignored, no pull request ever carries the bundle, so the CI half never runs at all: there, the curator's in-session rules are the whole of it.
+
+**The optional `attestation` job** is off unless `KNOWLEDGE_CURATION_ENVIRONMENT` names an environment, and exists for repositories that cannot sign. It is deliberately not a switch that disables the check - a permanent "provenance: off" setting gets flipped once and never flipped back - but a fresh, logged approval from an environment reviewer on each affected pull request. One misconfiguration matters: setting that variable while leaving the environment's **required reviewers** empty makes it self-approve instantly, turning the gate into a false assurance. Configure the reviewers first.
 
 ## Prompt-injection guards
 
