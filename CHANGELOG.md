@@ -2,6 +2,23 @@
 
 All notable changes to this repository are documented here. Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/); versioning follows the rules in [README.md](README.md#versioning). All skills release together under one tag.
 
+## [Unreleased]
+
+## [0.16.0] - 2026-09-13
+
+### Changed
+
+- **One layout, every host.** `.lokf/knowledge/` is the real folder everywhere, and the `knowledge_bundle` doorway link beside it (Step 2) is laid down by default again - a host-agnostic reason: dot-folders are hidden from Finder and most pickers, and Obsidian opens the link *itself* as a vault. Step 0 no longer asks which kind of host it is in; the Step 6 handoff says whether the doorway was created, the one command if not, and, for a vault host, to open `knowledge_bundle` itself as a vault.
+- **`just lokf-link`** now creates or recreates that doorway idempotently, refusing a name already taken; its `visible` variable is gone.
+- **`lokf-docent`** gains `references/obsidian.md`, answering the two-vault workflow directly and naming `lokf-sidecar` for an agent to make the link; a missing link is never a feedback entry.
+- **Shared-folder guidance is consolidated** in `lokf-sidecar/references/portability.md`, Obsidian included: sync services carry `.lokf/` but drop links, so the doorway is per-machine; a team may still rearrange a real `knowledge_bundle/` by hand outside a vault, still covered by the Step 5 templates and the plugins' auto-detection.
+- **`README.md` restructured**: "Where the bundle lives" (host-agnostic) and "…and where it meets an Obsidian vault" (optional, why the pairing is worth it, the two-vault story) replace the old combined section; "For the curious" is delegated to a new `docs/for-the-curious.md`, mirroring the plugin READMEs; every passing Obsidian mention now says it is optional.
+
+### Removed
+
+- **The visible layout** (0.15.0) - a real `knowledge_bundle/` folder inside a vault, with `.lokf/knowledge` as the link. A day of use showed why not: Obsidian indexes a real folder like any other, so the exhibition leaked into the workshop's link suggestions, graph and search. Its Step 0 host decision, the justfile's `visible` variable, and two layout-test cases go with it.
+- References to the maintainer's private vault, named during the 0.15.0 work: the family this repository describes is the four skills and the two Obsidian plugins.
+
 ## [0.15.0] - 2026-09-12
 
 ### Changed
@@ -15,7 +32,7 @@ All notable changes to this repository are documented here. Format follows [Keep
 ### Added
 
 - **`lokf-sidecar` lays the bundle down by host.** Two names, one real folder: `.lokf/knowledge` (what the tools address) and `knowledge_bundle` (what people and Obsidian open). A code repository keeps the hidden folder real with `knowledge_bundle` as the doorway link; a notes vault or shared folder (Step 0 asks) makes `knowledge_bundle/` real and `.lokf/knowledge` the link - detected by both plugins with nothing to configure.
-- **`just lokf-link`** recreates the visible layout's link where a sync service drops it, follows a new `visible` variable for a vault nested inside its repository (e.g. `../MSc-AI/knowledge_bundle`), and refuses a dangling link instead of failing on `ln`.
+- **`just lokf-link`** recreates the visible layout's link where a sync service drops it, follows a new `visible` variable for a vault nested inside its repository (e.g. `../vault/knowledge_bundle`), and refuses a dangling link instead of failing on `ln`.
 - **`scripts/test-sidecar-layouts.sh`**, run by the repository-contract check: builds throwaway hosts in both layouts and pins the wrapper's boundary check, the librarian workflow's change detection and packaging, the registrar's triggers, and `lokf-link`, all against both bundle names.
 - **`lokf-librarian`** now leaves LOKF Registrar's Obsidian affordances alone by rule - the `<!-- lokf:related -->` block and the `diataxis.md` map - and addresses the bundle by both paths when scoping a diff or PR.
 - **Semantic release**, version and changelog only: the version is computed from Conventional Commits on `main` and `CHANGELOG.md`'s `## [Unreleased]` section promoted into a dated heading. It never tags - `gh skill publish` remains the one tag creator - and `publish.yml` now refuses a typed version that disagrees with what was promoted. See [CONTRIBUTING.md](CONTRIBUTING.md#release-process).
